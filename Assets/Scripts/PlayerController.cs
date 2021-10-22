@@ -18,19 +18,26 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        MoveUpdate();
         DashUpdate();
         JumpUpdate();
-        Debug.Log("Velocity: " + playerRB.velocity);
+        //Debug.Log("Velocity: " + playerRB.velocity);
     }
 
 
+    private void FixedUpdate()
+    {
+        MoveUpdate();
+
+    }
 
     private void MoveUpdate()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
 
-        transform.Translate(Vector2.right * Time.deltaTime * movementSpeed * horizontalInput);
+        //transform.Translate(Vector2.right * Time.deltaTime * movementSpeed * horizontalInput);
+        float xForce = Time.deltaTime * movementSpeed * horizontalInput;
+        Vector2 moveForce = new Vector2(xForce, 0);
+        playerRB.AddForce(moveForce);
     }
 
     private void DashUpdate()
@@ -39,9 +46,9 @@ public class PlayerController : MonoBehaviour
         {
             if(playerRB.velocity.x > 0)
             {
-                playerRB.AddForce(Vector2.right * dashForce, ForceMode2D.Impulse);
+                playerRB.AddForce(Vector2.left * -dashForce, ForceMode2D.Impulse);
             }else{
-                playerRB.AddForce(Vector2.left * dashForce, ForceMode2D.Impulse);
+                playerRB.AddForce(Vector2.right * dashForce, ForceMode2D.Impulse);
             }
 
         }
