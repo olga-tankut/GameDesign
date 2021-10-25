@@ -13,7 +13,7 @@ public class PlayerMovement : MonoBehaviour
     [Range(1, 5)]
     [SerializeField]private float lowJumpMultiplier = 2.0f;
     [Range(500, 3000)]
-    [SerializeField]private float accelerationSpeed = 1.0f;
+    [SerializeField]private float accelerationSpeed = 1000.0f;
     [Range(1, 10)]
     [SerializeField]private float dashStrength = 3.0f;
     [Range(2, 10)]
@@ -23,16 +23,19 @@ public class PlayerMovement : MonoBehaviour
     [Range(0, 5)]
     [SerializeField]private float dashCooldown = 3.0f;
     [SerializeField]private bool multiJumpIsActive = false;
+    [Range(5, 15)]
+    [SerializeField]private float MovementEnergieConservationMultiplyer = 10f;
 
     private Rigidbody2D rb;
-    private bool isInContactWithCollider = false;
+    private Collision2D isInContactWithCollider;
     private float timeSinceLastDash = 0f;
+    private Vector2 energyConservation;
 
-    // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        timeSinceLastDash = 3.1f;   
+        timeSinceLastDash = 3.1f;
+        energyConservation = new Vector2(0, 0);
     }
 
     void Update()
@@ -41,7 +44,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if(Input.GetButtonDown("Jump"))
             {
-                GetComponent<Rigidbody2D>().velocity = Vector2.up * jumpVelocity;
+                GetComponent<Rigidbody2D>().velocity = Vector2.up * jumpVelocity + rb.velocity;
             }
         }
 
@@ -69,7 +72,6 @@ public class PlayerMovement : MonoBehaviour
         timeSinceLastDash += Time.deltaTime;
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
         JumpFixedUpdate();
@@ -79,13 +81,14 @@ public class PlayerMovement : MonoBehaviour
     private void MoveFixedUpdate()
     {
         // TODO: deaktivate stick to wall
+        //movement
         float horizontalInput = Input.GetAxis("Horizontal");
         if(Math.Abs(rb.velocity.x) < maxSpeed)
         {
             rb.AddForce(Vector2.right * horizontalInput * accelerationSpeed * Time.fixedDeltaTime);
         }
-        // gegen force zum bremsen
 
+        // gegen force zum bremsen
         if(IsOnGround())
         {
             //ToDo: doesn't work at the moment friction physics material is needed
@@ -118,7 +121,9 @@ public class PlayerMovement : MonoBehaviour
     // walljumps are possible
     private bool IsOnGround()
     {
-        if(isInContactWithCollider)
+        // needs maybe safety margin
+        // does accept all colliders
+        if(rb.velocity.y >= 0 && isInContactWithCollider != null)
         {
             return true;
         }
@@ -130,11 +135,18 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collisionInfo)
     {
-        isInContactWithCollider = true;
+        isInContactWithCollider = collisionInfo;
+        addConservedEnergyToMomentum();
     }
 
     private void OnCollisionExit2D(Collision2D collisionInfo)
     {
-        isInContactWithCollider = false;
+        isInContactWithCollider = null;
+    }
+
+    private void addConservedEnergyToMomentum()
+    {
+        float horizontalInput = Input.GetAxis("Horizontal");
+        rb.AddForce(Vector2.right * horizontalInput * accelerationSpeed * Time.fixedDeltaTime * MovementEnergieConservationMultiplyer);
     }
 }
