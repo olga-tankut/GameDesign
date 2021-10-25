@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 public class PlayerMovement : MonoBehaviour
 {
     [Range(5, 15)]
     [SerializeField]private float jumpVelocity;
-    [Range(1, 5)]
+    [Range(1, 10)]
     [SerializeField]private float fallMultiplier = 2.5f;
     [Range(1, 5)]
     [SerializeField]private float lowJumpMultiplier = 2.0f;
@@ -16,26 +17,30 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]private float accelerationSpeed = 1000.0f;
     [Range(1, 10)]
     [SerializeField]private float dashStrength = 3.0f;
-    [Range(2, 10)]
-    [SerializeField]private float maxSpeed = 4f;
-    [Range(2, 10)]
-    [SerializeField]private float breakForce = 5.0f;
+    [Range(0, 15)]
+    [SerializeField]private float maxGroundSpeed = 4f;
+    [Range(0, 1000)]
+    [SerializeField]private float breakForce = 100.0f;
     [Range(0, 5)]
     [SerializeField]private float dashCooldown = 3.0f;
-    [SerializeField]private bool multiJumpIsActive = false;
+    
     [Range(5, 15)]
-    [SerializeField]private float MovementEnergieConservationMultiplyer = 10f;
+    [SerializeField]private float movementEnergieConservationMultiplyer = 10f;
+    [Range(0, 5)]
+    [SerializeField]private float airMovementMultiplyer = 1.0f;
+    [Range(0, 15)]
+    [SerializeField]private float maxAirSpeed = 5.0f;
+    [SerializeField]private bool multiJumpIsActive = false;
+    [SerializeField]private bool airMovementIsActive = false;
 
     private Rigidbody2D rb;
     private Collision2D isInContactWithCollider;
     private float timeSinceLastDash = 0f;
-    private Vector2 energyConservation;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         timeSinceLastDash = 3.1f;
-        energyConservation = new Vector2(0, 0);
     }
 
     void Update()
@@ -44,6 +49,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if(Input.GetButtonDown("Jump"))
             {
+                // multi jumps are less strong because of rb.velocity
                 GetComponent<Rigidbody2D>().velocity = Vector2.up * jumpVelocity + rb.velocity;
             }
         }
@@ -83,16 +89,33 @@ public class PlayerMovement : MonoBehaviour
         // TODO: deaktivate stick to wall
         //movement
         float horizontalInput = Input.GetAxis("Horizontal");
-        if(Math.Abs(rb.velocity.x) < maxSpeed)
+        // acceleration is allowed to inrease in the opposite direction currently traveled
+        if((Math.Abs(rb.velocity.x) < maxGroundSpeed && IsOnGround()) || (Math.Abs(rb.velocity.x) < maxAirSpeed && !IsOnGround()) ||
+        (airMovementIsActive && (GetCurrentDirectionTraveledX() != (horizontalInput / Math.Abs(horizontalInput)))))
         {
-            rb.AddForce(Vector2.right * horizontalInput * accelerationSpeed * Time.fixedDeltaTime);
+            if(IsOnGround())
+            {
+                rb.AddForce(Vector2.right * horizontalInput * accelerationSpeed * Time.fixedDeltaTime);
+            }
+            else
+            {
+                rb.AddForce(Vector2.right * horizontalInput * accelerationSpeed * Time.fixedDeltaTime * airMovementMultiplyer);
+            }
+            
         }
 
         // gegen force zum bremsen
-        if(IsOnGround())
+        if(IsOnGround() && !(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)))
         {
+            double x = Math.Sqrt(Math.Abs(rb.velocity.x));
+            if(double.IsInfinity(x) || double.IsNaN(x))
+            {   
+                x = 0;
+            }
+            
             //ToDo: doesn't work at the moment friction physics material is needed
-            rb.AddForce(Vector2.right * breakForce * rb.velocity * Time.fixedDeltaTime);
+            rb.AddForce(new Vector2((float)x * Time.fixedDeltaTime * breakForce * -(GetCurrentDirectionTraveledX()), 0));
+            // where does the not a number come from?
         }
         
     }
@@ -147,6 +170,17 @@ public class PlayerMovement : MonoBehaviour
     private void addConservedEnergyToMomentum()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
-        rb.AddForce(Vector2.right * horizontalInput * accelerationSpeed * Time.fixedDeltaTime * MovementEnergieConservationMultiplyer);
+        rb.AddForce(Vector2.right * horizontalInput * accelerationSpeed * Time.fixedDeltaTime * movementEnergieConservationMultiplyer);
+    }
+
+    // the return value is normalized
+    private float GetCurrentDirectionTraveledX()
+    {
+        float temp = rb.velocity.x / Math.Abs(rb.velocity.x);
+        if(float.IsNaN(temp))
+        {
+            temp = 0;
+        }
+        return temp;
     }
 }
