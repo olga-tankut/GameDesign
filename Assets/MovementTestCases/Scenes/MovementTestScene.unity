@@ -160,7 +160,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 6200000, guid: 1da0095250b9e464b8e1523b36b1bcc8, type: 2}
+  m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -281,15 +281,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff8d426d5a85e5abcad36bb637f7bed0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jumpVelocity: 8.89
+  jumpVelocity: 9
   fallMultiplier: 4
   lowJumpMultiplier: 2
-  movementSpeed: 1000
+  accelerationSpeed: 1000
   dashStrength: 6
-  maxSpeed: 5
-  breakForce: 5
-  multiJumpIsActive: 1
+  maxGroundSpeed: 5
+  breakForce: 100
   dashCooldown: 3
+  movementEnergieConservationMultiplyer: 10
+  airMovementMultiplyer: 1
+  maxAirSpeed: 5
+  multiJumpIsActive: 1
+  airMovementIsActive: 1
 --- !u!1 &387959686
 GameObject:
   m_ObjectHideFlags: 0
