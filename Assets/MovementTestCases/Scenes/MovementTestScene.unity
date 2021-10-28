@@ -137,6 +137,7 @@ GameObject:
   - component: {fileID: 383927610}
   - component: {fileID: 383927615}
   - component: {fileID: 383927614}
+  - component: {fileID: 383927616}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -285,15 +286,35 @@ MonoBehaviour:
   fallMultiplier: 4
   lowJumpMultiplier: 2
   accelerationSpeed: 1000
-  dashStrength: 6
   maxGroundSpeed: 5
   breakForce: 100
-  dashCooldown: 3
+  dashCooldown: 1
   movementEnergieConservationMultiplyer: 10
   airMovementMultiplyer: 1
   maxAirSpeed: 5
-  multiJumpIsActive: 1
+  multiJumpIsActive: 0
   airMovementIsActive: 1
+  dashingLength: 500
+  dashBreakingStrength: 0
+  dashingStrength: 10
+--- !u!114 &383927616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 383927609}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1642d542186b22fc0b290a23a803dae5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  move: {fileID: 2100000, guid: bd83e4716d83f502ba41331a5e0c4540, type: 2}
+  dash: {fileID: 2100000, guid: 080e58b3cb99e3e20968bb36c7260233, type: 2}
+  slide: {fileID: 2100000, guid: a758e78c98ce0090599e52a29c1af0b0, type: 2}
+  jump: {fileID: 2100000, guid: 068e2e816a7d56d5ca5ceafacffd1980, type: 2}
+  error: {fileID: 2100000, guid: 063a2daaec08e55acb0ae4ccfff68960, type: 2}
+  ColorCodingIsActive: 1
 --- !u!1 &387959686
 GameObject:
   m_ObjectHideFlags: 0

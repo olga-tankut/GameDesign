@@ -15,8 +15,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]private float lowJumpMultiplier = 2.0f;
     [Range(500, 3000)]
     [SerializeField]private float accelerationSpeed = 1000.0f;
-    [Range(1, 10)]
-    [SerializeField]private float dashStrength = 3.0f;
     [Range(0, 15)]
     [SerializeField]private float maxGroundSpeed = 4f;
     [Range(0, 1000)]
@@ -32,15 +30,28 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]private float maxAirSpeed = 5.0f;
     [SerializeField]private bool multiJumpIsActive = false;
     [SerializeField]private bool airMovementIsActive = false;
+    [Range(0, 10000)]
+    [SerializeField]private float dashingLength = 1000;// length is determined by dashing time in ms
+    [Range(0, 2000)]
+    [SerializeField]private int dashBreakingStrength = 500;
+    [Range(1, 20)]
+    [SerializeField]private float dashingStrength = 10f;
 
     private Rigidbody2D rb;
     private Collision2D isInContactWithCollider;
     private float timeSinceLastDash = 0f;
+    private float timeInDash = 0f;
+    private bool isSliding = false;
+    private bool isDashing = false;
+    private float startingGravity;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        // beginning dash delay
         timeSinceLastDash = 3.1f;
+        timeInDash = 0f;
+        startingGravity = rb.gravityScale;
     }
 
     void Update()
@@ -53,35 +64,88 @@ public class PlayerMovement : MonoBehaviour
                 GetComponent<Rigidbody2D>().velocity = Vector2.up * jumpVelocity + rb.velocity;
             }
         }
-
-        if(Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            //Debug.Log(rb.velocity);
-            // Dash in the current moving Direction
-            //rb.AddForce(rb.velocity.normalized * dashStrength, ForceMode2D.Impulse);
-            if(timeSinceLastDash > dashCooldown)
-            {
-                if(Input.GetKey(KeyCode.D))
-                {
-                    rb.AddForce(Vector2.right * dashStrength, ForceMode2D.Impulse);
-                    timeSinceLastDash = 0f;
-                }
-                else if (Input.GetKey(KeyCode.A))
-                {
-                    rb.AddForce(Vector2.left * dashStrength, ForceMode2D.Impulse);
-                    timeSinceLastDash = 0f;
-                }
-            }
-            
-            //switch(Input.GetKey)
-        }
-        timeSinceLastDash += Time.deltaTime;
+        DashUpdate();
     }
 
     void FixedUpdate()
     {
         JumpFixedUpdate();
+        SlideFixedUpdate();
         MoveFixedUpdate();
+    }
+
+    private void SlideFixedUpdate()
+    {
+        if(Input.GetKey(KeyCode.S))
+        {
+            isSliding = true;
+        }
+        else
+        {
+            isSliding = false;
+        }
+    }
+
+    private void DashUpdate()
+    {
+        if(Input.GetKeyDown(KeyCode.LeftShift))
+        {   
+            // startDash
+            if(timeSinceLastDash > dashCooldown)
+            {
+                if(Input.GetKey(KeyCode.D))
+                {
+                    rb.velocity = Vector2.zero;
+                    rb.AddForce(Vector2.right * dashingStrength, ForceMode2D.Impulse);
+                    timeSinceLastDash = 0f;
+                    // what if no direction is set?
+                    if(!isDashing)
+                    {
+                        isDashing = true;
+                        timeInDash = 0f;
+                    }
+                }
+                else if (Input.GetKey(KeyCode.A))
+                {
+                    rb.velocity = Vector2.zero;
+                    rb.AddForce(Vector2.left * dashingStrength, ForceMode2D.Impulse);
+                    timeSinceLastDash = 0f;
+                    // what if no direction is set?
+                    if(!isDashing)
+                    {
+                    isDashing = true;
+                    timeInDash = 0f;
+                    }
+                }
+            }
+            else
+            {
+                Debug.Log("Dash is not ready! Time until next dash: " + (dashCooldown - timeSinceLastDash) + " seconds.");
+            }
+        }
+
+        // end dash
+        if(isDashing)
+        {
+            // Breaking an reseting gravity
+            if(timeInDash > dashingLength / 1000f / dashingStrength)
+            {
+                AddBreakingForce(dashBreakingStrength, Time.deltaTime);
+                isDashing = false;
+            }
+            else
+            {
+                rb.gravityScale = 0;
+            }
+            
+            timeInDash += Time.deltaTime;
+        }
+        else
+        {
+            rb.gravityScale = startingGravity;
+        }
+
+        timeSinceLastDash += Time.deltaTime;
     }
 
     private void MoveFixedUpdate()
@@ -104,20 +168,24 @@ public class PlayerMovement : MonoBehaviour
             
         }
 
-        // gegen force zum bremsen
+        // slow down
         if(IsOnGround() && !(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)))
         {
-            double x = Math.Sqrt(Math.Abs(rb.velocity.x));
-            if(double.IsInfinity(x) || double.IsNaN(x))
+            AddBreakingForce(breakForce, Time.fixedDeltaTime);
+        }
+    }
+
+    // Calculates a breaking force to stop the gameObject
+    // because of the scond parameter the function is time independent
+    private void AddBreakingForce(float breakingStrength, float timeSinceLastFrameUpdate)
+    {
+        double x = Math.Sqrt(Math.Abs(rb.velocity.x));
+        if(double.IsInfinity(x) || double.IsNaN(x))
             {   
                 x = 0;
             }
             
-            //ToDo: doesn't work at the moment friction physics material is needed
-            rb.AddForce(new Vector2((float)x * Time.fixedDeltaTime * breakForce * -(GetCurrentDirectionTraveledX()), 0));
-            // where does the not a number come from?
-        }
-        
+        rb.AddForce(new Vector2((float)x * timeSinceLastFrameUpdate * breakingStrength * -(GetCurrentDirectionTraveledX()), 0));
     }
 
     private void JumpFixedUpdate()
