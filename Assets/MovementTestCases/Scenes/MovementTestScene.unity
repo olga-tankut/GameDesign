@@ -295,8 +295,9 @@ MonoBehaviour:
   multiJumpIsActive: 0
   airMovementIsActive: 1
   dashingLength: 500
-  dashBreakingStrength: 0
+  dashBreakingStrength: 100
   dashingStrength: 10
+  slidingLength: 10
 --- !u!114 &383927616
 MonoBehaviour:
   m_ObjectHideFlags: 0

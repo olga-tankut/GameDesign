@@ -36,6 +36,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]private int dashBreakingStrength = 500;
     [Range(1, 20)]
     [SerializeField]private float dashingStrength = 10f;
+    [Range(0, 30)]
+    [SerializeField]private float slidingLength = 1.0f;// it is not proportional
 
     private Rigidbody2D rb;
     private Collision2D isInContactWithCollider;
@@ -44,6 +46,7 @@ public class PlayerMovement : MonoBehaviour
     private bool isSliding = false;
     private bool isDashing = false;
     private float startingGravity;
+    private float slideMultiplyer = 1.0f;
 
     void Start()
     {
@@ -52,6 +55,7 @@ public class PlayerMovement : MonoBehaviour
         timeSinceLastDash = 3.1f;
         timeInDash = 0f;
         startingGravity = rb.gravityScale;
+        slideMultiplyer = 1.0f;
     }
 
     void Update()
@@ -76,12 +80,18 @@ public class PlayerMovement : MonoBehaviour
 
     private void SlideFixedUpdate()
     {
-        if(Input.GetKey(KeyCode.S))
+        if(Input.GetKey(KeyCode.S) && IsOnGround())
         {
+            slideMultiplyer = (1 / slidingLength);
+            if(float.IsNaN(slideMultiplyer) || float.IsInfinity(slideMultiplyer))
+            {
+                slideMultiplyer = 0f;
+            }
             isSliding = true;
         }
         else
         {
+            slideMultiplyer = 1.0f;
             isSliding = false;
         }
     }
@@ -185,7 +195,7 @@ public class PlayerMovement : MonoBehaviour
                 x = 0;
             }
             
-        rb.AddForce(new Vector2((float)x * timeSinceLastFrameUpdate * breakingStrength * -(GetCurrentDirectionTraveledX()), 0));
+        rb.AddForce(new Vector2((float)x * timeSinceLastFrameUpdate * breakingStrength * -(GetCurrentDirectionTraveledX()) * slideMultiplyer, 0));
     }
 
     private void JumpFixedUpdate()
