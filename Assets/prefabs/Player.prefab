@@ -148,7 +148,7 @@ MonoBehaviour:
   jumpVelocity: 8.89
   fallMultiplier: 4
   lowJumpMultiplier: 2
-  accelerationSpeed: 1000
+  accelerationSpeed: 969
   dashStrength: 6
   maxSpeed: 5
   breakForce: 5

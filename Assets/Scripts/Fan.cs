@@ -5,7 +5,7 @@ using UnityEngine;
 public class Fan : MonoBehaviour
 {
     Collider2D fanCollider;
-    public PlayerController player;
+    public PlayerMovement player;
     public float fanSpeed;
     
     void Start()
@@ -26,7 +26,7 @@ public class Fan : MonoBehaviour
     void OnTriggerStay2D(Collider2D other)
     {
         Debug.Log("Object is in trigger");
-        player.GetComponent<Rigidbody2D>().AddForce(Vector2.right * fanSpeed * Time.deltaTime);
+        player.GetComponent<Rigidbody2D>().AddForce(Vector2.right * fanSpeed * Time.fixedDeltaTime);
 
     }
     void OnTriggerExit2D(Collider2D other)

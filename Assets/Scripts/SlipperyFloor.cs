@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SlipperyFloor : MonoBehaviour
 {
-    public PlayerController player;
+    public PlayerMovement player;
     Collider2D floorCollider;
     Vector2 acceleration = new Vector2(100f, 0f);
 
@@ -22,18 +22,10 @@ public class SlipperyFloor : MonoBehaviour
     }
     protected void OnCollisionEnter2D(Collision2D collision)
     {
-        //Debug.Log(player.GetComponent<Rigidbody2D>().velocity);
-        //player.GetComponent<Rigidbody2D>().isKinematic = true;
-        //player.GetComponent<Rigidbody2D>().transform.Translate(direction * Time.deltaTime * 100);
-        //player.GetComponent<Rigidbody2D>().velocity = player.GetComponent<Rigidbody2D>().velocity + acceleration; 
-
+        player.GetComponent<Rigidbody2D>().velocity = player.GetComponent<Rigidbody2D>().velocity * acceleration*Time.deltaTime; 
     }
     protected void OnCollisionExit2D(Collision2D collision)
     {
-        //Debug.Log(player.GetComponent<Rigidbody2D>().velocity);
-        //player.GetComponent<Rigidbody2D>().isKinematic = false;
-        //player.GetComponent<Rigidbody2D>().transform.Translate(direction * Time.deltaTime * 100);
-        //player.GetComponent<Rigidbody2D>().velocity = player.GetComponent<Rigidbody2D>().velocity + acceleration; 
-
+        
     }
 }
