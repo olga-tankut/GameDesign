@@ -3,36 +3,59 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 public class PlayerMovement : MonoBehaviour
 {
     [Range(5, 15)]
     [SerializeField]private float jumpVelocity;
-    [Range(1, 5)]
+    [Range(1, 10)]
     [SerializeField]private float fallMultiplier = 2.5f;
     [Range(1, 5)]
     [SerializeField]private float lowJumpMultiplier = 2.0f;
     [Range(500, 3000)]
-    [SerializeField]private float accelerationSpeed = 1.0f;
-    [Range(1, 10)]
-    [SerializeField]private float dashStrength = 3.0f;
-    [Range(2, 10)]
-    [SerializeField]private float maxSpeed = 4f;
-    [Range(2, 10)]
-    [SerializeField]private float breakForce = 5.0f;
+    [SerializeField]private float accelerationSpeed = 1000.0f;
+    [Range(0, 15)]
+    [SerializeField]private float maxGroundSpeed = 4f;
+    [Range(0, 1000)]
+    [SerializeField]private float breakForce = 100.0f;
     [Range(0, 5)]
     [SerializeField]private float dashCooldown = 3.0f;
+    
+    [Range(5, 15)]
+    [SerializeField]private float movementEnergieConservationMultiplyer = 10f;
+    [Range(0, 5)]
+    [SerializeField]private float airMovementMultiplyer = 1.0f;
+    [Range(0, 15)]
+    [SerializeField]private float maxAirSpeed = 5.0f;
     [SerializeField]private bool multiJumpIsActive = false;
+    [SerializeField]private bool airMovementIsActive = false;
+    [Range(0, 10000)]
+    [SerializeField]private float dashingLength = 1000;// length is determined by dashing time in ms
+    [Range(0, 2000)]
+    [SerializeField]private int dashBreakingStrength = 500;
+    [Range(1, 20)]
+    [SerializeField]private float dashingStrength = 10f;
+    [Range(0, 30)]
+    [SerializeField]private float slidingLength = 1.0f;// it is not proportional
 
     private Rigidbody2D rb;
-    private bool isInContactWithCollider = false;
+    private Collision2D isInContactWithCollider;
     private float timeSinceLastDash = 0f;
+    private float timeInDash = 0f;
+    private bool isSliding = false;
+    private bool isDashing = false;
+    private float startingGravity;
+    private float slideMultiplyer = 1.0f;
 
-    // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        timeSinceLastDash = 3.1f;   
+        // beginning dash delay
+        timeSinceLastDash = 3.1f;
+        timeInDash = 0f;
+        startingGravity = rb.gravityScale;
+        slideMultiplyer = 1.0f;
     }
 
     void Update()
@@ -41,57 +64,138 @@ public class PlayerMovement : MonoBehaviour
         {
             if(Input.GetButtonDown("Jump"))
             {
-                GetComponent<Rigidbody2D>().velocity = Vector2.up * jumpVelocity;
+                // multi jumps are less strong because of rb.velocity
+                GetComponent<Rigidbody2D>().velocity = Vector2.up * jumpVelocity + rb.velocity;
             }
         }
+        DashUpdate();
+    }
 
-        if(Input.GetKeyDown(KeyCode.LeftShift))
+    void FixedUpdate()
+    {
+        JumpFixedUpdate();
+        SlideFixedUpdate();
+        MoveFixedUpdate();
+    }
+
+    private void SlideFixedUpdate()
+    {
+        if(Input.GetKey(KeyCode.S) && IsOnGround())
         {
-            //Debug.Log(rb.velocity);
-            // Dash in the current moving Direction
-            //rb.AddForce(rb.velocity.normalized * dashStrength, ForceMode2D.Impulse);
+            slideMultiplyer = (1 / slidingLength);
+            if(float.IsNaN(slideMultiplyer) || float.IsInfinity(slideMultiplyer))
+            {
+                slideMultiplyer = 0f;
+            }
+            isSliding = true;
+        }
+        else
+        {
+            slideMultiplyer = 1.0f;
+            isSliding = false;
+        }
+    }
+
+    private void DashUpdate()
+    {
+        if(Input.GetKeyDown(KeyCode.LeftShift))
+        {   
+            // startDash
             if(timeSinceLastDash > dashCooldown)
             {
                 if(Input.GetKey(KeyCode.D))
                 {
-                    rb.AddForce(Vector2.right * dashStrength, ForceMode2D.Impulse);
+                    rb.velocity = Vector2.zero;
+                    rb.AddForce(Vector2.right * dashingStrength, ForceMode2D.Impulse);
                     timeSinceLastDash = 0f;
+                    // what if no direction is set?
+                    if(!isDashing)
+                    {
+                        isDashing = true;
+                        timeInDash = 0f;
+                    }
                 }
                 else if (Input.GetKey(KeyCode.A))
                 {
-                    rb.AddForce(Vector2.left * dashStrength, ForceMode2D.Impulse);
+                    rb.velocity = Vector2.zero;
+                    rb.AddForce(Vector2.left * dashingStrength, ForceMode2D.Impulse);
                     timeSinceLastDash = 0f;
+                    // what if no direction is set?
+                    if(!isDashing)
+                    {
+                    isDashing = true;
+                    timeInDash = 0f;
+                    }
                 }
             }
-            
-            //switch(Input.GetKey)
+            else
+            {
+                Debug.Log("Dash is not ready! Time until next dash: " + (dashCooldown - timeSinceLastDash) + " seconds.");
+            }
         }
-        timeSinceLastDash += Time.deltaTime;
-    }
 
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        JumpFixedUpdate();
-        MoveFixedUpdate();
+        // end dash
+        if(isDashing)
+        {
+            // Breaking an reseting gravity
+            if(timeInDash > dashingLength / 1000f / dashingStrength)
+            {
+                AddBreakingForce(dashBreakingStrength, Time.deltaTime);
+                isDashing = false;
+            }
+            else
+            {
+                rb.gravityScale = 0;
+            }
+            
+            timeInDash += Time.deltaTime;
+        }
+        else
+        {
+            rb.gravityScale = startingGravity;
+        }
+
+        timeSinceLastDash += Time.deltaTime;
     }
 
     private void MoveFixedUpdate()
     {
         // TODO: deaktivate stick to wall
+        //movement
         float horizontalInput = Input.GetAxis("Horizontal");
-        if(Math.Abs(rb.velocity.x) < maxSpeed)
+        // acceleration is allowed to inrease in the opposite direction currently traveled
+        if((Math.Abs(rb.velocity.x) < maxGroundSpeed && IsOnGround()) || (Math.Abs(rb.velocity.x) < maxAirSpeed && !IsOnGround()) ||
+        (airMovementIsActive && (GetCurrentDirectionTraveledX() != (horizontalInput / Math.Abs(horizontalInput)))))
         {
-            rb.AddForce(Vector2.right * horizontalInput * accelerationSpeed * Time.fixedDeltaTime);
+            if(IsOnGround())
+            {
+                rb.AddForce(Vector2.right * horizontalInput * accelerationSpeed * Time.fixedDeltaTime);
+            }
+            else
+            {
+                rb.AddForce(Vector2.right * horizontalInput * accelerationSpeed * Time.fixedDeltaTime * airMovementMultiplyer);
+            }
+            
         }
-        // gegen force zum bremsen
 
-        if(IsOnGround())
+        // slow down
+        if(IsOnGround() && !(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)))
         {
-            //ToDo: doesn't work at the moment friction physics material is needed
-            rb.AddForce(Vector2.right * breakForce * rb.velocity * Time.fixedDeltaTime);
+            AddBreakingForce(breakForce, Time.fixedDeltaTime);
         }
-        
+    }
+
+    // Calculates a breaking force to stop the gameObject
+    // because of the scond parameter the function is time independent
+    private void AddBreakingForce(float breakingStrength, float timeSinceLastFrameUpdate)
+    {
+        double x = Math.Sqrt(Math.Abs(rb.velocity.x));
+        if(double.IsInfinity(x) || double.IsNaN(x))
+            {   
+                x = 0;
+            }
+            
+        rb.AddForce(new Vector2((float)x * timeSinceLastFrameUpdate * breakingStrength * -(GetCurrentDirectionTraveledX()) * slideMultiplyer, 0));
     }
 
     private void JumpFixedUpdate()
@@ -118,7 +222,9 @@ public class PlayerMovement : MonoBehaviour
     // walljumps are possible
     private bool IsOnGround()
     {
-        if(isInContactWithCollider)
+        // needs maybe safety margin
+        // does accept all colliders
+        if(rb.velocity.y >= 0 && isInContactWithCollider != null)
         {
             return true;
         }
@@ -130,11 +236,29 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collisionInfo)
     {
-        isInContactWithCollider = true;
+        isInContactWithCollider = collisionInfo;
+        addConservedEnergyToMomentum();
     }
 
     private void OnCollisionExit2D(Collision2D collisionInfo)
     {
-        isInContactWithCollider = false;
+        isInContactWithCollider = null;
+    }
+
+    private void addConservedEnergyToMomentum()
+    {
+        float horizontalInput = Input.GetAxis("Horizontal");
+        rb.AddForce(Vector2.right * horizontalInput * accelerationSpeed * Time.fixedDeltaTime * movementEnergieConservationMultiplyer);
+    }
+
+    // the return value is normalized
+    private float GetCurrentDirectionTraveledX()
+    {
+        float temp = rb.velocity.x / Math.Abs(rb.velocity.x);
+        if(float.IsNaN(temp))
+        {
+            temp = 0;
+        }
+        return temp;
     }
 }
