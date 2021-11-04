@@ -8,10 +8,8 @@ public class Lamp : MonoBehaviour
     public float moveSpeed;
     public float leftAngle;
     public float rightAngle;
-    PlayerMovement player;
 
     bool moovingClockwise;
-    Vector2 acceleration = new Vector2(1000000f, 0f);
 
     // Start is called before the first frame update
     void Start()

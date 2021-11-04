@@ -69,6 +69,11 @@ public class PlayerMovement : MonoBehaviour
             }
         }
         DashUpdate();
+
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            FindObjectOfType<GameManager>().EndGame();
+        }
     }
 
     void FixedUpdate()

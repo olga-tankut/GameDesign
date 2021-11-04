@@ -5,9 +5,10 @@ using UnityEngine;
 public class FlowerTop : MonoBehaviour
     
 {
+    public float countdown = 2;
+
     private SpriteRenderer sprender;
     private Rigidbody2D rb;
-    private float countdown = 2;
     private bool hasFallen = false;
 
 

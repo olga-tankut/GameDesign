@@ -6,7 +6,7 @@ public class SlipperyFloor : MonoBehaviour
 {
     public PlayerMovement player;
     Collider2D floorCollider;
-    Vector2 acceleration = new Vector2(100f, 0f);
+    public Vector2 acceleration = new Vector2(50f, 0f);
 
     // Start is called before the first frame update
     void Start()
