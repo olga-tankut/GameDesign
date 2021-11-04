@@ -51,8 +51,8 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        // beginning dash delay
-        timeSinceLastDash = 3.1f;
+        // beginning dash delay => has to be bigger than dashCooldown to be instant available at the start of the game
+        timeSinceLastDash = dashCooldown + 0.1f;
         timeInDash = 0f;
         startingGravity = rb.gravityScale;
         slideMultiplyer = 1.0f;
