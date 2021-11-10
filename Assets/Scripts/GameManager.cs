@@ -7,16 +7,21 @@ public class GameManager : MonoBehaviour
    public float restartDelay = 1f;
    public void EndGame()
     {
-        if(!gameHasEnded)
+        if(gameHasEnded)
         {
             gameHasEnded = true;
             Debug.Log("Game over");
-            Invoke("Restart", restartDelay);
+            Invoke("RestartLevel", restartDelay);
         }      
     } 
     
-    void Restart()
+    public void RestartLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void BackToMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 }
