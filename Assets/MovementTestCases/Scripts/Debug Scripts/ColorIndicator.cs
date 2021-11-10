@@ -10,7 +10,7 @@ public class ColorIndicator : MonoBehaviour
     [SerializeField]private Material jump;
     [SerializeField]private Material error;
     private SpriteRenderer spriteRenderer;
-    private bool isOnGround = false;
+    //private bool isOnGround = false;
     [SerializeField]private bool ColorCodingIsActive = false;
     private KeyCode overRideKey;
     // Start is called before the first frame update

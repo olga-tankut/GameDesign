@@ -279,9 +279,10 @@ MonoBehaviour:
   dashingLength: 1000
   dashBreakingStrength: 500
   dashingStrength: 10
-  slidingLength: 1
-  wallJumpIsAktive: 1
-  wallJumpTimingWindow: 500
+  slidingLength: 1.7
+  wallJumpIsAktive: 0
+  ForgivingFramesWallJump: 500
+  ForgivingFramesDashCancel: 300
   wallJumpStrength: 5
 --- !u!212 &438578505
 SpriteRenderer:

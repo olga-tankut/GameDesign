@@ -19,7 +19,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]private float maxGroundSpeed = 4f;
     [Range(0, 1000)]
     [SerializeField]private float breakForce = 100.0f;
-    [Range(0, 5)]
+    [Range(0, 5000)]
     [SerializeField]private float dashCooldown = 1000f;// in ms
     
     [Range(5, 15)]
@@ -36,11 +36,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]private int dashBreakingStrength = 500;
     [Range(1, 20)]
     [SerializeField]private float dashingStrength = 10f;
-    [Range(0, 30)]
-    [SerializeField]private float slidingLength = 1.0f;// it is not proportional
+    [Range(1, 1.9f)]
+    [SerializeField]private float slidingLength = 1.5f;// it is not proportional
     [SerializeField]private bool wallJumpIsAktive = true;
     [Range(0, 2000)]
-    [SerializeField]private int wallJumpTimingWindow = 500;
+    [SerializeField]private int ForgivingFramesWallJump = 500;
+    [Range(0, 2000)]
+    [SerializeField]private int ForgivingFramesDashCancel = 300;
     [Range(0, 10)]
     [SerializeField]private float wallJumpStrength = 5f;
 
@@ -53,6 +55,7 @@ public class PlayerMovement : MonoBehaviour
     private float startingGravity;
     private float slideMultiplyer = 1.0f;
     private long timeSinceLastContactWithWall = 0; // in ms
+    private long timeSinceStartOfDash = 0;
     private Vector2 wallWithLastContactPosition;
     private ContactPoint2D[] colliderCurrentlyinContactWith = new ContactPoint2D[5];
 
@@ -64,6 +67,7 @@ public class PlayerMovement : MonoBehaviour
         timeInDash = 0f;
         startingGravity = rb.gravityScale;
         slideMultiplyer = 1.0f;
+        timeSinceLastContactWithWall = ForgivingFramesWallJump + 1;
     }
 
     void Update()
@@ -96,7 +100,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void WallJumpFixedUpdate()
     {
-        if(wallJumpTimingWindow > (DateTimeOffset.Now.ToUnixTimeMilliseconds() - timeSinceLastContactWithWall) && Input.GetKeyDown(KeyCode.Space) && !IsOnGround())
+        if(ForgivingFramesWallJump > (DateTimeOffset.Now.ToUnixTimeMilliseconds() - timeSinceLastContactWithWall) 
+            && Input.GetKeyDown(KeyCode.Space) && !IsOnGround() && wallJumpIsAktive)
         {
             // left
             if((wallWithLastContactPosition.x - transform.position.x) > 0)
@@ -110,20 +115,16 @@ public class PlayerMovement : MonoBehaviour
             }
             else if((wallWithLastContactPosition.x - transform.position.x) == 0)
             {
-                Debug.Log("ERROR WallJump in the Wall");
+                Debug.Log("ERROR WallJump in the Wall: " + wallWithLastContactPosition);
             }
         }
     }
-
+    
     private void SlideFixedUpdate()
     {
         if(Input.GetKey(KeyCode.S) && IsOnGround())
         {
-            slideMultiplyer = (1 / slidingLength);
-            if(float.IsNaN(slideMultiplyer) || float.IsInfinity(slideMultiplyer))
-            {
-                slideMultiplyer = 0f;
-            }
+            slideMultiplyer = slidingLength;
             isSliding = true;
         }
         else
@@ -135,11 +136,36 @@ public class PlayerMovement : MonoBehaviour
 
     private void DashUpdate()
     {
-        if(Input.GetKeyDown(KeyCode.LeftShift))
+        //check if dash has been canceled
+        if(ForgivingFramesDashCancel > (DateTimeOffset.Now.ToUnixTimeMilliseconds() - timeSinceStartOfDash) )
+        {
+            if(GetCurrentDirectionTraveledX() == (Input.GetAxis("Horizontal") / Math.Abs(Input.GetAxis("Horizontal"))))
+            {
+
+            }
+            // dash has been cancelled
+            else
+            {
+                Debug.Log("Dash has been cancelled: " + (Input.GetAxis("Horizontal") / Math.Abs(Input.GetAxis("Horizontal"))));
+                // dash als abgelaufen markieren
+                timeInDash  = dashingLength + 0.1f;
+
+                // momentum cancell
+                rb.velocity = new Vector2(0, rb.velocity.y);
+            }
+        }
+        // wille sliding dashing is forbidden
+        if(Input.GetKeyDown(KeyCode.LeftShift) && !isSliding)
         {   
             // startDash
             if(timeSinceLastDash > dashCooldown / 1000f)
-            {
+            {   
+                //setting starting time of the dash
+                if(!isDashing)
+                {
+                    timeSinceStartOfDash = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+                }
+
                 if(Input.GetKey(KeyCode.D))
                 {
                     rb.velocity = Vector2.zero;
@@ -228,11 +254,21 @@ public class PlayerMovement : MonoBehaviour
     {
         double x = Math.Sqrt(Math.Abs(rb.velocity.x));
         if(double.IsInfinity(x) || double.IsNaN(x))
-            {   
-                x = 0;
-            }
-            
-        rb.AddForce(new Vector2((float)x * timeSinceLastFrameUpdate * breakingStrength * -(GetCurrentDirectionTraveledX()) * slideMultiplyer, 0));
+        {   
+            x = 0;
+        }
+
+        rb.AddForce(new Vector2((float)x * timeSinceLastFrameUpdate * breakingStrength * -(GetCurrentDirectionTraveledX()), 0));
+        if(isSliding)
+        {
+            rb.AddForce(new Vector2(GetCurrentDirectionTraveledX() * (float)x * slideMultiplyer * breakingStrength * timeSinceLastFrameUpdate, 0));
+        }
+        
+        /*if(Math.Abs(rb.velocity.x) > 1.0f)
+        {
+            Debug.Log("Force: " + ((float)x * timeSinceLastFrameUpdate * breakingStrength * -(GetCurrentDirectionTraveledX()) * slideMultiplyer) + ", " + slideMultiplyer);
+        }*/
+        
     }
 
     private void JumpFixedUpdate()
@@ -280,6 +316,7 @@ public class PlayerMovement : MonoBehaviour
         {
             timeSinceLastContactWithWall = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             wallWithLastContactPosition = collisionInfo.gameObject.transform.position;
+            Debug.Log("Collision with wall: " + collisionInfo.gameObject.tag);
         }
         addConservedEnergyToMomentum();
     }
