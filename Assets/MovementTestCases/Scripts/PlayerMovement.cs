@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using System;
-using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -19,8 +19,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]private float maxGroundSpeed = 4f;
     [Range(0, 1000)]
     [SerializeField]private float breakForce = 100.0f;
-    [Range(0, 5)]
-    [SerializeField]private float dashCooldown = 3.0f;
+    [Range(0, 5000)]
+    [SerializeField]private float dashCooldown = 1000f;// in ms
     
     [Range(5, 15)]
     [SerializeField]private float movementEnergieConservationMultiplyer = 10f;
@@ -36,8 +36,15 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]private int dashBreakingStrength = 500;
     [Range(1, 20)]
     [SerializeField]private float dashingStrength = 10f;
-    [Range(0, 30)]
-    [SerializeField]private float slidingLength = 1.0f;// it is not proportional
+    [Range(1, 1.9f)]
+    [SerializeField]private float slidingLength = 1.5f;// it is not proportional
+    [SerializeField]private bool wallJumpIsAktive = true;
+    [Range(0, 2000)]
+    [SerializeField]private int ForgivingFramesWallJump = 500;
+    [Range(0, 2000)]
+    [SerializeField]private int ForgivingFramesDashCancel = 300;
+    [Range(0, 10)]
+    [SerializeField]private float wallJumpStrength = 5f;
 
     private Rigidbody2D rb;
     private Collision2D isInContactWithCollider;
@@ -47,15 +54,20 @@ public class PlayerMovement : MonoBehaviour
     private bool isDashing = false;
     private float startingGravity;
     private float slideMultiplyer = 1.0f;
+    private long timeSinceLastContactWithWall = 0; // in ms
+    private long timeSinceStartOfDash = 0;
+    private Vector2 wallWithLastContactPosition;
+    private ContactPoint2D[] colliderCurrentlyinContactWith = new ContactPoint2D[5];
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        // beginning dash delay
-        timeSinceLastDash = 3.1f;
+        // beginning dash delay => has to be bigger than dashCooldown to be instant available at the start of the game
+        timeSinceLastDash = (dashCooldown / 1000) + 0.1f;
         timeInDash = 0f;
         startingGravity = rb.gravityScale;
         slideMultiplyer = 1.0f;
+        timeSinceLastContactWithWall = ForgivingFramesWallJump + 1;
     }
 
     void Update()
@@ -78,20 +90,46 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
+        WallJumpFixedUpdate();
         JumpFixedUpdate();
         SlideFixedUpdate();
         MoveFixedUpdate();
+        //Debug.Log(RayCastHitDetection().Exists(x => x == "Wall") +", " + RayCastHitDetection().Exists(x => x == "Ground"));
+        //Debug.Log(IsOnGround());
+        /*Debug.Log(RayCastHitDetection()[0] + ", " +
+        RayCastHitDetection()[1] + ", " +
+        RayCastHitDetection()[2] + ", " +
+        RayCastHitDetection()[3] + ", " +
+        RayCastHitDetection()[4]);*/
     }
 
+    private void WallJumpFixedUpdate()
+    {
+        if(ForgivingFramesWallJump > (DateTimeOffset.Now.ToUnixTimeMilliseconds() - timeSinceLastContactWithWall) 
+            && Input.GetKeyDown(KeyCode.Space) && !IsOnGround() && wallJumpIsAktive)
+        {
+            // left
+            if((wallWithLastContactPosition.x - transform.position.x) > 0)
+            {
+                rb.AddForce(new Vector2(-1, 1) * wallJumpStrength, ForceMode2D.Impulse);
+            }
+            // right
+            else if((wallWithLastContactPosition.x - transform.position.x) < 0)
+            {
+                rb.AddForce(new Vector2(1, 1) * wallJumpStrength, ForceMode2D.Impulse);
+            }
+            else if((wallWithLastContactPosition.x - transform.position.x) == 0)
+            {
+                Debug.Log("ERROR WallJump in the Wall: " + wallWithLastContactPosition);
+            }
+        }
+    }
+    
     private void SlideFixedUpdate()
     {
         if(Input.GetKey(KeyCode.S) && IsOnGround())
         {
-            slideMultiplyer = (1 / slidingLength);
-            if(float.IsNaN(slideMultiplyer) || float.IsInfinity(slideMultiplyer))
-            {
-                slideMultiplyer = 0f;
-            }
+            slideMultiplyer = slidingLength;
             isSliding = true;
         }
         else
@@ -103,11 +141,36 @@ public class PlayerMovement : MonoBehaviour
 
     private void DashUpdate()
     {
-        if(Input.GetKeyDown(KeyCode.LeftShift))
+        //check if dash has been canceled
+        if(ForgivingFramesDashCancel > (DateTimeOffset.Now.ToUnixTimeMilliseconds() - timeSinceStartOfDash) )
+        {
+            if(GetCurrentDirectionTraveledX() == (Input.GetAxis("Horizontal") / Math.Abs(Input.GetAxis("Horizontal"))))
+            {
+
+            }
+            // dash has been cancelled
+            else
+            {
+                Debug.Log("Dash has been cancelled: " + (Input.GetAxis("Horizontal") / Math.Abs(Input.GetAxis("Horizontal"))));
+                // dash als abgelaufen markieren
+                timeInDash  = dashingLength + 0.1f;
+
+                // momentum cancell
+                rb.velocity = new Vector2(0, rb.velocity.y);
+            }
+        }
+        // wille sliding dashing is forbidden
+        if(Input.GetKeyDown(KeyCode.LeftShift) && !isSliding)
         {   
             // startDash
-            if(timeSinceLastDash > dashCooldown)
-            {
+            if(timeSinceLastDash > dashCooldown / 1000f)
+            {   
+                //setting starting time of the dash
+                if(!isDashing)
+                {
+                    timeSinceStartOfDash = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+                }
+
                 if(Input.GetKey(KeyCode.D))
                 {
                     rb.velocity = Vector2.zero;
@@ -176,7 +239,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 rb.AddForce(Vector2.right * horizontalInput * accelerationSpeed * Time.fixedDeltaTime);
             }
-            else
+            else if(Math.Abs(rb.velocity.x) > 0.1f || isInContactWithCollider == null)
             {
                 rb.AddForce(Vector2.right * horizontalInput * accelerationSpeed * Time.fixedDeltaTime * airMovementMultiplyer);
             }
@@ -196,11 +259,21 @@ public class PlayerMovement : MonoBehaviour
     {
         double x = Math.Sqrt(Math.Abs(rb.velocity.x));
         if(double.IsInfinity(x) || double.IsNaN(x))
-            {   
-                x = 0;
-            }
-            
-        rb.AddForce(new Vector2((float)x * timeSinceLastFrameUpdate * breakingStrength * -(GetCurrentDirectionTraveledX()) * slideMultiplyer, 0));
+        {   
+            x = 0;
+        }
+
+        rb.AddForce(new Vector2((float)x * timeSinceLastFrameUpdate * breakingStrength * -(GetCurrentDirectionTraveledX()), 0));
+        if(isSliding)
+        {
+            rb.AddForce(new Vector2(GetCurrentDirectionTraveledX() * (float)x * slideMultiplyer * breakingStrength * timeSinceLastFrameUpdate, 0));
+        }
+        
+        /*if(Math.Abs(rb.velocity.x) > 1.0f)
+        {
+            Debug.Log("Force: " + ((float)x * timeSinceLastFrameUpdate * breakingStrength * -(GetCurrentDirectionTraveledX()) * slideMultiplyer) + ", " + slideMultiplyer);
+        }*/
+        
     }
 
     private void JumpFixedUpdate()
@@ -229,7 +302,9 @@ public class PlayerMovement : MonoBehaviour
     {
         // needs maybe safety margin
         // does accept all colliders
-        if(rb.velocity.y >= 0 && isInContactWithCollider != null)
+        if(rb.velocity.y >= 0 && ((RayCastHitDetection()[1] != null && RayCastHitDetection()[1] != "Wall")
+                || (RayCastHitDetection()[2] != null && RayCastHitDetection()[2] != "Wall")
+                || (RayCastHitDetection()[3] != null && RayCastHitDetection()[3] != "Wall"))) // does a nother collider exists to stand of?
         {
             return true;
         }
@@ -242,6 +317,12 @@ public class PlayerMovement : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collisionInfo)
     {
         isInContactWithCollider = collisionInfo;
+        if(collisionInfo.gameObject.tag == "Wall")
+        {
+            timeSinceLastContactWithWall = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            wallWithLastContactPosition = collisionInfo.gameObject.transform.position;
+            Debug.Log("Collision with wall: " + collisionInfo.gameObject.tag);
+        }
         addConservedEnergyToMomentum();
     }
 
@@ -265,5 +346,48 @@ public class PlayerMovement : MonoBehaviour
             temp = 0;
         }
         return temp;
+    }
+
+    private List<String> RayCastHitDetection()
+    {
+        float raycastLength = 0.6f;
+
+        RaycastHit2D[] left = Physics2D.RaycastAll(transform.Find("RayCastStart").transform.position, Vector2.left, raycastLength);
+        RaycastHit2D[] down = Physics2D.RaycastAll(transform.Find("RayCastStart").transform.position, Vector2.down, raycastLength);
+        RaycastHit2D[] right = Physics2D.RaycastAll(transform.Find("RayCastStart").transform.position, Vector2.right, raycastLength);
+        RaycastHit2D[] leftDown = Physics2D.RaycastAll(transform.Find("RayCastStart").transform.position, new Vector2(-1, -1), raycastLength);
+        RaycastHit2D[] rightDown = Physics2D.RaycastAll(transform.Find("RayCastStart").transform.position, new Vector2(1, -1), raycastLength);
+
+        Debug.DrawRay(transform.Find("RayCastStart").transform.position, Vector2.left * raycastLength, Color.magenta);
+        Debug.DrawRay(transform.Find("RayCastStart").transform.position, Vector2.right * raycastLength, Color.magenta);
+        Debug.DrawRay(transform.Find("RayCastStart").transform.position, Vector2.down * raycastLength, Color.magenta);
+        Debug.DrawRay(transform.Find("RayCastStart").transform.position, new Vector2(-1, -1) * raycastLength, Color.yellow);
+        Debug.DrawRay(transform.Find("RayCastStart").transform.position, new Vector2(1, -1) * raycastLength, Color.yellow);
+
+        List<String> x = new List<String>();
+
+        List<RaycastHit2D[]> l = new List<RaycastHit2D[]>();
+        // do not change the order of the adding of the lists
+        l.Add(right);
+        l.Add(rightDown);
+        l.Add(down);
+        l.Add(leftDown);
+        l.Add(left);
+
+        
+        for(int y = 0; y < 5; y++)
+        {
+            if(l[y].Length > 1)
+            {
+                // the first contact is the player collider 
+                x.Add(l[y][1].collider.gameObject.tag);
+            }
+            else
+            {
+                x.Add(null);
+            }
+        }
+
+        return x;
     }
 }
