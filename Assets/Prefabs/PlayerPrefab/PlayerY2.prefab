@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5604897966615203770}
   - component: {fileID: 5604897966615203774}
   - component: {fileID: 5604897966615203769}
+  - component: {fileID: 1932499799}
   m_Layer: 0
   m_Name: PlayerY2
   m_TagString: Player
@@ -108,7 +109,7 @@ MonoBehaviour:
   movementEnergieConservationMultiplyer: 10
   airMovementMultiplyer: 1
   maxAirSpeed: 5
-  multiJumpIsActive: 1
+  multiJumpIsActive: 0
   airMovementIsActive: 1
   dashingLength: 1000
   dashBreakingStrength: 500
@@ -125,7 +126,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5604897966615203765}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -165,6 +166,22 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!70 &1932499799
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5604897966615203765}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 1, y: 1}
+  m_Direction: 0
 --- !u!1 &5604897967619863401
 GameObject:
   m_ObjectHideFlags: 0
