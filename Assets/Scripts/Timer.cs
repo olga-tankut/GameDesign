@@ -2,15 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System;
 
 public class Timer : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI timer;
+    private TextMeshProUGUI timer;
     [SerializeField] private float timeLeft = 20.0f;
     // Start is called before the first frame update
     void Start()
     {
-
+        timer = GetComponent<TextMeshProUGUI>();
     }
 
     // Update is called once per frame
@@ -19,7 +20,8 @@ public class Timer : MonoBehaviour
         timeLeft -= Time.deltaTime;
         if(timeLeft > 0)
         {
-            timer.text = "" + timeLeft;
+            decimal x = (decimal)timeLeft;
+            timer.text = "" + (Math.Round(x, 2));
         }else{
             timer.text = " 0.00";
             // gameOver screen?
