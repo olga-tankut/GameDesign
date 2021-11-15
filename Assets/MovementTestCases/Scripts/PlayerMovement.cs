@@ -285,7 +285,7 @@ public class PlayerMovement : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, jumpVelocity);
         }
         // ende code zitat: 1
-        else if(IsOnGround() || multiJumpIsActive)
+        else /*if(IsOnGround() || multiJumpIsActive)*/
         {
             // code zitat: 
             if(rb.velocity.y > 0 && !Input.GetButton("Jump"))
