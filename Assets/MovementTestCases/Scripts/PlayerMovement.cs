@@ -45,6 +45,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]private int ForgivingFramesDashCancel = 300;
     [Range(0, 10)]
     [SerializeField]private float wallJumpStrength = 5f;
+    [Range(0, 3)]
+    [SerializeField]private float upwardForceOnSlopes = 1.0f;
 
     private Rigidbody2D rb;
     private Collision2D isInContactWithCollider;
@@ -243,6 +245,12 @@ public class PlayerMovement : MonoBehaviour
             {
                 rb.AddForce(Vector2.right * horizontalInput * accelerationSpeed * Time.fixedDeltaTime * airMovementMultiplyer);
             }
+
+            if(IsOnSlope())
+            {
+                Debug.Log("appling Slope");
+                rb.AddForce(Vector2.up * Time.fixedDeltaTime * 1000);
+            }
             
         }
 
@@ -330,14 +338,14 @@ public class PlayerMovement : MonoBehaviour
         {
             timeSinceLastContactWithWall = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             wallWithLastContactPosition = new Vector2(transform.position.x + 1, transform.position.y);
-            Debug.Log("Collision with Wall");
+            //Debug.Log("Collision with Wall");
         }
 
         if(RayCastHitDetection()[4] != null)
         {
             timeSinceLastContactWithWall = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             wallWithLastContactPosition = new Vector2(transform.position.x - 1, transform.position.y);
-            Debug.Log("Collision with Wall");
+            //Debug.Log("Collision with Wall");
         }
         addConservedEnergyToMomentum();
     }
@@ -405,5 +413,21 @@ public class PlayerMovement : MonoBehaviour
         }
 
         return x;
+    }
+
+    private bool IsOnSlope()
+    {
+        if(RayCastHitDetection()[1] != null && RayCastHitDetection()[3] == null)
+        {
+            //Debug.Log("Is on Slope");
+            return true;
+        }
+        if(RayCastHitDetection()[3] != null && RayCastHitDetection()[1] == null)
+        {
+            //Debug.Log("Is on Slope");
+            return true;
+        }
+        //Debug.Log(RayCastHitDetection()[1] + ", " + RayCastHitDetection()[2] + ", " + RayCastHitDetection()[3]);
+        return false;
     }
 }
