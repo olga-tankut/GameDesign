@@ -317,11 +317,27 @@ public class PlayerMovement : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collisionInfo)
     {
         isInContactWithCollider = collisionInfo;
-        if(collisionInfo.gameObject.tag == "Wall")
+        // old RayCast less aproach
+        /*if(collisionInfo.gameObject.tag == "Wall")
         {
             timeSinceLastContactWithWall = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             wallWithLastContactPosition = collisionInfo.gameObject.transform.position;
             Debug.Log("Collision with wall: " + collisionInfo.gameObject.tag);
+        }*/
+        if(collisionInfo.gameObject.tag == "LVL")
+        //right
+        if(RayCastHitDetection()[0] != null)
+        {
+            timeSinceLastContactWithWall = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            wallWithLastContactPosition = new Vector2(transform.position.x + 1, transform.position.y);
+            Debug.Log("Collision with Wall");
+        }
+
+        if(RayCastHitDetection()[4] != null)
+        {
+            timeSinceLastContactWithWall = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            wallWithLastContactPosition = new Vector2(transform.position.x - 1, transform.position.y);
+            Debug.Log("Collision with Wall");
         }
         addConservedEnergyToMomentum();
     }
