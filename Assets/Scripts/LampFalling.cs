@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FlowerTop : MonoBehaviour
+public class LampFalling : MonoBehaviour
     
 {
     public float countdown = 2;
@@ -19,7 +19,6 @@ public class FlowerTop : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         rb.Sleep();
         rb.isKinematic = true;
-        sprender.enabled = false;
     }
 
     // Update is called once per frame
@@ -35,7 +34,6 @@ public class FlowerTop : MonoBehaviour
     void Fall()
     {
         rb.WakeUp();
-        sprender.enabled = true;
         rb.isKinematic = false;
         Debug.Log("wakeup");
         hasFallen = true;
