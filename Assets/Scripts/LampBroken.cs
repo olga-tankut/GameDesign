@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Lamp : MonoBehaviour
+public class LampBroken : MonoBehaviour
 {
     Rigidbody2D rb;
     public float moveSpeed;
