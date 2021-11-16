@@ -10,8 +10,8 @@ public class GameManager : MonoBehaviour
    public bool gameIsPaused = false;
 
    private void Start() {
-       pauseScreen = transform.Find("PauseScreen").gameObject;
-       gameScreen = transform.Find("GameScreen").gameObject;
+       pauseScreen = transform.parent.transform.Find("PauseScreen").gameObject;
+       gameScreen = transform.parent.transform.Find("GameScreen").gameObject;
        pauseScreen.SetActive(false);
        gameScreen.SetActive(true);
    }
