@@ -302,7 +302,7 @@ public class PlayerMovement : MonoBehaviour
     {
         // needs maybe safety margin
         // does accept all colliders
-        if(rb.velocity.y >= 0 && ((RayCastHitDetection()[1] != null && RayCastHitDetection()[1] != "Wall")
+        if(/*rb.velocity.y >= 0 &&*/ ((RayCastHitDetection()[1] != null && RayCastHitDetection()[1] != "Wall")
                 || (RayCastHitDetection()[2] != null && RayCastHitDetection()[2] != "Wall")
                 || (RayCastHitDetection()[3] != null && RayCastHitDetection()[3] != "Wall"))) // does a nother collider exists to stand of?
         {
