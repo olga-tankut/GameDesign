@@ -45,13 +45,18 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]private int ForgivingFramesDashCancel = 300;
     [Range(0, 10)]
     [SerializeField]private float wallJumpStrength = 5f;
+    [Range(0, 3)]
+    [SerializeField]private float upwardForceOnSlopes = 1.0f;
+    
+    //public Animator animator;
 
     private Rigidbody2D rb;
     private Collision2D isInContactWithCollider;
     private float timeSinceLastDash = 0f;
     private float timeInDash = 0f;
-    private bool isSliding = false;
-    private bool isDashing = false;
+    private static bool isSliding = false;
+    private static bool isDashing = false;
+    private static bool isJumping = false;
     private float startingGravity;
     private float slideMultiplyer = 1.0f;
     private long timeSinceLastContactWithWall = 0; // in ms
@@ -76,6 +81,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if(Input.GetButtonDown("Jump"))
             {
+                isJumping = true;
                 // multi jumps are less strong because of rb.velocity
                 GetComponent<Rigidbody2D>().velocity = Vector2.up * jumpVelocity + rb.velocity;
             }
@@ -94,6 +100,7 @@ public class PlayerMovement : MonoBehaviour
         JumpFixedUpdate();
         SlideFixedUpdate();
         MoveFixedUpdate();
+        // AnimDirectionFixedUpdate();
         //Debug.Log(RayCastHitDetection().Exists(x => x == "Wall") +", " + RayCastHitDetection().Exists(x => x == "Ground"));
         //Debug.Log(IsOnGround());
         /*Debug.Log(RayCastHitDetection()[0] + ", " +
@@ -209,7 +216,7 @@ public class PlayerMovement : MonoBehaviour
             if(timeInDash > dashingLength / 1000f / dashingStrength)
             {
                 AddBreakingForce(dashBreakingStrength, Time.deltaTime);
-                isDashing = false;
+                isDashing = false;  
             }
             else
             {
@@ -242,6 +249,12 @@ public class PlayerMovement : MonoBehaviour
             else if(Math.Abs(rb.velocity.x) > 0.1f || isInContactWithCollider == null)
             {
                 rb.AddForce(Vector2.right * horizontalInput * accelerationSpeed * Time.fixedDeltaTime * airMovementMultiplyer);
+            }
+
+            if(IsOnSlope())
+            {
+                Debug.Log("appling Slope");
+                rb.AddForce(Vector2.up * Time.fixedDeltaTime * 1000);
             }
             
         }
@@ -283,6 +296,8 @@ public class PlayerMovement : MonoBehaviour
         {
             float jumpVelocity = rb.velocity.y + (Physics2D.gravity.y * (fallMultiplier - 1) * Time.fixedDeltaTime);
             rb.velocity = new Vector2(rb.velocity.x, jumpVelocity);
+
+            //animator.SetBool("isJumping", false);  
         }
         // ende code zitat: 1
         else /*if(IsOnGround() || multiJumpIsActive)*/
@@ -291,8 +306,14 @@ public class PlayerMovement : MonoBehaviour
             if(rb.velocity.y > 0 && !Input.GetButton("Jump"))
             {
                 rb.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.fixedDeltaTime;
+                isJumping = true;
+                //animator.SetBool("isJumping", true);
             }
             // ende code zitat: 1
+            else
+            {
+                isJumping = false;
+            }
         }
     }
 
@@ -302,7 +323,7 @@ public class PlayerMovement : MonoBehaviour
     {
         // needs maybe safety margin
         // does accept all colliders
-        if(rb.velocity.y >= 0 && ((RayCastHitDetection()[1] != null && RayCastHitDetection()[1] != "Wall")
+        if(/*rb.velocity.y >= 0 &&*/ ((RayCastHitDetection()[1] != null && RayCastHitDetection()[1] != "Wall")
                 || (RayCastHitDetection()[2] != null && RayCastHitDetection()[2] != "Wall")
                 || (RayCastHitDetection()[3] != null && RayCastHitDetection()[3] != "Wall"))) // does a nother collider exists to stand of?
         {
@@ -330,14 +351,14 @@ public class PlayerMovement : MonoBehaviour
         {
             timeSinceLastContactWithWall = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             wallWithLastContactPosition = new Vector2(transform.position.x + 1, transform.position.y);
-            Debug.Log("Collision with Wall");
+            //Debug.Log("Collision with Wall");
         }
 
         if(RayCastHitDetection()[4] != null)
         {
             timeSinceLastContactWithWall = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             wallWithLastContactPosition = new Vector2(transform.position.x - 1, transform.position.y);
-            Debug.Log("Collision with Wall");
+            //Debug.Log("Collision with Wall");
         }
         addConservedEnergyToMomentum();
     }
@@ -405,5 +426,42 @@ public class PlayerMovement : MonoBehaviour
         }
 
         return x;
+    }
+
+    private bool IsOnSlope()
+    {
+        if(RayCastHitDetection()[1] != null && RayCastHitDetection()[3] == null)
+        {
+            //Debug.Log("Is on Slope");
+            return true;
+        }
+        if(RayCastHitDetection()[3] != null && RayCastHitDetection()[1] == null)
+        {
+            //Debug.Log("Is on Slope");
+            return true;
+        }
+        //Debug.Log(RayCastHitDetection()[1] + ", " + RayCastHitDetection()[2] + ", " + RayCastHitDetection()[3]);
+        return false;
+    }
+    public static bool GetIsJumping()
+    {
+        // if() for slope
+        return isJumping;
+    }
+
+    public static bool GetIsDashing()
+    {
+        return isDashing;
+    }
+
+    public static bool GetIsSliding()
+    {
+        return isSliding;
+    }
+
+    public static float GetCurrentSpeed()
+    {
+        // returns values between -1 and 1 
+        return Mathf.Abs(Input.GetAxis("Horizontal"));
     }
 }

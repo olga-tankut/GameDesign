@@ -8,9 +8,6 @@ TagManager:
   - Wall
   - DeadlyObstacle
   - LVL
-  - Cable
-  - Cardboard Box
-  - Lamp
   layers:
   - Default
   - TransparentFX
