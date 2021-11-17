@@ -46,14 +46,15 @@ public class PlayerMovement : MonoBehaviour
     [Range(0, 10)]
     [SerializeField]private float wallJumpStrength = 5f;
     
-    public Animator animator;
+    //public Animator animator;
 
     private Rigidbody2D rb;
     private Collision2D isInContactWithCollider;
     private float timeSinceLastDash = 0f;
     private float timeInDash = 0f;
-    private bool isSliding = false;
-    private bool isDashing = false;
+    private static bool isSliding = false;
+    private static bool isDashing = false;
+    private static bool isJumping = false;
     private float startingGravity;
     private float slideMultiplyer = 1.0f;
     private long timeSinceLastContactWithWall = 0; // in ms
@@ -78,6 +79,7 @@ public class PlayerMovement : MonoBehaviour
         {
             if(Input.GetButtonDown("Jump"))
             {
+                isJumping = true;
                 // multi jumps are less strong because of rb.velocity
                 GetComponent<Rigidbody2D>().velocity = Vector2.up * jumpVelocity + rb.velocity;
             }
@@ -96,7 +98,7 @@ public class PlayerMovement : MonoBehaviour
         JumpFixedUpdate();
         SlideFixedUpdate();
         MoveFixedUpdate();
-        AnimDirectionFixedUpdate();
+        // AnimDirectionFixedUpdate();
         //Debug.Log(RayCastHitDetection().Exists(x => x == "Wall") +", " + RayCastHitDetection().Exists(x => x == "Ground"));
         //Debug.Log(IsOnGround());
         /*Debug.Log(RayCastHitDetection()[0] + ", " +
@@ -134,15 +136,11 @@ public class PlayerMovement : MonoBehaviour
         {
             slideMultiplyer = slidingLength;
             isSliding = true;
-
-            animator.SetBool("isSliding", true);
         }
         else
         {
             slideMultiplyer = 1.0f;
             isSliding = false;
-
-            animator.SetBool("isSliding", false);
         }
     }
 
@@ -212,13 +210,11 @@ public class PlayerMovement : MonoBehaviour
         // end dash
         if(isDashing)
         {
-            animator.SetBool("isDashing", true);
             // Breaking an reseting gravity
             if(timeInDash > dashingLength / 1000f / dashingStrength)
             {
                 AddBreakingForce(dashBreakingStrength, Time.deltaTime);
                 isDashing = false;  
-                animator.SetBool("isDashing", false);
             }
             else
             {
@@ -240,8 +236,6 @@ public class PlayerMovement : MonoBehaviour
         // TODO: deaktivate stick to wall
         //movement
         float horizontalInput = Input.GetAxis("Horizontal");
-        //movement animation
-        animator.SetFloat("Speed", Mathf.Abs(horizontalInput));
         // acceleration is allowed to inrease in the opposite direction currently traveled
         if((Math.Abs(rb.velocity.x) < maxGroundSpeed && IsOnGround()) || (Math.Abs(rb.velocity.x) < maxAirSpeed && !IsOnGround()) ||
         (airMovementIsActive && (GetCurrentDirectionTraveledX() != (horizontalInput / Math.Abs(horizontalInput)))))
@@ -295,7 +289,7 @@ public class PlayerMovement : MonoBehaviour
             float jumpVelocity = rb.velocity.y + (Physics2D.gravity.y * (fallMultiplier - 1) * Time.fixedDeltaTime);
             rb.velocity = new Vector2(rb.velocity.x, jumpVelocity);
 
-            animator.SetBool("isJumping", false);  
+            //animator.SetBool("isJumping", false);  
         }
         // ende code zitat: 1
         else /*if(IsOnGround() || multiJumpIsActive)*/
@@ -304,33 +298,15 @@ public class PlayerMovement : MonoBehaviour
             if(rb.velocity.y > 0 && !Input.GetButton("Jump"))
             {
                 rb.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.fixedDeltaTime;
-                
-                animator.SetBool("isJumping", true);
+                isJumping = true;
+                //animator.SetBool("isJumping", true);
             }
             // ende code zitat: 1
+            else
+            {
+                isJumping = false;
+            }
         }
-    }
-
-    //Zitat, Quelle: https://www.youtube.com/watch?v=4qE8cuHI93c
-    public bool facingRight = true; //Default direction of sprite
-    
-    //Dtermining which direction player is facing
-    void AnimDirectionFixedUpdate()
-    {
-        float h = Input.GetAxis("Horizontal");
-        if(h > 0 && !facingRight)
-            Flip();
-        else if(h < 0 && facingRight)
-            Flip();
-     }
-
-    //Flipping animation sprite into correct direction
-    void Flip ()
-    {
-        facingRight = !facingRight;
-        Vector3 theScale = transform.localScale;
-        theScale.x *= -1;
-        transform.localScale = theScale;
     }
 
     // ToDo: detecton of conntact 
@@ -442,5 +418,26 @@ public class PlayerMovement : MonoBehaviour
         }
 
         return x;
+    }
+    public static bool GetIsJumping()
+    {
+        // if() for slope
+        return isJumping;
+    }
+
+    public static bool GetIsDashing()
+    {
+        return isDashing;
+    }
+
+    public static bool GetIsSliding()
+    {
+        return isSliding;
+    }
+
+    public static float GetCurrentSpeed()
+    {
+        // returns values between -1 and 1 
+        return Mathf.Abs(Input.GetAxis("Horizontal"));
     }
 }
