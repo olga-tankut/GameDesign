@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerAnimationControl : MonoBehaviour
 {
+    public Animator animator;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,20 +17,34 @@ public class PlayerAnimationControl : MonoBehaviour
         
     }
 
-    private void OnGUI() {
-        GetKeyPress(Event.current);
+    private void FixedUpdate() {
+        animator.SetBool("isJumping", PlayerMovement.GetIsJumping());
+        animator.SetBool("isDashing", PlayerMovement.GetIsDashing());
+        animator.SetBool("isSliding", PlayerMovement.GetIsSliding());
+        animator.SetFloat("Speed", PlayerMovement.GetCurrentSpeed());
+        AnimDirectionFixedUpdate();
     }
 
-    // implement the animation trigger change here
-    private void GetKeyPress(Event e)
+    //Zitat, Quelle: https://www.youtube.com/watch?v=4qE8cuHI93c
+    public bool facingRight = true; //Default direction of sprite
+    
+    //Dtermining which direction player is facing
+    void AnimDirectionFixedUpdate()
     {
-        if(e.isKey)
-        {
-            // return e.keyCode;
-        }
-        else
-        {
-            // return null;
-        }
+        float h = Input.GetAxis("Horizontal");
+        if(h > 0 && !facingRight)
+            Flip();
+        else if(h < 0 && facingRight)
+            Flip();
+     }
+
+    //Flipping animation sprite into correct direction
+    void Flip ()
+    {
+        facingRight = !facingRight;
+        Vector3 theScale = transform.localScale;
+        theScale.x *= -1;
+        transform.localScale = theScale;
     }
+
 }
