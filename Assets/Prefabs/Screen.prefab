@@ -104,27 +104,19 @@ PrefabInstance:
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2411232270515514636, guid: cedda197e4cb6a77992bed69a7d0c409, type: 3}
+    - target: {fileID: 2444955893541908844, guid: bbff56a7569415a489d5b501f63b5410, type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2411232270515514636, guid: cedda197e4cb6a77992bed69a7d0c409, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2411232270515514636, guid: cedda197e4cb6a77992bed69a7d0c409, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2411232270515514636, guid: cedda197e4cb6a77992bed69a7d0c409, type: 3}
+    - target: {fileID: 2444955893541908844, guid: bbff56a7569415a489d5b501f63b5410, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2411232270515514636, guid: cedda197e4cb6a77992bed69a7d0c409, type: 3}
+    - target: {fileID: 2444955893541908844, guid: bbff56a7569415a489d5b501f63b5410, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2411232270515514636, guid: cedda197e4cb6a77992bed69a7d0c409, type: 3}
+    - target: {fileID: 2444955893541908844, guid: bbff56a7569415a489d5b501f63b5410, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
@@ -144,7 +136,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4020788483363237250, guid: 354668e30a06f125fb2f419e74204e82, type: 3}
       propertyPath: m_Name
-      value: PauseScreen
+      value: GameManager
       objectReference: {fileID: 0}
     - target: {fileID: 4020788483363237250, guid: 354668e30a06f125fb2f419e74204e82, type: 3}
       propertyPath: m_IsActive
