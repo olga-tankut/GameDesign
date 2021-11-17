@@ -8,6 +8,12 @@ TagManager:
   - Wall
   - DeadlyObstacle
   - LVL
+  - LampBrokenLeft
+  - LampBrokenRight
+  - FanLeft
+  - Cable
+  - LampFalling
+  - FanRight
   layers:
   - Default
   - TransparentFX
