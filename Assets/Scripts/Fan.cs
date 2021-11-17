@@ -8,7 +8,7 @@ public class Fan : MonoBehaviour
     PlayerMovement pm;
     Rigidbody2D prb;
     GameObject p;
-    public float fanSpeed = 500;
+    public float fanSpeed = 1000;
 
     public enum Direction
     {

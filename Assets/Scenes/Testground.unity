@@ -4436,6 +4436,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 852351750, guid: c5d3c66bc5dedec44a839ed59a4f21b9, type: 3}
+      propertyPath: fanSpeed
+      value: 1000
+      objectReference: {fileID: 0}
     - target: {fileID: 6395871636423240167, guid: c5d3c66bc5dedec44a839ed59a4f21b9, type: 3}
       propertyPath: m_Name
       value: medium fan
