@@ -55,7 +55,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: bd83e4716d83f502ba41331a5e0c4540, type: 2}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -73,8 +73,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -485081605
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -99,24 +99,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff8d426d5a85e5abcad36bb637f7bed0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jumpVelocity: 8.9
-  fallMultiplier: 2.5
-  lowJumpMultiplier: 2
-  accelerationSpeed: 1000
-  maxGroundSpeed: 4
-  breakForce: 100
-  dashCooldown: 1000
-  movementEnergieConservationMultiplyer: 10
-  airMovementMultiplyer: 1
-  maxAirSpeed: 5
+  jumpVelocity: 8.8
+  fallMultiplier: 4
+  lowJumpMultiplier: 1.25
+  accelerationSpeed: 1853
+  maxGroundSpeed: 11.73
+  breakForce: 327
+  dashCooldown: 65
+  movementEnergieConservationMultiplyer: 11.37
+  airMovementMultiplyer: 1.35
+  maxAirSpeed: 13.95
   multiJumpIsActive: 0
   airMovementIsActive: 1
-  dashingLength: 1000
-  dashBreakingStrength: 500
-  dashingStrength: 10
+  dashingLength: 4487
+  dashBreakingStrength: 611
+  dashingStrength: 14.51
   slidingLength: 1.7
   wallJumpIsAktive: 1
-  ForgivingFramesWallJump: 500
+  ForgivingFramesWallJump: 300
   ForgivingFramesDashCancel: 300
   wallJumpStrength: 5
 --- !u!61 &5604897966615203774
