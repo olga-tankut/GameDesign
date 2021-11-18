@@ -296,7 +296,6 @@ public class PlayerMovement : MonoBehaviour
         {
             float jumpVelocity = rb.velocity.y + (Physics2D.gravity.y * (fallMultiplier - 1) * Time.fixedDeltaTime);
             rb.velocity = new Vector2(rb.velocity.x, jumpVelocity);
-
             //animator.SetBool("isJumping", false);  
         }
         // ende code zitat: 1
@@ -312,7 +311,10 @@ public class PlayerMovement : MonoBehaviour
             // ende code zitat: 1
             else
             {
-                isJumping = false;
+                if(Input.GetKey(KeyCode.Space) != true)
+                {
+                    isJumping = false;
+                }
             }
         }
     }
@@ -387,7 +389,7 @@ public class PlayerMovement : MonoBehaviour
 
     private List<String> RayCastHitDetection()
     {
-        float raycastLength = 0.6f;
+        float raycastLength = 0.3f;
 
         RaycastHit2D[] left = Physics2D.RaycastAll(transform.Find("RayCastStart").transform.position, Vector2.left, raycastLength);
         RaycastHit2D[] down = Physics2D.RaycastAll(transform.Find("RayCastStart").transform.position, Vector2.down, raycastLength);
