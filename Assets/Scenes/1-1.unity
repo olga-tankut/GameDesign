@@ -5380,6 +5380,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7327751444201242511, guid: 68ed136e1e89247488314b3d34eb7d39, type: 3}
+      propertyPath: m_TrackedObjectOffset.y
+      value: -1.5
+      objectReference: {fileID: 0}
     - target: {fileID: 7327751444579383163, guid: 68ed136e1e89247488314b3d34eb7d39, type: 3}
       propertyPath: m_Name
       value: Main Camera
@@ -5390,11 +5394,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7327751444579383166, guid: 68ed136e1e89247488314b3d34eb7d39, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.9986721
+      value: 0.9982684
       objectReference: {fileID: 0}
     - target: {fileID: 7327751444579383166, guid: 68ed136e1e89247488314b3d34eb7d39, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.2699995
+      value: -1.7699995
       objectReference: {fileID: 0}
     - target: {fileID: 7327751444579383166, guid: 68ed136e1e89247488314b3d34eb7d39, type: 3}
       propertyPath: m_LocalPosition.z
