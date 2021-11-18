@@ -24,11 +24,11 @@ public class LampFalling : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        countdown -= Time.deltaTime;
-        if (countdown <= 0f && !hasFallen)
-        {
-            Fall();
-        }
+        //countdown -= Time.deltaTime;
+        //if (countdown <= 0f && !hasFallen)
+        //{
+        //    Fall();
+        //}
        
     }
     void Fall()
@@ -41,9 +41,17 @@ public class LampFalling : MonoBehaviour
 
     protected void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.transform.gameObject)
+        //if (collision.transform.gameObject)
+        //{
+        //    Debug.Log("Boom");
+        //}
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Player")
         {
-            Debug.Log("Boom");
+            Fall();
         }
     }
 }

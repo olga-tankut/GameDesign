@@ -39,8 +39,6 @@ public class Fan : MonoBehaviour
         if(direction == Direction.right) prb.AddForce(Vector2.right * fanSpeed * Time.fixedDeltaTime);
         if (direction == Direction.down) prb.AddForce(Vector2.down * fanSpeed * Time.fixedDeltaTime);
         if (direction == Direction.left) prb.AddForce(Vector2.left * fanSpeed * Time.fixedDeltaTime);
-
-
     }
     void OnTriggerExit2D(Collider2D other)
     {
