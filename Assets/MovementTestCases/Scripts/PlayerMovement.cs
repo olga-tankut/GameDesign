@@ -63,16 +63,19 @@ public class PlayerMovement : MonoBehaviour
     private long timeSinceStartOfDash = 0;
     private Vector2 wallWithLastContactPosition;
     private ContactPoint2D[] colliderCurrentlyinContactWith = new ContactPoint2D[5];
+    private GameObject raycastStart;
 
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        rb = transform.parent.GetComponent<Rigidbody2D>();
         // beginning dash delay => has to be bigger than dashCooldown to be instant available at the start of the game
         timeSinceLastDash = (dashCooldown / 1000) + 0.1f;
         timeInDash = 0f;
         startingGravity = rb.gravityScale;
         slideMultiplyer = 1.0f;
         timeSinceLastContactWithWall = ForgivingFramesWallJump + 1;
+
+        //raycastStart = transform.parent.Find("RayCastStart");
     }
 
     void Update()
@@ -83,15 +86,10 @@ public class PlayerMovement : MonoBehaviour
             {
                 isJumping = true;
                 // multi jumps are less strong because of rb.velocity
-                GetComponent<Rigidbody2D>().velocity = Vector2.up * jumpVelocity + rb.velocity;
+                rb.velocity = Vector2.up * jumpVelocity + rb.velocity;
             }
         }
         DashUpdate();
-
-        if(Input.GetKeyDown(KeyCode.Escape))
-        {
-            FindObjectOfType<GameManager>().EndGame();
-        }
     }
 
     void FixedUpdate()
@@ -100,6 +98,7 @@ public class PlayerMovement : MonoBehaviour
         JumpFixedUpdate();
         SlideFixedUpdate();
         MoveFixedUpdate();
+        //Debug.Log(IsOnGround());
         // AnimDirectionFixedUpdate();
         //Debug.Log(RayCastHitDetection().Exists(x => x == "Wall") +", " + RayCastHitDetection().Exists(x => x == "Ground"));
         //Debug.Log(IsOnGround());
@@ -389,7 +388,8 @@ public class PlayerMovement : MonoBehaviour
 
     private List<String> RayCastHitDetection()
     {
-        float raycastLength = 0.3f;
+        float raycastLength = 0.6f;
+        raycastLength *= transform.parent.transform.localScale.y;
 
         RaycastHit2D[] left = Physics2D.RaycastAll(transform.Find("RayCastStart").transform.position, Vector2.left, raycastLength);
         RaycastHit2D[] down = Physics2D.RaycastAll(transform.Find("RayCastStart").transform.position, Vector2.down, raycastLength);

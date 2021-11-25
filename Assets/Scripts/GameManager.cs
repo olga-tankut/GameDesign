@@ -27,16 +27,6 @@ public class GameManager : MonoBehaviour
            RestartLevel();
        }
    }
-
-   public void EndGame()
-    {
-        if(gameHasEnded)
-        {
-            gameHasEnded = true;
-            Debug.Log("Game over");
-            Invoke("RestartLevel", restartDelay);
-        }      
-    } 
     
     public void RestartLevel()
     {
