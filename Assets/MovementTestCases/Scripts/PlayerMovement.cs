@@ -64,6 +64,10 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 wallWithLastContactPosition;
     private ContactPoint2D[] colliderCurrentlyinContactWith = new ContactPoint2D[5];
     private GameObject raycastStart;
+    private long slopeDelay = 5; // ms
+    private long timeOfHitOfSlope;
+    private long timeOfStartOfFall;
+    private long fallAnimationDelayOnSlopes = 5; // ms
 
     void Start()
     {
@@ -74,16 +78,19 @@ public class PlayerMovement : MonoBehaviour
         startingGravity = rb.gravityScale;
         slideMultiplyer = 1.0f;
         timeSinceLastContactWithWall = ForgivingFramesWallJump + 1;
+        timeOfHitOfSlope = 0; // 1970-01-01 00:00
+        timeOfStartOfFall = 0;
 
         //raycastStart = transform.parent.Find("RayCastStart");
     }
 
     void Update()
     {
-        if(IsOnGround() || multiJumpIsActive)
+        if(IsOnGround() || multiJumpIsActive || IsOnSlope())
         {
             if(Input.GetButtonDown("Jump"))
             {
+
                 isJumping = true;
                 // multi jumps are less strong because of rb.velocity
                 rb.velocity = Vector2.up * jumpVelocity + rb.velocity;
@@ -98,6 +105,12 @@ public class PlayerMovement : MonoBehaviour
         JumpFixedUpdate();
         SlideFixedUpdate();
         MoveFixedUpdate();
+        Debug.Log(IsOnSlope());
+        // cancel Jumping animation on slopes
+        if(IsOnSlope() && !Input.GetKey(KeyCode.Space))
+        {
+            isJumping = false;
+        }
         //Debug.Log(IsOnGround());
         // AnimDirectionFixedUpdate();
         //Debug.Log(RayCastHitDetection().Exists(x => x == "Wall") +", " + RayCastHitDetection().Exists(x => x == "Ground"));
@@ -241,7 +254,7 @@ public class PlayerMovement : MonoBehaviour
         if((Math.Abs(rb.velocity.x) < maxGroundSpeed && IsOnGround()) || (Math.Abs(rb.velocity.x) < maxAirSpeed && !IsOnGround()) ||
         (airMovementIsActive && (GetCurrentDirectionTraveledX() != (horizontalInput / Math.Abs(horizontalInput)))))
         {
-            if(IsOnGround())
+            if(IsOnGround() || IsOnSlope())
             {
                 rb.AddForce(Vector2.right * horizontalInput * accelerationSpeed * Time.fixedDeltaTime);
             }
@@ -252,8 +265,11 @@ public class PlayerMovement : MonoBehaviour
 
             if(IsOnSlope())
             {
-                Debug.Log("appling Slope");
-                rb.AddForce(Vector2.up * Time.fixedDeltaTime * 1000);
+                if(Input.GetAxis("Horizontal") != 0)
+                {
+                    rb.AddForce(Vector2.up * Time.fixedDeltaTime * 70, ForceMode2D.Impulse);
+                }
+                
             }
             
         }
@@ -295,17 +311,25 @@ public class PlayerMovement : MonoBehaviour
         {
             float jumpVelocity = rb.velocity.y + (Physics2D.gravity.y * (fallMultiplier - 1) * Time.fixedDeltaTime);
             rb.velocity = new Vector2(rb.velocity.x, jumpVelocity);
-            //animator.SetBool("isJumping", false);  
+            if(!IsOnSlope() && (DateTimeOffset.Now.ToUnixTimeMilliseconds() > (timeOfStartOfFall + fallAnimationDelayOnSlopes)))
+            {
+                isJumping = true;
+            }
         }
         // ende code zitat: 1
-        else /*if(IsOnGround() || multiJumpIsActive)*/
+        else
         {
+            timeOfStartOfFall = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             // code zitat: 
             if(rb.velocity.y > 0 && !Input.GetButton("Jump"))
             {
                 rb.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.fixedDeltaTime;
-                isJumping = true;
-                //animator.SetBool("isJumping", true);
+                if(RayCastHitDetection()[1] == null &&
+                RayCastHitDetection()[2] == null &&
+                RayCastHitDetection()[3] == null)
+                {
+                    isJumping = true;
+                }
             }
             // ende code zitat: 1
             else
@@ -388,14 +412,14 @@ public class PlayerMovement : MonoBehaviour
 
     private List<String> RayCastHitDetection()
     {
-        float raycastLength = 0.6f;
+        float raycastLength = 0.7f;
         raycastLength *= transform.parent.transform.localScale.y;
 
         RaycastHit2D[] left = Physics2D.RaycastAll(transform.Find("RayCastStart").transform.position, Vector2.left, raycastLength);
         RaycastHit2D[] down = Physics2D.RaycastAll(transform.Find("RayCastStart").transform.position, Vector2.down, raycastLength);
         RaycastHit2D[] right = Physics2D.RaycastAll(transform.Find("RayCastStart").transform.position, Vector2.right, raycastLength);
-        RaycastHit2D[] leftDown = Physics2D.RaycastAll(transform.Find("RayCastStart").transform.position, new Vector2(-1, -1), raycastLength);
-        RaycastHit2D[] rightDown = Physics2D.RaycastAll(transform.Find("RayCastStart").transform.position, new Vector2(1, -1), raycastLength);
+        RaycastHit2D[] leftDown = Physics2D.RaycastAll(transform.Find("RayCastStart").transform.position, new Vector2(-1, -1), raycastLength * 1.2f);
+        RaycastHit2D[] rightDown = Physics2D.RaycastAll(transform.Find("RayCastStart").transform.position, new Vector2(1, -1), raycastLength * 1.2f);
 
         Debug.DrawRay(transform.Find("RayCastStart").transform.position, Vector2.left * raycastLength, Color.magenta);
         Debug.DrawRay(transform.Find("RayCastStart").transform.position, Vector2.right * raycastLength, Color.magenta);
@@ -432,14 +456,21 @@ public class PlayerMovement : MonoBehaviour
 
     private bool IsOnSlope()
     {
-        if(RayCastHitDetection()[1] != null && RayCastHitDetection()[3] == null)
+        if(RayCastHitDetection()[1] == "Untagged" && RayCastHitDetection()[3] != "Untagged")
         {
+            timeOfHitOfSlope = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             //Debug.Log("Is on Slope");
             return true;
         }
-        if(RayCastHitDetection()[3] != null && RayCastHitDetection()[1] == null)
+        if(RayCastHitDetection()[3] == "Untagged" && RayCastHitDetection()[1] != "Untagged")
         {
+            timeOfHitOfSlope = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             //Debug.Log("Is on Slope");
+            return true;
+        }
+        if(DateTimeOffset.Now.ToUnixTimeMilliseconds() < (timeOfHitOfSlope + slopeDelay))
+        {
+            //Debug.Log("Slope air push");
             return true;
         }
         //Debug.Log(RayCastHitDetection()[1] + ", " + RayCastHitDetection()[2] + ", " + RayCastHitDetection()[3]);
