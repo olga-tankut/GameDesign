@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class LevelLoadTrigger : MonoBehaviour
 {
+
     public string nextScene; // name of the nextScene loaded
     // Start is called before the first frame update
     void Start()
@@ -18,11 +19,13 @@ public class LevelLoadTrigger : MonoBehaviour
         
     }
 
-    private void OnTriggerEnter2D(Collider2D other) {
+    private void OnTriggerEnter2D(Collider2D other) 
+    {
         if(other.gameObject.tag == "Player")
         {
-            LoadNextLevel();
+            GameManager.Instance.LoadNextLevel();
         }
+        
     }
 
     private void LoadNextLevel()
