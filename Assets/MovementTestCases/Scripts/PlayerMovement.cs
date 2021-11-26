@@ -36,7 +36,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]private int dashBreakingStrength = 500;
     [Range(1, 20)]
     [SerializeField]private float dashingStrength = 10f;
-    [Range(1, 1.9f)]
+    [Range(0, 1.8f)]
     [SerializeField]private float slidingLength = 1.5f;// it is not proportional
     [SerializeField]private bool wallJumpIsAktive = true;
     [Range(0, 2000)]
@@ -68,6 +68,10 @@ public class PlayerMovement : MonoBehaviour
     private long timeOfHitOfSlope;
     private long timeOfStartOfFall;
     private long fallAnimationDelayOnSlopes = 5; // ms
+    private Vector3 raycastStartlocalPosition;
+    private Vector3 playerScaling;
+    private CapsuleCollider2D collider;
+    private Vector2 colliderSize;
 
     void Start()
     {
@@ -80,8 +84,10 @@ public class PlayerMovement : MonoBehaviour
         timeSinceLastContactWithWall = ForgivingFramesWallJump + 1;
         timeOfHitOfSlope = 0; // 1970-01-01 00:00
         timeOfStartOfFall = 0;
-
-        //raycastStart = transform.parent.Find("RayCastStart");
+        raycastStartlocalPosition = transform.Find("RayCastStart").transform.localPosition;
+        playerScaling = transform.parent.transform.localScale;
+        collider = GetComponent<CapsuleCollider2D>();
+        colliderSize = collider.size; // starting horizontal
     }
 
     void Update()
@@ -105,21 +111,33 @@ public class PlayerMovement : MonoBehaviour
         JumpFixedUpdate();
         SlideFixedUpdate();
         MoveFixedUpdate();
-        Debug.Log(IsOnSlope());
         // cancel Jumping animation on slopes
         if(IsOnSlope() && !Input.GetKey(KeyCode.Space))
         {
             isJumping = false;
         }
-        //Debug.Log(IsOnGround());
-        // AnimDirectionFixedUpdate();
-        //Debug.Log(RayCastHitDetection().Exists(x => x == "Wall") +", " + RayCastHitDetection().Exists(x => x == "Ground"));
-        //Debug.Log(IsOnGround());
-        /*Debug.Log(RayCastHitDetection()[0] + ", " +
-        RayCastHitDetection()[1] + ", " +
-        RayCastHitDetection()[2] + ", " +
-        RayCastHitDetection()[3] + ", " +
-        RayCastHitDetection()[4]);*/
+        //Debug.Log(rb.velocity);
+        /*if(Input.GetKeyDown(KeyCode.S))
+        {
+            CapsuleCollider2D collider = GetComponent<CapsuleCollider2D>();
+            Vector2 x = collider.size;
+            collider.size = new Vector2(x.y, x.x);
+            if(collider.direction == CapsuleDirection2D.Vertical)
+            {
+                // Horizontal
+                collider.offset = new Vector2(0, -0.4f) * playerScaling.y;
+                collider.direction = CapsuleDirection2D.Horizontal;
+                transform.Find("RayCastStart").transform.localPosition = new Vector3(0, -0.2f, 0) * playerScaling.y;
+            }
+            else
+            {
+                // Vertical 
+                collider.offset = Vector2.zero;
+                collider.direction = CapsuleDirection2D.Vertical;
+                transform.Find("RayCastStart").transform.localPosition = raycastStartlocalPosition;
+            }
+            
+        }*/
     }
 
     private void WallJumpFixedUpdate()
@@ -146,15 +164,32 @@ public class PlayerMovement : MonoBehaviour
     
     private void SlideFixedUpdate()
     {
+
         if(Input.GetKey(KeyCode.S) && IsOnGround())
         {
             slideMultiplyer = slidingLength;
             isSliding = true;
+
+            if(Input.GetKey(KeyCode.S))
+            {
+            collider.size = new Vector2(colliderSize.y, colliderSize.x); 
+            collider.offset = new Vector2(0, -0.4f) * playerScaling.y;
+            collider.direction = CapsuleDirection2D.Horizontal;
+            transform.Find("RayCastStart").transform.localPosition = new Vector3(0, -0.2f, 0) * playerScaling.y;
+            }
         }
-        else
+        else if(!Input.GetKey(KeyCode.S))
         {
             slideMultiplyer = 1.0f;
             isSliding = false;
+        }
+
+        if(!Input.GetKey(KeyCode.S))
+        {
+            collider.size = colliderSize; 
+            collider.offset = Vector2.zero;
+            collider.direction = CapsuleDirection2D.Vertical;
+            transform.Find("RayCastStart").transform.localPosition = raycastStartlocalPosition;
         }
     }
 
@@ -178,7 +213,7 @@ public class PlayerMovement : MonoBehaviour
                 rb.velocity = new Vector2(0, rb.velocity.y);
             }
         }
-        // wille sliding dashing is forbidden
+        // while sliding dashing is forbidden
         if(Input.GetKeyDown(KeyCode.LeftShift) && !isSliding)
         {   
             // startDash
@@ -254,20 +289,22 @@ public class PlayerMovement : MonoBehaviour
         if((Math.Abs(rb.velocity.x) < maxGroundSpeed && IsOnGround()) || (Math.Abs(rb.velocity.x) < maxAirSpeed && !IsOnGround()) ||
         (airMovementIsActive && (GetCurrentDirectionTraveledX() != (horizontalInput / Math.Abs(horizontalInput)))))
         {
-            if(IsOnGround() || IsOnSlope())
+            // ground movement
+            if((IsOnGround() || IsOnSlope()) && !isSliding)
             {
                 rb.AddForce(Vector2.right * horizontalInput * accelerationSpeed * Time.fixedDeltaTime);
             }
-            else if(Math.Abs(rb.velocity.x) > 0.1f || isInContactWithCollider == null)
+            // ai movement
+            else if(!IsOnGround())
             {
                 rb.AddForce(Vector2.right * horizontalInput * accelerationSpeed * Time.fixedDeltaTime * airMovementMultiplyer);
             }
 
-            if(IsOnSlope())
+            if(IsOnSlope() && !isSliding)
             {
                 if(Input.GetAxis("Horizontal") != 0)
                 {
-                    rb.AddForce(Vector2.up * Time.fixedDeltaTime * 70, ForceMode2D.Impulse);
+                    rb.AddForce(Vector2.up * Time.fixedDeltaTime * 70 * upwardForceOnSlopes, ForceMode2D.Impulse);
                 }
                 
             }
@@ -275,7 +312,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // slow down
-        if(IsOnGround() && !(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)))
+        if(IsOnGround() && (!(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D)) || isSliding))
         {
             AddBreakingForce(breakForce, Time.fixedDeltaTime);
         }
@@ -290,11 +327,14 @@ public class PlayerMovement : MonoBehaviour
         {   
             x = 0;
         }
-
-        rb.AddForce(new Vector2((float)x * timeSinceLastFrameUpdate * breakingStrength * -(GetCurrentDirectionTraveledX()), 0));
+        
         if(isSliding)
         {
             rb.AddForce(new Vector2(GetCurrentDirectionTraveledX() * (float)x * slideMultiplyer * breakingStrength * timeSinceLastFrameUpdate, 0));
+        }
+        else
+        {
+            rb.AddForce(new Vector2((float)x * timeSinceLastFrameUpdate * breakingStrength * -(GetCurrentDirectionTraveledX()), 0));
         }
         
         /*if(Math.Abs(rb.velocity.x) > 1.0f)
