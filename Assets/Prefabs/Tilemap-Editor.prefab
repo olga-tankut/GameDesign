@@ -192,7 +192,7 @@ GameObject:
   - component: {fileID: 5430371132291969705}
   m_Layer: 0
   m_Name: Walls and Halls
-  m_TagString: Untagged
+  m_TagString: LVL
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
