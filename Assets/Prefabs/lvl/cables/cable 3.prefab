@@ -75,10 +75,10 @@ HingeJoint2D:
   m_Motor:
     m_MotorSpeed: 0
     m_MaximumMotorForce: 10000
-  m_UseLimits: 0
+  m_UseLimits: 1
   m_AngleLimits:
-    m_LowerAngle: 0
-    m_UpperAngle: 359
+    m_LowerAngle: -20
+    m_UpperAngle: 20
 --- !u!61 &4435460669387388702
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -180,10 +180,10 @@ HingeJoint2D:
   m_Motor:
     m_MotorSpeed: 0
     m_MaximumMotorForce: 10000
-  m_UseLimits: 0
+  m_UseLimits: 1
   m_AngleLimits:
-    m_LowerAngle: 0
-    m_UpperAngle: 359
+    m_LowerAngle: -20
+    m_UpperAngle: 20
 --- !u!61 &6617124266340258667
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -285,10 +285,10 @@ HingeJoint2D:
   m_Motor:
     m_MotorSpeed: 0
     m_MaximumMotorForce: 10000
-  m_UseLimits: 0
+  m_UseLimits: 1
   m_AngleLimits:
-    m_LowerAngle: 0
-    m_UpperAngle: 359
+    m_LowerAngle: -20
+    m_UpperAngle: 20
 --- !u!61 &4171398137933896969
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -329,7 +329,7 @@ GameObject:
   - component: {fileID: 1276485041043383643}
   - component: {fileID: 1202439031239610096}
   m_Layer: 0
-  m_Name: Cable 3
+  m_Name: cable 3
   m_TagString: Cable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -453,7 +453,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!233 &1202439031239610096
 HingeJoint2D:
   m_ObjectHideFlags: 0
@@ -5357,10 +5357,10 @@ HingeJoint2D:
   m_Motor:
     m_MotorSpeed: 0
     m_MaximumMotorForce: 10000
-  m_UseLimits: 0
+  m_UseLimits: 1
   m_AngleLimits:
-    m_LowerAngle: 0
-    m_UpperAngle: 359
+    m_LowerAngle: -20
+    m_UpperAngle: 20
 --- !u!61 &6837526282988833029
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5462,10 +5462,10 @@ HingeJoint2D:
   m_Motor:
     m_MotorSpeed: 0
     m_MaximumMotorForce: 10000
-  m_UseLimits: 0
+  m_UseLimits: 1
   m_AngleLimits:
-    m_LowerAngle: 0
-    m_UpperAngle: 359
+    m_LowerAngle: -20
+    m_UpperAngle: 20
 --- !u!61 &6388027590318798327
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5567,10 +5567,10 @@ HingeJoint2D:
   m_Motor:
     m_MotorSpeed: 0
     m_MaximumMotorForce: 10000
-  m_UseLimits: 0
+  m_UseLimits: 1
   m_AngleLimits:
-    m_LowerAngle: 0
-    m_UpperAngle: 359
+    m_LowerAngle: -20
+    m_UpperAngle: 20
 --- !u!61 &6395040161990862419
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5665,7 +5665,7 @@ HingeJoint2D:
   m_ConnectedRigidBody: {fileID: 1276485041043383643}
   m_BreakForce: Infinity
   m_BreakTorque: Infinity
-  m_AutoConfigureConnectedAnchor: 1
+  m_AutoConfigureConnectedAnchor: 0
   m_Anchor: {x: 0, y: 0}
   m_ConnectedAnchor: {x: 0.002685176, y: -0.03356199}
   m_UseMotor: 0
@@ -5674,8 +5674,8 @@ HingeJoint2D:
     m_MaximumMotorForce: 10000
   m_UseLimits: 0
   m_AngleLimits:
-    m_LowerAngle: 0
-    m_UpperAngle: 359
+    m_LowerAngle: -20
+    m_UpperAngle: 20
 --- !u!61 &6461228343503487165
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5777,10 +5777,10 @@ HingeJoint2D:
   m_Motor:
     m_MotorSpeed: 0
     m_MaximumMotorForce: 10000
-  m_UseLimits: 0
+  m_UseLimits: 1
   m_AngleLimits:
-    m_LowerAngle: 0
-    m_UpperAngle: 359
+    m_LowerAngle: -20
+    m_UpperAngle: 20
 --- !u!61 &1497523325236020237
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5882,10 +5882,10 @@ HingeJoint2D:
   m_Motor:
     m_MotorSpeed: 0
     m_MaximumMotorForce: 10000
-  m_UseLimits: 0
+  m_UseLimits: 1
   m_AngleLimits:
-    m_LowerAngle: 0
-    m_UpperAngle: 359
+    m_LowerAngle: -20
+    m_UpperAngle: 20
 --- !u!61 &1943642775696620938
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5987,10 +5987,10 @@ HingeJoint2D:
   m_Motor:
     m_MotorSpeed: 0
     m_MaximumMotorForce: 10000
-  m_UseLimits: 0
+  m_UseLimits: 1
   m_AngleLimits:
-    m_LowerAngle: 0
-    m_UpperAngle: 359
+    m_LowerAngle: -20
+    m_UpperAngle: 20
 --- !u!61 &9160387800044923051
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6092,10 +6092,10 @@ HingeJoint2D:
   m_Motor:
     m_MotorSpeed: 0
     m_MaximumMotorForce: 10000
-  m_UseLimits: 0
+  m_UseLimits: 1
   m_AngleLimits:
-    m_LowerAngle: 0
-    m_UpperAngle: 359
+    m_LowerAngle: -20
+    m_UpperAngle: 20
 --- !u!61 &5283440243838613275
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6197,10 +6197,10 @@ HingeJoint2D:
   m_Motor:
     m_MotorSpeed: 0
     m_MaximumMotorForce: 10000
-  m_UseLimits: 0
+  m_UseLimits: 1
   m_AngleLimits:
-    m_LowerAngle: 0
-    m_UpperAngle: 359
+    m_LowerAngle: -20
+    m_UpperAngle: 20
 --- !u!61 &7320817702504516238
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6302,10 +6302,10 @@ HingeJoint2D:
   m_Motor:
     m_MotorSpeed: 0
     m_MaximumMotorForce: 10000
-  m_UseLimits: 0
+  m_UseLimits: 1
   m_AngleLimits:
-    m_LowerAngle: 0
-    m_UpperAngle: 359
+    m_LowerAngle: -20
+    m_UpperAngle: 20
 --- !u!61 &820556083227212968
 BoxCollider2D:
   m_ObjectHideFlags: 0

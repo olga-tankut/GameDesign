@@ -27,9 +27,4 @@ public class LevelLoadTrigger : MonoBehaviour
         }
         
     }
-
-    private void LoadNextLevel()
-    {
-        SceneManager.LoadScene(nextScene);
-    }
 }

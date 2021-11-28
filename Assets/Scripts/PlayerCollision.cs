@@ -12,7 +12,7 @@ public class PlayerCollision : MonoBehaviour
         {
             Debug.Log("Dead!");
             //GetComponent<PlayerMovement>().enabled = false;
-            FindObjectOfType<GameManager>().EndGame();
+            GameManager.Instance.EndGame();
         }
     }
 }

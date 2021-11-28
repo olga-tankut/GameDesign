@@ -24,4 +24,8 @@ public class GameManagerMainMenu : MonoBehaviour
         Debug.Log("Make sure all new Scenes/Levels follow the naming convention");
         Debug.Log("Currently loaded scene: " + levelToLoad);
     }
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
 }

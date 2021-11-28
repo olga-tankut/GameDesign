@@ -8,12 +8,10 @@ public class GameManager : MonoBehaviour
 
    public bool IsGameplayActive = true;
 
-   bool gameHasEnded = false;
    public float restartDelay = 1f;
    private GameObject pauseScreen;
    private GameObject gameScreen;
    public bool gameIsPaused = false;
-    private object time;
 
     private void Awake()
     {
@@ -42,7 +40,6 @@ public class GameManager : MonoBehaviour
 
     public void EndGame()
     {
-        gameHasEnded = true;
         Debug.Log("Game over");
         Invoke("RestartLevel", restartDelay);     
     } 

@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1459079007}
   m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.7, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 0.4, z: 1}
   m_Children: []
   m_Father: {fileID: 4648782021586452846}
@@ -4816,6 +4816,8 @@ GameObject:
   - component: {fileID: 4648782021586452847}
   - component: {fileID: 347443782}
   - component: {fileID: 347443781}
+  - component: {fileID: 6687970465780012703}
+  - component: {fileID: 6724568393987538185}
   m_Layer: 0
   m_Name: small fan
   m_TagString: Untagged
@@ -4902,7 +4904,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -1.1640215, y: 0}
+  m_Offset: {x: -1.094902, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 1, y: 0.5}
@@ -4913,7 +4915,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.3413906, y: 1}
+  m_Size: {x: 1.4796295, y: 1}
   m_EdgeRadius: 0
 --- !u!114 &347443781
 MonoBehaviour:
@@ -4928,3 +4930,68 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fanSpeed: 500
+  direction: 3
+--- !u!95 &6687970465780012703
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4648782021586452844}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 03e7933409c928844ba9b8de57edecac, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!60 &6724568393987538185
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4648782021586452844}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 1, y: 0.5}
+    oldSize: {x: 0.5925926, y: 1}
+    newSize: {x: 0.64, y: 1.08}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -0.3550887, y: 0.5}
+      - {x: -0.3578186, y: 0.040441513}
+      - {x: -0.43911743, y: 0.042637825}
+      - {x: -0.44050288, y: 0.42042908}
+      - {x: -0.47530648, y: 0.35709158}
+      - {x: -0.538208, y: 0.21801949}
+      - {x: -0.5367683, y: 0.032645687}
+      - {x: -0.58026886, y: 0.032546043}
+      - {x: -0.59420013, y: 0.015182495}
+      - {x: -0.5955658, y: -0.011793137}
+      - {x: -0.5887985, y: -0.024634361}
+      - {x: -0.53323364, y: -0.029418945}
+      - {x: -0.53479004, y: -0.21426582}
+      - {x: -0.49807966, y: -0.29466236}
+      - {x: -0.4515887, y: -0.42150497}
+      - {x: -0.43867493, y: -0.024910927}
+      - {x: -0.35416412, y: -0.02709961}
+      - {x: -0.35565186, y: -0.50023746}
+      - {x: 0, y: -0.5}
+      - {x: 0, y: 0.5}

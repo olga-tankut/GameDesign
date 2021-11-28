@@ -7,7 +7,7 @@ using System;
 public class Timer : MonoBehaviour
 {
     private TextMeshProUGUI timer;
-    [SerializeField] private float timeLeft = 3.0f;
+    [SerializeField] private float timeLeft = 20.0f;
 
     public bool timerIsRunning = false;
     // Start is called before the first frame update
@@ -25,7 +25,6 @@ public class Timer : MonoBehaviour
             if (timeLeft >= 0)
             {
                 timeLeft -= Time.deltaTime;
-                decimal x = (decimal)timeLeft;
                 DisplayTime(timeLeft);
             }
             else
