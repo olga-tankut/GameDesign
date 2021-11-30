@@ -36,8 +36,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]private int dashBreakingStrength = 500;
     [Range(1, 20)]
     [SerializeField]private float dashingStrength = 10f;
-    [Range(0, 1.8f)]
-    [SerializeField]private float slidingLength = 1.5f;// it is not proportional
+    [Range(0, 2)]
+    [SerializeField]private float slidingLength = 1;// it is not proportional
     [SerializeField]private bool wallJumpIsAktive = true;
     [Range(0, 2000)]
     [SerializeField]private int ForgivingFramesWallJump = 500;
@@ -72,7 +72,11 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 playerScaling;
     private CapsuleCollider2D collider;
     private Vector2 colliderSize;
+    private long startingTimeOfSlide = 0;
+    private Vector2 startingVelocityOfSlide;
 
+
+    private int counter = 0;
     void Start()
     {
         rb = transform.parent.GetComponent<Rigidbody2D>();
@@ -88,6 +92,8 @@ public class PlayerMovement : MonoBehaviour
         playerScaling = transform.parent.transform.localScale;
         collider = GetComponent<CapsuleCollider2D>();
         colliderSize = collider.size; // starting horizontal
+        startingVelocityOfSlide = Vector2.zero;
+
     }
 
     void Update()
@@ -116,28 +122,21 @@ public class PlayerMovement : MonoBehaviour
         {
             isJumping = false;
         }
-        //Debug.Log(rb.velocity);
-        /*if(Input.GetKeyDown(KeyCode.S))
+        if(Input.GetKey(KeyCode.S))
         {
-            CapsuleCollider2D collider = GetComponent<CapsuleCollider2D>();
-            Vector2 x = collider.size;
-            collider.size = new Vector2(x.y, x.x);
-            if(collider.direction == CapsuleDirection2D.Vertical)
+        if(counter == 2)
+        {
+            if(rb.velocity.x != 0)
             {
-                // Horizontal
-                collider.offset = new Vector2(0, -0.4f) * playerScaling.y;
-                collider.direction = CapsuleDirection2D.Horizontal;
-                transform.Find("RayCastStart").transform.localPosition = new Vector3(0, -0.2f, 0) * playerScaling.y;
+               Debug.Log(rb.velocity.x);
             }
-            else
-            {
-                // Vertical 
-                collider.offset = Vector2.zero;
-                collider.direction = CapsuleDirection2D.Vertical;
-                transform.Find("RayCastStart").transform.localPosition = raycastStartlocalPosition;
-            }
-            
-        }*/
+            counter = 0;
+        }
+        else
+        {
+            counter++;
+        }
+        }
     }
 
     private void WallJumpFixedUpdate()
@@ -164,7 +163,11 @@ public class PlayerMovement : MonoBehaviour
     
     private void SlideFixedUpdate()
     {
-
+        if(Input.GetKeyDown(KeyCode.S))
+        {
+            startingTimeOfSlide = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            startingVelocityOfSlide = rb.velocity;
+        }
         if(Input.GetKey(KeyCode.S) && IsOnGround())
         {
             slideMultiplyer = slidingLength;
@@ -330,7 +333,22 @@ public class PlayerMovement : MonoBehaviour
         
         if(isSliding)
         {
-            rb.AddForce(new Vector2(GetCurrentDirectionTraveledX() * (float)x * slideMultiplyer * breakingStrength * timeSinceLastFrameUpdate, 0));
+            // long secondsElapsedSinceStartofSlide = (DateTimeOffset.Now.ToUnixTimeMilliseconds() / 1000) - (startingTimeOfSlide / 1000);
+            double secondsElapsedSinceStartofSlide = (Convert.ToDouble(DateTimeOffset.Now.ToUnixTimeMilliseconds()) / 1000) - (Convert.ToDouble(startingTimeOfSlide) / 1000);
+            
+            Vector2 slideVelocityTemp = new Vector2(GetCurrentDirectionTraveledX() * 
+            (-((float)(secondsElapsedSinceStartofSlide * secondsElapsedSinceStartofSlide * secondsElapsedSinceStartofSlide)/ slidingLength)
+             + startingVelocityOfSlide.x), rb.velocity.y);
+
+            if(slideVelocityTemp.x > 1)
+            {
+                rb.velocity = slideVelocityTemp;
+            }
+            else
+            {
+                // total stop
+                rb.velocity = new Vector2(0, rb.velocity.y);
+            }
         }
         else
         {

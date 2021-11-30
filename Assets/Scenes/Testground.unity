@@ -2767,6 +2767,10 @@ PrefabInstance:
       propertyPath: m_Tiles.Array.data[67].second.m_TileObjectToInstantiateIndex
       value: 65535
       objectReference: {fileID: 0}
+    - target: {fileID: 5430371132291969709, guid: feadb57fb78fce84faa381b8ff12794f, type: 3}
+      propertyPath: m_TagString
+      value: LVL
+      objectReference: {fileID: 0}
     - target: {fileID: 5430371132291969711, guid: feadb57fb78fce84faa381b8ff12794f, type: 3}
       propertyPath: m_ChunkCullingBounds.x
       value: 8.388889
@@ -3672,7 +3676,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7327751444579383166, guid: 68ed136e1e89247488314b3d34eb7d39, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.88924074
+      value: 0.8884213
       objectReference: {fileID: 0}
     - target: {fileID: 7327751444579383166, guid: 68ed136e1e89247488314b3d34eb7d39, type: 3}
       propertyPath: m_LocalPosition.y
@@ -4064,7 +4068,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3637744018097900089, guid: c4c0aae73fd44ce609bad0360f8b85ad, type: 3}
       propertyPath: slidingLength
-      value: 1.1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3637744018766222361, guid: c4c0aae73fd44ce609bad0360f8b85ad, type: 3}
       propertyPath: m_RootOrder
@@ -4121,6 +4125,10 @@ PrefabInstance:
     - target: {fileID: 3637744018766222363, guid: c4c0aae73fd44ce609bad0360f8b85ad, type: 3}
       propertyPath: m_Name
       value: ScalablePlayer
+      objectReference: {fileID: 0}
+    - target: {fileID: 3637744018766222363, guid: c4c0aae73fd44ce609bad0360f8b85ad, type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c4c0aae73fd44ce609bad0360f8b85ad, type: 3}
