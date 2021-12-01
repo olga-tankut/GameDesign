@@ -255,7 +255,7 @@ public class PlayerMovement : MonoBehaviour
             }
             else
             {
-                Debug.Log("Dash is not ready! Time until next dash: " + (dashCooldown - timeSinceLastDash) + " seconds.");
+                Debug.Log("Dash is not ready! Time until next dash: " + ((dashCooldown / 1000) - timeSinceLastDash) + " seconds.");
             }
         }
 
@@ -410,6 +410,7 @@ public class PlayerMovement : MonoBehaviour
                 || (RayCastHitDetection()[2] != null && RayCastHitDetection()[2] != "Wall")
                 || (RayCastHitDetection()[3] != null && RayCastHitDetection()[3] != "Wall"))) // does a nother collider exists to stand of?
         {
+            timeSinceLastDash = dashCooldown + 0.1f;
             return true;
         }
         else
