@@ -5,7 +5,7 @@ using UnityEngine;
 using System;
 using System.Linq;
 
-public class PlayerMovement : MonoBehaviour
+public sealed class PlayerMovement : MonoBehaviour
 {
     [Range(5, 15)]
     [SerializeField]private float jumpVelocity;
@@ -76,6 +76,26 @@ public class PlayerMovement : MonoBehaviour
 
 
     private int counter = 0;
+
+    // Singelton pattern
+    private static PlayerMovement instance = null;
+
+    private PlayerMovement()
+    {
+    }
+
+    public static PlayerMovement Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = new PlayerMovement();
+            }
+            return instance;
+        }
+    }
+
     void Start()
     {
         rb = transform.parent.GetComponent<Rigidbody2D>();
@@ -123,7 +143,7 @@ public class PlayerMovement : MonoBehaviour
         }
         if(counter == 2)
         {
-            Debug.Log("slide: " + isSliding + ", Slope: " + IsOnSlope());
+        
             counter = 0;
         }
         else
@@ -330,7 +350,7 @@ public class PlayerMovement : MonoBehaviour
             double secondsElapsedSinceStartofSlide = (Convert.ToDouble(DateTimeOffset.Now.ToUnixTimeMilliseconds()) / 1000) - (Convert.ToDouble(startingTimeOfSlide) / 1000);
             
             Vector2 slideVelocityTemp = new Vector2(GetCurrentDirectionTraveledX() * 
-            (-((float)(secondsElapsedSinceStartofSlide * secondsElapsedSinceStartofSlide * secondsElapsedSinceStartofSlide)/ slidingLength)
+            (-(Math.Abs((float)(secondsElapsedSinceStartofSlide * secondsElapsedSinceStartofSlide * secondsElapsedSinceStartofSlide))/ slidingLength)
              + startingVelocityOfSlide.x), rb.velocity.y);
 
             if(slideVelocityTemp.x > 1)
