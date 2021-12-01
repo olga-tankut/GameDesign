@@ -11,6 +11,10 @@ TagManager:
   - Cable
   - Cardboard Box
   - Lamp
+  - SlipperyFloor
+  - LampBrokenLeft
+  - LampBrokenRight
+  - HealthBar
   layers:
   - Default
   - TransparentFX

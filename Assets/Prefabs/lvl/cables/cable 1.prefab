@@ -5237,6 +5237,7 @@ GameObject:
   - component: {fileID: 5757310861670137102}
   - component: {fileID: 6461319712278909126}
   - component: {fileID: 7426191085290385649}
+  - component: {fileID: 5546977946430194361}
   m_Layer: 0
   m_Name: cable 1
   m_TagString: Cable
@@ -5356,7 +5357,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!233 &7426191085290385649
 HingeJoint2D:
@@ -5378,10 +5379,22 @@ HingeJoint2D:
   m_Motor:
     m_MotorSpeed: 0
     m_MaximumMotorForce: 10000
-  m_UseLimits: 0
+  m_UseLimits: 1
   m_AngleLimits:
     m_LowerAngle: 0
     m_UpperAngle: 359
+--- !u!114 &5546977946430194361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1651554945057257023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6b023443eb292f4b872421f45d78d68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3229451052885077367
 GameObject:
   m_ObjectHideFlags: 0

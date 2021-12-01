@@ -64,6 +64,11 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 wallWithLastContactPosition;
     private ContactPoint2D[] colliderCurrentlyinContactWith = new ContactPoint2D[5];
 
+    //health
+    private HealthBar healthBar;
+    private int health = 100;
+    private bool isAlive = true;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -73,6 +78,8 @@ public class PlayerMovement : MonoBehaviour
         startingGravity = rb.gravityScale;
         slideMultiplyer = 1.0f;
         timeSinceLastContactWithWall = ForgivingFramesWallJump + 1;
+
+        healthBar = GameObject.FindGameObjectWithTag("HealthBar").GetComponent<HealthBar>();
     }
 
     void Update()
@@ -460,5 +467,25 @@ public class PlayerMovement : MonoBehaviour
     {
         // returns values between -1 and 1 
         return Mathf.Abs(Input.GetAxis("Horizontal"));
+    }
+
+
+    public void Damage(int Damage)
+    {
+        health = Mathf.Max(health - Damage, 0);
+        healthBar.SetHealthValueOf(health);
+        if (health <= 0)
+        {
+            healthBar.DeactivateHealthBar();
+            DespawnPlayer();
+        }
+    }
+    private void DespawnPlayer()
+    {
+        isAlive = false;
+        Debug.Log("Player is dead");
+        this.gameObject.SetActive(false);
+        GameManager.Instance.EndGame();
+        //Destroy(this.gameObject);
     }
 }

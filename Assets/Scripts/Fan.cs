@@ -25,7 +25,6 @@ public class Fan : MonoBehaviour
         p = GameObject.FindGameObjectWithTag("Player");
         pm = p.GetComponent<PlayerMovement>();
         prb = p.GetComponent<Rigidbody2D>();
-        if (p == null) Debug.Log("Player missing, is player tagged?");
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -34,6 +33,7 @@ public class Fan : MonoBehaviour
     }
     void OnTriggerStay2D(Collider2D other)
     {
+        
         //Debug.Log("Object is in trigger");
         if (direction == Direction.up) prb.AddForce(Vector2.up * fanSpeed * Time.fixedDeltaTime);
         if(direction == Direction.right) prb.AddForce(Vector2.right * fanSpeed * Time.fixedDeltaTime);
