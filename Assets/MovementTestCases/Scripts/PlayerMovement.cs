@@ -56,6 +56,8 @@ public sealed class PlayerMovement : MonoBehaviour
     private static bool isSliding = false;
     private static bool isDashing = false;
     private static bool isJumping = false;
+    private static bool isOnSlope = false;
+    private static bool isAtWall = false;
     private float startingGravity;
     private float slideMultiplyer = 1.0f;
     private long timeSinceLastContactWithWall = 0; // in ms
@@ -157,6 +159,7 @@ public sealed class PlayerMovement : MonoBehaviour
         if(ForgivingFramesWallJump > (DateTimeOffset.Now.ToUnixTimeMilliseconds() - timeSinceLastContactWithWall) 
             && Input.GetKeyDown(KeyCode.Space) && !IsOnGround() && wallJumpIsAktive)
         {
+            // Debug.Log("WallJump");
             // left
             if((wallWithLastContactPosition.x - transform.position.x) > 0)
             {
@@ -382,9 +385,14 @@ public sealed class PlayerMovement : MonoBehaviour
         {
             float jumpVelocity = rb.velocity.y + (Physics2D.gravity.y * (fallMultiplier - 1) * Time.fixedDeltaTime);
             rb.velocity = new Vector2(rb.velocity.x, jumpVelocity);
-            if(!IsOnSlope() && (DateTimeOffset.Now.ToUnixTimeMilliseconds() > (timeOfStartOfFall + fallAnimationDelayOnSlopes)))
+            if(!IsOnSlope() && (DateTimeOffset.Now.ToUnixTimeMilliseconds() > (timeOfStartOfFall + fallAnimationDelayOnSlopes)) &&  !IsOnGround())
             {
                 isJumping = true;
+            }
+            else
+            {
+                // reset jumping Flag
+                isJumping = false;
             }
         }
         // ende code zitat: 1
@@ -399,6 +407,7 @@ public sealed class PlayerMovement : MonoBehaviour
                 RayCastHitDetection()[2] == null &&
                 RayCastHitDetection()[3] == null)
                 {
+                    Debug.Log("X");
                     isJumping = true;
                 }
             }
@@ -419,9 +428,9 @@ public sealed class PlayerMovement : MonoBehaviour
     {
         // needs maybe safety margin
         // does accept all colliders
-        if(/*rb.velocity.y >= 0 &&*/ ((RayCastHitDetection()[1] != null && RayCastHitDetection()[1] != "Wall")
-                || (RayCastHitDetection()[2] != null && RayCastHitDetection()[2] != "Wall")
-                || (RayCastHitDetection()[3] != null && RayCastHitDetection()[3] != "Wall"))) // does a nother collider exists to stand of?
+        if(/*rb.velocity.y >= 0 &&*/ ((RayCastHitDetection()[1] != null && RayCastHitDetection()[1] != null)
+                || (RayCastHitDetection()[2] != null && RayCastHitDetection()[2] != null)
+                || (RayCastHitDetection()[3] != null && RayCastHitDetection()[3] != null))) // does a nother collider exists to stand of?
         {
             timeSinceLastDash = dashCooldown + 0.1f;
             return true;
@@ -448,14 +457,14 @@ public sealed class PlayerMovement : MonoBehaviour
         {
             timeSinceLastContactWithWall = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             wallWithLastContactPosition = new Vector2(transform.position.x + 1, transform.position.y);
-            //Debug.Log("Collision with Wall");
+            Debug.Log("Collision with Wall rechts");
         }
 
         if(RayCastHitDetection()[4] != null)
         {
             timeSinceLastContactWithWall = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             wallWithLastContactPosition = new Vector2(transform.position.x - 1, transform.position.y);
-            //Debug.Log("Collision with Wall");
+            Debug.Log("Collision with Wall links");
         }
         addConservedEnergyToMomentum();
     }
@@ -531,21 +540,21 @@ public sealed class PlayerMovement : MonoBehaviour
         if(RayCastHitDetection()[1] == "LVL" && RayCastHitDetection()[3] != "LVL")
         {
             timeOfHitOfSlope = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-            //Debug.Log("Is on Slope");
+            isOnSlope = true;
             return true;
         }
         if(RayCastHitDetection()[3] == "LVL" && RayCastHitDetection()[1] != "LVL")
         {
             timeOfHitOfSlope = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-            //Debug.Log("Is on Slope");
+            isOnSlope = true;
             return true;
         }
         if(DateTimeOffset.Now.ToUnixTimeMilliseconds() < (timeOfHitOfSlope + slopeDelay))
         {
-            //Debug.Log("Slope air push");
+            isOnSlope = true;
             return true;
         }
-        //Debug.Log(RayCastHitDetection()[1] + ", " + RayCastHitDetection()[2] + ", " + RayCastHitDetection()[3]);
+        isOnSlope = false;
         return false;
     }
     public static bool GetIsJumping()
@@ -568,5 +577,15 @@ public sealed class PlayerMovement : MonoBehaviour
     {
         // returns values between -1 and 1 
         return Mathf.Abs(Input.GetAxis("Horizontal"));
+    }
+
+    public static bool GetIsOnSlope()
+    {
+        return isOnSlope;
+    }
+
+    public static bool GetIsAtWall()
+    {
+        return isAtWall;
     }
 }
