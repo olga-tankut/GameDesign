@@ -21,7 +21,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]private float breakForce = 100.0f;
     [Range(0, 5000)]
     [SerializeField]private float dashCooldown = 1000f;// in ms
-    
     [Range(5, 15)]
     [SerializeField]private float movementEnergieConservationMultiplyer = 10f;
     [Range(0, 5)]
@@ -122,20 +121,14 @@ public class PlayerMovement : MonoBehaviour
         {
             isJumping = false;
         }
-        if(Input.GetKey(KeyCode.S))
-        {
         if(counter == 2)
         {
-            if(rb.velocity.x != 0)
-            {
-               Debug.Log(rb.velocity.x);
-            }
+            Debug.Log("slide: " + isSliding + ", Slope: " + IsOnSlope());
             counter = 0;
         }
         else
         {
             counter++;
-        }
         }
     }
 
@@ -515,13 +508,13 @@ public class PlayerMovement : MonoBehaviour
 
     private bool IsOnSlope()
     {
-        if(RayCastHitDetection()[1] == "Untagged" && RayCastHitDetection()[3] != "Untagged")
+        if(RayCastHitDetection()[1] == "LVL" && RayCastHitDetection()[3] != "LVL")
         {
             timeOfHitOfSlope = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             //Debug.Log("Is on Slope");
             return true;
         }
-        if(RayCastHitDetection()[3] == "Untagged" && RayCastHitDetection()[1] != "Untagged")
+        if(RayCastHitDetection()[3] == "LVL" && RayCastHitDetection()[1] != "LVL")
         {
             timeOfHitOfSlope = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             //Debug.Log("Is on Slope");

@@ -4063,12 +4063,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3637744018097900089, guid: c4c0aae73fd44ce609bad0360f8b85ad, type: 3}
+      propertyPath: dashCooldown
+      value: 4000
+      objectReference: {fileID: 0}
+    - target: {fileID: 3637744018097900089, guid: c4c0aae73fd44ce609bad0360f8b85ad, type: 3}
       propertyPath: slideFriction
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3637744018097900089, guid: c4c0aae73fd44ce609bad0360f8b85ad, type: 3}
       propertyPath: slidingLength
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3637744018766222361, guid: c4c0aae73fd44ce609bad0360f8b85ad, type: 3}
       propertyPath: m_RootOrder
