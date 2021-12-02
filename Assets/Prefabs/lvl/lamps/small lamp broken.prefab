@@ -160,7 +160,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90e138b68d6db3d458c78b6ddb8d6ce9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  countdown: 2
 --- !u!61 &2091833275643604352
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -5207,7 +5207,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.23, y: 0}
+  m_Offset: {x: 0.12254581, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -5218,7 +5218,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.5, y: 0.17}
+  m_Size: {x: 0.2, y: 0.17}
   m_EdgeRadius: 0
 --- !u!1 &7682109929867432186
 GameObject:
@@ -5517,6 +5517,7 @@ GameObject:
   - component: {fileID: 7682109930953304831}
   - component: {fileID: 7682109930953304828}
   - component: {fileID: 7682109930953304830}
+  - component: {fileID: 8724511085335919162}
   m_Layer: 0
   m_Name: bone_9
   m_TagString: Untagged
@@ -5597,7 +5598,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.0055217147, y: 0.03313609}
+  m_Offset: {x: 0.0055217147, y: 0.0033973753}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -5608,8 +5609,20 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.05104345, y: 0.10372784}
+  m_Size: {x: 0.12, y: 0.1823791}
   m_EdgeRadius: 0
+--- !u!114 &8724511085335919162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7682109930953304826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6b023443eb292f4b872421f45d78d68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7682109930995162142
 GameObject:
   m_ObjectHideFlags: 0
@@ -5621,7 +5634,6 @@ GameObject:
   - component: {fileID: 7682109930995162115}
   - component: {fileID: 7682109930995162112}
   - component: {fileID: 7682109930995162113}
-  - component: {fileID: 4734186483458449342}
   m_Layer: 0
   m_Name: cable 4
   m_TagString: Cable
@@ -5732,18 +5744,6 @@ MonoBehaviour:
     m_Extent: {x: 0.1099329, y: 1.3815184, z: 0}
   m_UseBatching: 1
   m_AlwaysUpdate: 1
---- !u!114 &4734186483458449342
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7682109930995162142}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d6b023443eb292f4b872421f45d78d68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &7682109931362068971
 GameObject:
   m_ObjectHideFlags: 0
