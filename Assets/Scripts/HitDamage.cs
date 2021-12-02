@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HitDamage : MonoBehaviour
 {
-    protected int damage = 20;
+    public int damage = 20;
 
     protected void OnCollisionEnter2D(Collision2D collision)
     {
