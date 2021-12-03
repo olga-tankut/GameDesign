@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     
 
    private bool tryHasEnded = false;
-   private int amountOfTry = 1;
+   private int amountOfTry = 2;
 
     private void Awake()
     {
