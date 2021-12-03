@@ -6,12 +6,13 @@ public class GameManager : MonoBehaviour
 {
    public static GameManager Instance = null;
 
-   public bool IsGameplayActive = true;
-
    public float restartDelay = 1f;
    private GameObject pauseScreen;
    private GameObject gameScreen;
+   
    public bool gameIsPaused = false;
+   private bool gameHasEnded = false;
+   
 
     private void Awake()
     {
@@ -19,11 +20,11 @@ public class GameManager : MonoBehaviour
     }
 
     private void Start() {
-       pauseScreen = transform.parent.transform.Find("PauseScreen").gameObject;
-       gameScreen = transform.parent.transform.Find("GameScreen").gameObject;
-       pauseScreen.SetActive(false);
-       gameScreen.SetActive(true);
-   }
+        pauseScreen = transform.parent.transform.Find("PauseScreen").gameObject;
+        gameScreen = transform.parent.transform.Find("GameScreen").gameObject;
+        pauseScreen.SetActive(false);
+        gameScreen.SetActive(true);
+    }
 
    private void Update() {
 
@@ -37,15 +38,18 @@ public class GameManager : MonoBehaviour
            RestartLevel();
        }
    }
-
+    
     public void EndGame()
     {
-        Debug.Log("Game over");
-        Invoke("RestartLevel", restartDelay);     
-    } 
-    
+        if (gameHasEnded == false)
+        {
+            gameHasEnded = true;
+            Invoke("RestartLevel", restartDelay);
+        }   
+    }
+
     public void RestartLevel()
-    {
+    {    
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
