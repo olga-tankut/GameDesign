@@ -35,12 +35,7 @@ public class LampFalling : MonoBehaviour
 
     protected void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "Player")
-        {
-            Debug.Log("Do something, cause collider is with Player");
-            PlayerMovement victim = collision.gameObject.GetComponent<PlayerMovement>();
-            victim.Damage(damage);
-        }
+        
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

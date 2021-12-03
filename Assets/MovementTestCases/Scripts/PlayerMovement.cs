@@ -75,12 +75,6 @@ public sealed class PlayerMovement : MonoBehaviour
     private long startingTimeOfSlide = 0;
     private Vector2 startingVelocityOfSlide;
 
-    //health
-    private HealthBar healthBar;
-    private int health = 100;
-    private bool isAlive = true;
-
-
     private int counter = 0;
 
     // Singelton pattern
@@ -112,7 +106,6 @@ public sealed class PlayerMovement : MonoBehaviour
         slideMultiplyer = 1.0f;
         timeSinceLastContactWithWall = ForgivingFramesWallJump + 1;
 
-        healthBar = GameObject.FindGameObjectWithTag("HealthBar").GetComponent<HealthBar>();
         timeOfHitOfSlope = 0; // 1970-01-01 00:00
         timeOfStartOfFall = 0;
         raycastStartlocalPosition = transform.Find("RayCastStart").transform.localPosition;
@@ -622,26 +615,6 @@ public sealed class PlayerMovement : MonoBehaviour
     {
         // returns values between -1 and 1 
         return Mathf.Abs(Input.GetAxis("Horizontal"));
-    }
-
-
-    public void Damage(int Damage)
-    {
-        health = Mathf.Max(health - Damage, 0);
-        healthBar.SetHealthValueOf(health);
-        if (health <= 0)
-        {
-            healthBar.DeactivateHealthBar();
-            DespawnPlayer();
-        }
-    }
-    private void DespawnPlayer()
-    {
-        isAlive = false;
-        Debug.Log("Player is dead");
-        this.gameObject.SetActive(false);
-        GameManager.Instance.EndTry();
-        //Destroy(this.gameObject);
     }
 
     public static bool GetIsOnSlope()

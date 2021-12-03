@@ -5517,7 +5517,6 @@ GameObject:
   - component: {fileID: 7682109930953304831}
   - component: {fileID: 7682109930953304828}
   - component: {fileID: 7682109930953304830}
-  - component: {fileID: 8724511085335919162}
   m_Layer: 0
   m_Name: bone_9
   m_TagString: Untagged
@@ -5611,18 +5610,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.12, y: 0.1823791}
   m_EdgeRadius: 0
---- !u!114 &8724511085335919162
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7682109930953304826}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d6b023443eb292f4b872421f45d78d68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &7682109930995162142
 GameObject:
   m_ObjectHideFlags: 0
