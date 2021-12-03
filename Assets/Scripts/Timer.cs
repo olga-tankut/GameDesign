@@ -32,7 +32,7 @@ public class Timer : MonoBehaviour
                 timeLeft = 0;
                 timerIsRunning = false;
                 timer.text = "0";
-                GameManager.Instance.EndGame();
+                GameManager.Instance.EndTry();
             }
         }
     }

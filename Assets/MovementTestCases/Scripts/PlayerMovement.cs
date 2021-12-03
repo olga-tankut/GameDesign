@@ -485,7 +485,7 @@ public class PlayerMovement : MonoBehaviour
         isAlive = false;
         Debug.Log("Player is dead");
         this.gameObject.SetActive(false);
-        GameManager.Instance.EndGame();
+        GameManager.Instance.EndTry();
         //Destroy(this.gameObject);
     }
 }
