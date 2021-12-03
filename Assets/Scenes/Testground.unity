@@ -3676,7 +3676,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7327751444579383166, guid: 68ed136e1e89247488314b3d34eb7d39, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.8884213
+      value: 0.88912153
       objectReference: {fileID: 0}
     - target: {fileID: 7327751444579383166, guid: 68ed136e1e89247488314b3d34eb7d39, type: 3}
       propertyPath: m_LocalPosition.y
@@ -4073,6 +4073,14 @@ PrefabInstance:
     - target: {fileID: 3637744018097900089, guid: c4c0aae73fd44ce609bad0360f8b85ad, type: 3}
       propertyPath: slidingLength
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3637744018097900089, guid: c4c0aae73fd44ce609bad0360f8b85ad, type: 3}
+      propertyPath: wallJumpStrength
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3637744018097900089, guid: c4c0aae73fd44ce609bad0360f8b85ad, type: 3}
+      propertyPath: ForgivingFramesWallJump
+      value: 1887
       objectReference: {fileID: 0}
     - target: {fileID: 3637744018766222361, guid: c4c0aae73fd44ce609bad0360f8b85ad, type: 3}
       propertyPath: m_RootOrder
