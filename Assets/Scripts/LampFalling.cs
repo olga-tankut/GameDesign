@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class LampFalling : MonoBehaviour
-    
 {
-    public float countdown = 2;
-
     private SpriteRenderer sprender;
     private Rigidbody2D rb;
     private bool hasFallen = false;
+
+    protected int damage = 30;
 
 
     // Start is called before the first frame update
@@ -24,11 +23,6 @@ public class LampFalling : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //countdown -= Time.deltaTime;
-        //if (countdown <= 0f && !hasFallen)
-        //{
-        //    Fall();
-        //}
        
     }
     void Fall()
@@ -41,10 +35,12 @@ public class LampFalling : MonoBehaviour
 
     protected void OnCollisionEnter2D(Collision2D collision)
     {
-        //if (collision.transform.gameObject)
-        //{
-        //    Debug.Log("Boom");
-        //}
+        if (collision.gameObject.tag == "Player")
+        {
+            Debug.Log("Do something, cause collider is with Player");
+            PlayerMovement victim = collision.gameObject.GetComponent<PlayerMovement>();
+            victim.Damage(damage);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

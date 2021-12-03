@@ -445,8 +445,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1651554943488373894}
-  m_LocalRotation: {x: -0, y: -0, z: 0.5005161, w: 0.86572725}
-  m_LocalPosition: {x: -0.12247644, y: -0.29297996, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: 0.500516, w: 0.8657273}
+  m_LocalPosition: {x: -0.12247601, y: -0.29297912, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7733279877406214460}
@@ -5237,6 +5237,7 @@ GameObject:
   - component: {fileID: 5757310861670137102}
   - component: {fileID: 6461319712278909126}
   - component: {fileID: 7426191085290385649}
+  - component: {fileID: 5546977946430194361}
   m_Layer: 0
   m_Name: cable 1
   m_TagString: Cable
@@ -5356,7 +5357,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!233 &7426191085290385649
 HingeJoint2D:
@@ -5378,10 +5379,22 @@ HingeJoint2D:
   m_Motor:
     m_MotorSpeed: 0
     m_MaximumMotorForce: 10000
-  m_UseLimits: 0
+  m_UseLimits: 1
   m_AngleLimits:
     m_LowerAngle: 0
     m_UpperAngle: 359
+--- !u!114 &5546977946430194361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1651554945057257023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6b023443eb292f4b872421f45d78d68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3229451052885077367
 GameObject:
   m_ObjectHideFlags: 0
@@ -5474,7 +5487,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.00681068}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -5485,7 +5498,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.4, y: 0.15}
+  m_Size: {x: 0.2, y: 0.1746814}
   m_EdgeRadius: 0
 --- !u!1 &5290915522437861516
 GameObject:
@@ -5603,7 +5616,8 @@ GameObject:
   - component: {fileID: 7733279877406214460}
   - component: {fileID: 8351873477892580702}
   - component: {fileID: 3321666489530333099}
-  - component: {fileID: 1550065139974568010}
+  - component: {fileID: 334748752577012242}
+  - component: {fileID: 6324391109775384659}
   m_Layer: 0
   m_Name: bone_8
   m_TagString: Untagged
@@ -5671,8 +5685,20 @@ HingeJoint2D:
   m_AngleLimits:
     m_LowerAngle: -70
     m_UpperAngle: 0
---- !u!61 &1550065139974568010
-BoxCollider2D:
+--- !u!114 &334748752577012242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5512112302509877826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6b023443eb292f4b872421f45d78d68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!60 &6324391109775384659
+PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -5684,7 +5710,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.0030291695, y: -0.051495735}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -5694,9 +5720,18 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.07133661, y: 0.15}
-  m_EdgeRadius: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.024996657, y: -0.024150843}
+      - {x: 0.03889724, y: 0.002828233}
+      - {x: -0.013584677, y: 0.032569498}
+      - {x: -0.0638479, y: -0.062109113}
+      - {x: -0.1133744, y: -0.03316538}
+      - {x: -0.18360992, y: -0.16563824}
+      - {x: -0.018475354, y: -0.24812114}
+      - {x: 0.07190592, y: -0.054567587}
+      - {x: 0.06997937, y: -0.057907403}
+      - {x: 0.07389894, y: -0.04820485}
 --- !u!1 &7979993577527975846
 GameObject:
   m_ObjectHideFlags: 0

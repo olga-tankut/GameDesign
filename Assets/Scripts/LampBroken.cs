@@ -48,9 +48,4 @@ public class LampBroken : MonoBehaviour
             rb.angularVelocity = -1*moveSpeed;
         }
     }
-
-    protected void OnCollisionEnter2D(Collision2D collision)
-    {
-        
-    }
 }

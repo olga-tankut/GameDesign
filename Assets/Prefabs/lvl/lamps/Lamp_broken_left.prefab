@@ -273,6 +273,7 @@ GameObject:
   - component: {fileID: 4207884224866754288}
   - component: {fileID: 4207884224866754289}
   - component: {fileID: 1979090779670323653}
+  - component: {fileID: 1162492945557542950}
   m_Layer: 0
   m_Name: Lamp
   m_TagString: Untagged
@@ -364,7 +365,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!233 &4207884224866754289
 HingeJoint2D:
@@ -440,3 +441,15 @@ PolygonCollider2D:
       - {x: 1.4002607, y: -0.4620468}
       - {x: 1.3993444, y: -0.40900844}
       - {x: 1.5694444, y: -0.4074074}
+--- !u!114 &1162492945557542950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4207884224866754292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6b023443eb292f4b872421f45d78d68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

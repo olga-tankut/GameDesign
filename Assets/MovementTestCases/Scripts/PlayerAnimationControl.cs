@@ -8,6 +8,7 @@ public class PlayerAnimationControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        animator = transform.parent.GetComponentInChildren<Animator>();
         
     }
 
@@ -42,9 +43,10 @@ public class PlayerAnimationControl : MonoBehaviour
     void Flip ()
     {
         facingRight = !facingRight;
-        Vector3 theScale = transform.localScale;
+        // changes the x skale
+        Vector3 theScale = transform.parent.localScale;
         theScale.x *= -1;
-        transform.localScale = theScale;
+        transform.parent.localScale = theScale;
     }
 
 }
