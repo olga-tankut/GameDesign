@@ -37,9 +37,9 @@ public class LampFalling : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            Debug.Log("Do something, cause collider is with Player");
-            PlayerMovement victim = collision.gameObject.GetComponent<PlayerMovement>();
-            victim.Damage(damage);
+            //Debug.Log("Do something, cause collider is with Player");
+            //PlayerMovement victim = collision.gameObject.GetComponent<PlayerMovement>();
+            //victim.Damage(damage);
         }
     }
 
