@@ -52,7 +52,7 @@ MonoBehaviour:
   accelerationSpeed: 1200
   maxGroundSpeed: 7
   breakForce: 600
-  dashCooldown: 600
+  dashCooldown: 4000
   movementEnergieConservationMultiplyer: 5
   airMovementMultiplyer: 3
   maxAirSpeed: 4
@@ -61,9 +61,9 @@ MonoBehaviour:
   dashingLength: 4000
   dashBreakingStrength: 1000
   dashingStrength: 12
-  slidingLength: 1.1
+  slidingLength: 1
   wallJumpIsAktive: 1
-  ForgivingFramesWallJump: 600
+  ForgivingFramesWallJump: 1887
   ForgivingFramesDashCancel: 300
   wallJumpStrength: 5
   upwardForceOnSlopes: 1
@@ -94,7 +94,7 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.000000059604645, y: 0}
+  m_Offset: {x: 0, y: 0}
   m_Size: {x: 0.8322786, y: 2.8868656}
   m_Direction: 0
 --- !u!1 &3637744018766222363
@@ -109,7 +109,7 @@ GameObject:
   - component: {fileID: 1565448730}
   m_Layer: 0
   m_Name: ScalablePlayer
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -203,7 +203,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
