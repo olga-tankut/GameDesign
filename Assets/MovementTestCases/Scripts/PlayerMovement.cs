@@ -46,8 +46,6 @@ public sealed class PlayerMovement : MonoBehaviour
     [SerializeField]private float wallJumpStrength = 5f;
     [Range(0, 3)]
     [SerializeField]private float upwardForceOnSlopes = 1.0f;
-    
-    //public Animator animator;
 
     private Rigidbody2D rb;
     private Collision2D isInContactWithCollider;
@@ -57,6 +55,7 @@ public sealed class PlayerMovement : MonoBehaviour
     private static bool isDashing = false;
     private static bool isJumping = false;
     private static bool isOnSlope = false;
+    private static bool isAtWall = false;
     private float startingGravity;
     private float slideMultiplyer = 1.0f;
     private long timeSinceLastContactWithWall = 0; // in ms
@@ -74,12 +73,7 @@ public sealed class PlayerMovement : MonoBehaviour
     private Vector2 colliderSize;
     private long startingTimeOfSlide = 0;
     private Vector2 startingVelocityOfSlide;
-
-    //health
-    private HealthBar healthBar;
-    private int health = 100;
-    private bool isAlive = true;
-
+    private static int isWallRight;
 
     private int counter = 0;
 
@@ -111,8 +105,6 @@ public sealed class PlayerMovement : MonoBehaviour
         startingGravity = rb.gravityScale;
         slideMultiplyer = 1.0f;
         timeSinceLastContactWithWall = ForgivingFramesWallJump + 1;
-
-        healthBar = GameObject.FindGameObjectWithTag("HealthBar").GetComponent<HealthBar>();
         timeOfHitOfSlope = 0; // 1970-01-01 00:00
         timeOfStartOfFall = 0;
         raycastStartlocalPosition = transform.Find("RayCastStart").transform.localPosition;
@@ -145,6 +137,8 @@ public sealed class PlayerMovement : MonoBehaviour
         JumpFixedUpdate();
         SlideFixedUpdate();
         MoveFixedUpdate();
+        // to update GetIsAtWall
+        IsAtWall();
         // cancel Jumping animation on slopes
         if(IsOnSlope() && !Input.GetKey(KeyCode.Space))
         {
@@ -183,6 +177,7 @@ public sealed class PlayerMovement : MonoBehaviour
             {
                 Debug.Log("ERROR WallJump in the Wall: " + wallWithLastContactPosition);
             }
+            timeSinceLastContactWithWall = ForgivingFramesWallJump + 1;
         }
     }
     
@@ -582,25 +577,21 @@ public sealed class PlayerMovement : MonoBehaviour
     {
         if(RayCastHitDetection()[0] == "LVL" && RayCastHitDetection()[1] == "LVL" && RayCastHitDetection()[2] == null)
         {
+            isWallRight = 1;
+            isAtWall = true;
             return true;
         }
 
         if(RayCastHitDetection()[4] == "LVL" && RayCastHitDetection()[3] == "LVL" && RayCastHitDetection()[2] == null)
         {
+            isWallRight = -1;
+            isAtWall = true;
             return true;
         }
 
+        isAtWall = false;
         return false;
     }
-
-    /*public bool isx()
-    {
-        return false;
-    }
-    public static bool testStatic()
-    {
-        return Instance.isx();
-    }*/
 
     public static bool GetIsJumping()
     {
@@ -624,33 +615,19 @@ public sealed class PlayerMovement : MonoBehaviour
         return Mathf.Abs(Input.GetAxis("Horizontal"));
     }
 
-
-    public void Damage(int Damage)
-    {
-        health = Mathf.Max(health - Damage, 0);
-        healthBar.SetHealthValueOf(health);
-        if (health <= 0)
-        {
-            healthBar.DeactivateHealthBar();
-            DespawnPlayer();
-        }
-    }
-    private void DespawnPlayer()
-    {
-        isAlive = false;
-        Debug.Log("Player is dead");
-        this.gameObject.SetActive(false);
-        GameManager.Instance.EndGame();
-        //Destroy(this.gameObject);
-    }
-
     public static bool GetIsOnSlope()
     {
         return isOnSlope;
     }
 
     public static bool GetIsAtWall()
-    {   
-        return Instance.IsAtWall();
+    {
+        return isAtWall;
+    }
+
+    public static int GetIsWallRight()
+    {
+        
+        return isWallRight;
     }
 }
