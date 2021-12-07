@@ -3594,7 +3594,7 @@ GameObject:
   - component: {fileID: 1790130532}
   m_Layer: 0
   m_Name: SlopeHelp
-  m_TagString: Untagged
+  m_TagString: LVL
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3676,7 +3676,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7327751444579383166, guid: 68ed136e1e89247488314b3d34eb7d39, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.88912153
+      value: 0.88920474
       objectReference: {fileID: 0}
     - target: {fileID: 7327751444579383166, guid: 68ed136e1e89247488314b3d34eb7d39, type: 3}
       propertyPath: m_LocalPosition.y

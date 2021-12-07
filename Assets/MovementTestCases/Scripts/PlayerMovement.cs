@@ -74,6 +74,7 @@ public sealed class PlayerMovement : MonoBehaviour
     private long startingTimeOfSlide = 0;
     private Vector2 startingVelocityOfSlide;
     private static int isWallRight;
+    private float directionBuffer;
 
     private int counter = 0;
 
@@ -355,12 +356,25 @@ public sealed class PlayerMovement : MonoBehaviour
         {
             // long secondsElapsedSinceStartofSlide = (DateTimeOffset.Now.ToUnixTimeMilliseconds() / 1000) - (startingTimeOfSlide / 1000);
             double secondsElapsedSinceStartofSlide = (Convert.ToDouble(DateTimeOffset.Now.ToUnixTimeMilliseconds()) / 1000) - (Convert.ToDouble(startingTimeOfSlide) / 1000);
-            
-            Vector2 slideVelocityTemp = new Vector2(GetCurrentDirectionTraveledX() * 
-            (-(Math.Abs((float)(secondsElapsedSinceStartofSlide * secondsElapsedSinceStartofSlide * secondsElapsedSinceStartofSlide))/ slidingLength)
-             + startingVelocityOfSlide.x), rb.velocity.y);
+            float direction = 0;
+            if(GetCurrentDirectionTraveledX() == 0)
+            {
+                direction = directionBuffer;
+            }
+            else
+            {
+                directionBuffer = GetCurrentDirectionTraveledX();
+                direction = GetCurrentDirectionTraveledX();
+            }
 
-            if(slideVelocityTemp.x > 1)
+
+            Vector2 slideVelocityTemp = new Vector2(GetCurrentDirectionTraveledX() * 
+            Math.Abs((-(Math.Abs((float)(secondsElapsedSinceStartofSlide * secondsElapsedSinceStartofSlide * secondsElapsedSinceStartofSlide))/ slidingLength)
+             + Math.Abs(startingVelocityOfSlide.x))), rb.velocity.y);
+
+            Debug.Log(slideVelocityTemp);
+
+            if(slideVelocityTemp.x > 1 || slideVelocityTemp.x < -1)
             {
                 rb.velocity = slideVelocityTemp;
             }
