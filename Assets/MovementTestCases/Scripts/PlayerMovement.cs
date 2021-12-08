@@ -78,9 +78,23 @@ public sealed class PlayerMovement : MonoBehaviour
     private int counter = 0;
 
     // Singelton pattern
-    private static PlayerMovement instance = null;
+    public static PlayerMovement Instance = null;
 
-    private PlayerMovement()
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+
+        }
+        else if (Instance != this)
+        {
+            Destroy(gameObject);
+        }
+
+    }
+
+    /*private PlayerMovement()
     {
     }
 
@@ -94,7 +108,7 @@ public sealed class PlayerMovement : MonoBehaviour
             }
             return instance;
         }
-    }
+    }*/
 
     void Start()
     {
@@ -125,6 +139,7 @@ public sealed class PlayerMovement : MonoBehaviour
             {
 
                 isJumping = true;
+                FindObjectOfType<AudioManager>().Play("Jump");
                 // multi jumps are less strong because of rb.velocity
                 rb.velocity = Vector2.up * jumpVelocity + rb.velocity;
             }
@@ -159,9 +174,10 @@ public sealed class PlayerMovement : MonoBehaviour
         if(ForgivingFramesWallJump > (DateTimeOffset.Now.ToUnixTimeMilliseconds() - timeSinceLastContactWithWall) 
             && Input.GetKeyDown(KeyCode.Space) && !IsOnGround() && wallJumpIsAktive)
         {
-            
+            FindObjectOfType<AudioManager>().Play("Walljump");
+
             // left
-            if((wallWithLastContactPosition.x - transform.position.x) > 0)
+            if ((wallWithLastContactPosition.x - transform.position.x) > 0)
             {
                 Debug.Log("Walljump");
                 rb.AddForce(new Vector2(-1, 3) * wallJumpStrength, ForceMode2D.Impulse);

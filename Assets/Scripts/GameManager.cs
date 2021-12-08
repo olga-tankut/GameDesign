@@ -6,10 +6,12 @@ public class GameManager : MonoBehaviour
 {
    public static GameManager Instance = null;
 
-   public float restartDelay = 1f;
+   public float restartDelay = 1.5f;
    private GameObject pauseScreen;
    private GameObject gameScreen;
-   
+   private GameObject gameOverScreen;
+   private GameObject gameWinScreen;
+
    public bool gameIsPaused = false;
    private bool gameHasEnded = false;
    
@@ -22,8 +24,12 @@ public class GameManager : MonoBehaviour
     private void Start() {
         pauseScreen = transform.parent.transform.Find("PauseScreen").gameObject;
         gameScreen = transform.parent.transform.Find("GameScreen").gameObject;
+        gameOverScreen = transform.parent.transform.Find("GameOverScreen").gameObject;
+        gameWinScreen = transform.parent.transform.Find("GameWinScreen").gameObject;
         pauseScreen.SetActive(false);
         gameScreen.SetActive(true);
+        gameOverScreen.SetActive(false);
+        gameWinScreen.SetActive(false);
     }
 
    private void Update() {
@@ -44,6 +50,8 @@ public class GameManager : MonoBehaviour
         if (gameHasEnded == false)
         {
             gameHasEnded = true;
+            gameOverScreen.SetActive(true);
+            FindObjectOfType<AudioManager>().Play("Lose");
             Invoke("RestartLevel", restartDelay);
         }   
     }

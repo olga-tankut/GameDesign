@@ -21,8 +21,12 @@ public class LevelLoadTrigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other) 
     {
-        if(other.gameObject.tag == "Player")
+        Debug.Log(PlayerMovement.Instance.ToString());
+        
+        if (other.gameObject == PlayerMovement.Instance)
         {
+           
+            FindObjectOfType<AudioManager>().Play("Win");
             GameManager.Instance.LoadNextLevel();
         }
         
