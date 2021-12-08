@@ -73,7 +73,7 @@ public sealed class PlayerMovement : MonoBehaviour
     private Vector2 colliderSize;
     private long startingTimeOfSlide = 0;
     private Vector2 startingVelocityOfSlide;
-    private static int isWallRight;
+    private static bool isWallRight;
     private float directionBuffer;
 
     private int counter = 0;
@@ -153,6 +153,15 @@ public sealed class PlayerMovement : MonoBehaviour
         else
         {
             counter++;
+        }
+        IsAtWall();
+        if(isWallRight && IsAtWall())
+        {
+            Debug.Log("Right");
+        }
+        else if(!isWallRight && IsAtWall())
+        {
+            Debug.Log("Left");
         }
     }
 
@@ -372,8 +381,6 @@ public sealed class PlayerMovement : MonoBehaviour
             Math.Abs((-(Math.Abs((float)(secondsElapsedSinceStartofSlide * secondsElapsedSinceStartofSlide * secondsElapsedSinceStartofSlide))/ slidingLength)
              + Math.Abs(startingVelocityOfSlide.x))), rb.velocity.y);
 
-            Debug.Log(slideVelocityTemp);
-
             if(slideVelocityTemp.x > 1 || slideVelocityTemp.x < -1)
             {
                 rb.velocity = slideVelocityTemp;
@@ -591,14 +598,14 @@ public sealed class PlayerMovement : MonoBehaviour
     {
         if(RayCastHitDetection()[0] == "LVL" && RayCastHitDetection()[1] == "LVL" && RayCastHitDetection()[2] == null)
         {
-            isWallRight = 1;
+            isWallRight = true;
             isAtWall = true;
             return true;
         }
 
         if(RayCastHitDetection()[4] == "LVL" && RayCastHitDetection()[3] == "LVL" && RayCastHitDetection()[2] == null)
         {
-            isWallRight = -1;
+            isWallRight = false;
             isAtWall = true;
             return true;
         }
@@ -639,7 +646,7 @@ public sealed class PlayerMovement : MonoBehaviour
         return isAtWall;
     }
 
-    public static int GetIsWallRight()
+    public static bool GetIsWallRight()
     {
         
         return isWallRight;
