@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
         gameScreen.SetActive(true);
         gameOverScreen.SetActive(false);
         gameWinScreen.SetActive(false);
+        FindObjectOfType<AudioManager>().Play("Game");
     }
 
    private void Update() {
@@ -57,7 +58,8 @@ public class GameManager : MonoBehaviour
     }
 
     public void RestartLevel()
-    {    
+    {
+        FindObjectOfType<AudioManager>().Stop("MainMenu");
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
@@ -68,7 +70,9 @@ public class GameManager : MonoBehaviour
 
     private void PauseLevel()
     {
-        if(!gameIsPaused)
+        FindObjectOfType<AudioManager>().Stop("Game");
+        FindObjectOfType<AudioManager>().Play("MainMenu");
+        if (!gameIsPaused)
         {
             gameScreen.SetActive(false);
             pauseScreen.SetActive(true);

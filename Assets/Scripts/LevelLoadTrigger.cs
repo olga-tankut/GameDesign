@@ -23,9 +23,8 @@ public class LevelLoadTrigger : MonoBehaviour
     {
         Debug.Log(PlayerMovement.Instance.ToString());
         
-        if (other.gameObject == PlayerMovement.Instance)
-        {
-           
+        if (other.gameObject.tag == "Player")
+        {  
             FindObjectOfType<AudioManager>().Play("Win");
             GameManager.Instance.LoadNextLevel();
         }

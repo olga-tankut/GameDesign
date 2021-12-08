@@ -222,8 +222,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1451846888277778614}
     - target: {fileID: 5407521711114839852, guid: 354668e30a06f125fb2f419e74204e82, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 3864792717547684188, guid: 630f8de6aea0dc148877d0308eb7e572, type: 3}
+    - target: {fileID: 5407521711114839852, guid: 354668e30a06f125fb2f419e74204e82, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: RestartLevel
+      objectReference: {fileID: 0}
+    - target: {fileID: 5407521711114839852, guid: 354668e30a06f125fb2f419e74204e82, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: Play
       objectReference: {fileID: 0}
     - target: {fileID: 6269570381461939987, guid: 354668e30a06f125fb2f419e74204e82, type: 3}
       propertyPath: m_AnchoredPosition.y

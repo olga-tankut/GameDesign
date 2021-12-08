@@ -78,23 +78,9 @@ public sealed class PlayerMovement : MonoBehaviour
     private int counter = 0;
 
     // Singelton pattern
-    public static PlayerMovement Instance = null;
+    public static PlayerMovement instance = null;
 
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-
-        }
-        else if (Instance != this)
-        {
-            Destroy(gameObject);
-        }
-
-    }
-
-    /*private PlayerMovement()
+    private PlayerMovement()
     {
     }
 
@@ -108,7 +94,7 @@ public sealed class PlayerMovement : MonoBehaviour
             }
             return instance;
         }
-    }*/
+    }
 
     void Start()
     {
@@ -640,6 +626,6 @@ public sealed class PlayerMovement : MonoBehaviour
 
     public static bool GetIsAtWall()
     {   
-        return Instance.IsAtWall();
+        return instance.IsAtWall();
     }
 }
