@@ -83,6 +83,7 @@ GameObject:
   - component: {fileID: 9013409186880253720}
   - component: {fileID: 9013409186880253727}
   - component: {fileID: 9013409186880253721}
+  - component: {fileID: 1619809678813600210}
   m_Layer: 0
   m_Name: small lamp
   m_TagString: Lamp
@@ -201,3 +202,19 @@ PolygonCollider2D:
       - {x: 0.06944445, y: -0.41666666}
       - {x: 0.06944445, y: -0.41666666}
       - {x: 0.06944445, y: -0.41666666}
+--- !u!114 &1619809678813600210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9013409186880253726}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e00223c688826540af1529d0c655a9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  light: {fileID: 0}
+  minTime: 1
+  maxTime: 35
+  offTime: 0.1

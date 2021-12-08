@@ -9,8 +9,8 @@ public class GameManager : MonoBehaviour
    public bool IsGameplayActive = true;
 
    public float restartDelay = 1f;
-   private GameObject pauseScreen;
-   private GameObject gameScreen;
+   public GameObject pauseScreen;
+   public GameObject gameScreen;
    public bool gameIsPaused = false;
 
     private void Awake()
@@ -19,8 +19,8 @@ public class GameManager : MonoBehaviour
     }
 
     private void Start() {
-       pauseScreen = transform.parent.transform.Find("PauseScreen").gameObject;
-       gameScreen = transform.parent.transform.Find("GameScreen").gameObject;
+       pauseScreen = GameObject.FindGameObjectWithTag("PauseScreen");
+       gameScreen = GameObject.FindGameObjectWithTag("GameScreen");
        pauseScreen.SetActive(false);
        gameScreen.SetActive(true);
    }
