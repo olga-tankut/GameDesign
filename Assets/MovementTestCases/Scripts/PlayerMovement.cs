@@ -46,6 +46,9 @@ public sealed class PlayerMovement : MonoBehaviour
     [SerializeField]private float wallJumpStrength = 5f;
     [Range(0, 3)]
     [SerializeField]private float upwardForceOnSlopes = 1.0f;
+    // 
+    [Range(0, 1000)]
+    private static int deaktivationFramesAfterWallJump = 500; // ms
 
     private Rigidbody2D rb;
     private Collision2D isInContactWithCollider;
@@ -58,7 +61,7 @@ public sealed class PlayerMovement : MonoBehaviour
     private static bool isAtWall = false;
     private float startingGravity;
     private float slideMultiplyer = 1.0f;
-    private long timeSinceLastContactWithWall = 0; // in ms
+    private static long timeSinceLastContactWithWall = 0; // in ms
     private long timeSinceStartOfDash = 0;
     private Vector2 wallWithLastContactPosition;
     private ContactPoint2D[] colliderCurrentlyinContactWith = new ContactPoint2D[5];
@@ -73,7 +76,8 @@ public sealed class PlayerMovement : MonoBehaviour
     private Vector2 colliderSize;
     private long startingTimeOfSlide = 0;
     private Vector2 startingVelocityOfSlide;
-    private static int isWallRight;
+    private static bool isWallRight;
+    private float directionBuffer;
 
     private int counter = 0;
 
@@ -146,7 +150,6 @@ public sealed class PlayerMovement : MonoBehaviour
         }
         if(counter == 10)
         {
-            // Debug.Log(IsOnGround() + ", " + IsOnSlope());
             counter = 0;
         }
         else
@@ -320,7 +323,15 @@ public sealed class PlayerMovement : MonoBehaviour
             // ai movement
             else if(!IsOnGround() && !IsAtWall())
             {
-                rb.AddForce(Vector2.right * horizontalInput * accelerationSpeed * Time.fixedDeltaTime * airMovementMultiplyer);
+                if((DateTimeOffset.Now.ToUnixTimeMilliseconds() - timeSinceLastContactWithWall) < deaktivationFramesAfterWallJump)
+                {
+                    // deaktiviere steuerung 
+                    rb.AddForce(Vector2.right * GetCurrentDirectionTraveledX() * accelerationSpeed * Time.fixedDeltaTime * airMovementMultiplyer);
+                }
+                else
+                {
+                    rb.AddForce(Vector2.right * horizontalInput * accelerationSpeed * Time.fixedDeltaTime * airMovementMultiplyer);
+                }
             }
 
             if(IsOnSlope() && !isSliding)
@@ -355,12 +366,23 @@ public sealed class PlayerMovement : MonoBehaviour
         {
             // long secondsElapsedSinceStartofSlide = (DateTimeOffset.Now.ToUnixTimeMilliseconds() / 1000) - (startingTimeOfSlide / 1000);
             double secondsElapsedSinceStartofSlide = (Convert.ToDouble(DateTimeOffset.Now.ToUnixTimeMilliseconds()) / 1000) - (Convert.ToDouble(startingTimeOfSlide) / 1000);
-            
-            Vector2 slideVelocityTemp = new Vector2(GetCurrentDirectionTraveledX() * 
-            (-(Math.Abs((float)(secondsElapsedSinceStartofSlide * secondsElapsedSinceStartofSlide * secondsElapsedSinceStartofSlide))/ slidingLength)
-             + startingVelocityOfSlide.x), rb.velocity.y);
+            float direction = 0;
+            if(GetCurrentDirectionTraveledX() == 0)
+            {
+                direction = directionBuffer;
+            }
+            else
+            {
+                directionBuffer = GetCurrentDirectionTraveledX();
+                direction = GetCurrentDirectionTraveledX();
+            }
 
-            if(slideVelocityTemp.x > 1)
+
+            Vector2 slideVelocityTemp = new Vector2(GetCurrentDirectionTraveledX() * 
+            Math.Abs((-(Math.Abs((float)(secondsElapsedSinceStartofSlide * secondsElapsedSinceStartofSlide * secondsElapsedSinceStartofSlide))/ slidingLength)
+             + Math.Abs(startingVelocityOfSlide.x))), rb.velocity.y);
+
+            if(slideVelocityTemp.x > 1 || slideVelocityTemp.x < -1)
             {
                 rb.velocity = slideVelocityTemp;
             }
@@ -462,23 +484,14 @@ public sealed class PlayerMovement : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collisionInfo)
     {
         isInContactWithCollider = collisionInfo;
-        // old RayCast less aproach
-        /*if(collisionInfo.gameObject.tag == "Wall")
-        {
-            timeSinceLastContactWithWall = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-            wallWithLastContactPosition = collisionInfo.gameObject.transform.position;
-            Debug.Log("Collision with wall: " + collisionInfo.gameObject.tag);
-        }*/
         //right
         if(RayCastHitDetection()[0] != null && RayCastHitDetection()[0] == "LVL")
         {
-            timeSinceLastContactWithWall = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             wallWithLastContactPosition = new Vector2(transform.position.x + 1, transform.position.y);
         }
 
         if(RayCastHitDetection()[4] != null && RayCastHitDetection()[4] == "LVL")
         {
-            timeSinceLastContactWithWall = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             wallWithLastContactPosition = new Vector2(transform.position.x - 1, transform.position.y);
         }
         addConservedEnergyToMomentum();
@@ -577,14 +590,16 @@ public sealed class PlayerMovement : MonoBehaviour
     {
         if(RayCastHitDetection()[0] == "LVL" && RayCastHitDetection()[1] == "LVL" && RayCastHitDetection()[2] == null)
         {
-            isWallRight = 1;
+            timeSinceLastContactWithWall = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            isWallRight = true;
             isAtWall = true;
             return true;
         }
 
         if(RayCastHitDetection()[4] == "LVL" && RayCastHitDetection()[3] == "LVL" && RayCastHitDetection()[2] == null)
         {
-            isWallRight = -1;
+            timeSinceLastContactWithWall = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            isWallRight = false;
             isAtWall = true;
             return true;
         }
@@ -625,7 +640,20 @@ public sealed class PlayerMovement : MonoBehaviour
         return isAtWall;
     }
 
-    public static int GetIsWallRight()
+    public static bool GetDeaktivateFacingChangeAfterWallJump()
+    {
+        if((DateTimeOffset.Now.ToUnixTimeMilliseconds() - timeSinceLastContactWithWall) < deaktivationFramesAfterWallJump)
+        {
+            // deaktiviere steuerung 
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public static bool GetIsWallRight()
     {
         
         return isWallRight;

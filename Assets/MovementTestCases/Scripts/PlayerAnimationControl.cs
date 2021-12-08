@@ -19,8 +19,15 @@ public class PlayerAnimationControl : MonoBehaviour
     }
 
     private void FixedUpdate() {
-        animator.SetBool("isJumping", PlayerMovement.GetIsJumping());
         animator.SetBool("isDashing", PlayerMovement.GetIsDashing());
+        if(PlayerMovement.GetIsDashing())
+        {
+            animator.SetBool("isJumping", false);
+        }
+        else
+        {
+            animator.SetBool("isJumping", PlayerMovement.GetIsJumping());
+        }
         animator.SetBool("isSliding", PlayerMovement.GetIsSliding());
         animator.SetFloat("Speed", PlayerMovement.GetCurrentSpeed());
         AnimDirectionFixedUpdate();
@@ -44,15 +51,40 @@ public class PlayerAnimationControl : MonoBehaviour
                 transform.parent.localScale = lookingDirection;
                 facingRight = !facingRight;
             }
+        }*/
+        if(PlayerMovement.GetIsAtWall())
+        {
+            if(PlayerMovement.GetIsWallRight())
+            {
+                if(facingRight)
+                {
+                    Flip();
+                }
+            }
+            else
+            {
+                if(!facingRight)
+                {
+                    Flip();
+                }
+            }
         }
         else
-        {*/
-        float h = Input.GetAxis("Horizontal");
-        if(h > 0 && !facingRight)
-            Flip();
-        else if(h < 0 && facingRight)
-            Flip();
-        //}
+        {
+        if(!PlayerMovement.GetDeaktivateFacingChangeAfterWallJump())
+        {
+            float h = Input.GetAxis("Horizontal");
+            if(h > 0 && !facingRight)
+            {
+                Flip();
+            }
+            else if(h < 0 && facingRight)
+            {
+                Flip();
+            }
+        }
+        
+        }
      }
 
     //Flipping animation sprite into correct direction
