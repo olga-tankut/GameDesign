@@ -55,7 +55,7 @@ MonoBehaviour:
   dashCooldown: 4000
   movementEnergieConservationMultiplyer: 5
   airMovementMultiplyer: 3
-  maxAirSpeed: 4
+  maxAirSpeed: 3
   multiJumpIsActive: 0
   airMovementIsActive: 0
   dashingLength: 4000
@@ -63,7 +63,7 @@ MonoBehaviour:
   dashingStrength: 12
   slidingLength: 1
   wallJumpIsAktive: 1
-  ForgivingFramesWallJump: 1887
+  ForgivingFramesWallJump: 2000
   ForgivingFramesDashCancel: 300
   wallJumpStrength: 5
   upwardForceOnSlopes: 1
@@ -81,6 +81,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
   facingRight: 1
+  facingAwayFromWall: 0
 --- !u!70 &630522941
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

@@ -22,9 +22,8 @@ public class Fan : MonoBehaviour
     void Start()
     {
         fanCollider = GetComponent<Collider2D>();
-        p = GameObject.FindGameObjectWithTag("Player");
-        pm = p.GetComponent<PlayerMovement>();
-        prb = p.GetComponent<Rigidbody2D>();
+        pm = PlayerMovement.Instance;
+        prb = GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody2D>();
     }
 
     void OnTriggerEnter2D(Collider2D other)
