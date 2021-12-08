@@ -56,7 +56,6 @@ public class PlayerAnimationControl : MonoBehaviour
         {
             if(PlayerMovement.GetIsWallRight())
             {
-                Debug.Log("x");
                 if(facingRight)
                 {
                     Flip();
@@ -64,7 +63,6 @@ public class PlayerAnimationControl : MonoBehaviour
             }
             else
             {
-                Debug.Log("y");
                 if(!facingRight)
                 {
                     Flip();
@@ -73,11 +71,19 @@ public class PlayerAnimationControl : MonoBehaviour
         }
         else
         {
-        float h = Input.GetAxis("Horizontal");
-        if(h > 0 && !facingRight)
-            Flip();
-        else if(h < 0 && facingRight)
-            Flip();
+        if(!PlayerMovement.GetDeaktivateFacingChangeAfterWallJump())
+        {
+            float h = Input.GetAxis("Horizontal");
+            if(h > 0 && !facingRight)
+            {
+                Flip();
+            }
+            else if(h < 0 && facingRight)
+            {
+                Flip();
+            }
+        }
+        
         }
      }
 
