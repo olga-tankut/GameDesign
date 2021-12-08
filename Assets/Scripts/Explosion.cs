@@ -23,6 +23,7 @@ public class Explosion : MonoBehaviour
     IEnumerator Explode()
     {
         explosionEffect.SetActive(true);
+        FindObjectOfType<AudioManager>().Play("Explosion");
         yield return new WaitForSeconds(0.5f);
         Destroy(gameObject);
     }
