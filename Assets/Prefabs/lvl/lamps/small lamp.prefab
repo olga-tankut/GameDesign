@@ -56,10 +56,10 @@ MonoBehaviour:
   m_AlphaBlendOnOverlap: 0
   m_ShadowIntensity: 0.15
   m_ShadowVolumeIntensity: 0
-  m_PointLightInnerAngle: 0
+  m_PointLightInnerAngle: 15
   m_PointLightOuterAngle: 67
   m_PointLightInnerRadius: 0
-  m_PointLightOuterRadius: 7.74
+  m_PointLightOuterRadius: 4.8
   m_PointLightDistance: 3
   m_PointLightQuality: 1
   m_ShapeLightParametricSides: 5
@@ -217,4 +217,5 @@ MonoBehaviour:
   light: {fileID: 0}
   minTime: 1
   maxTime: 35
-  offTime: 0.1
+  offTimeMin: 0.05
+  offTimeMax: 0.2

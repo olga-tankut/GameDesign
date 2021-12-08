@@ -10,7 +10,9 @@ public class LightFlicker : MonoBehaviour
     public float minTime; //minimum On time before flick
     public float maxTime; //maximum On time before flick
     float time = 0; //time when the lamp is on
-    public float offTime; //the time how long the lamp will be out
+    public float offTimeMin; //min off time for a lamp
+    public float offTimeMax; //max time off for a lamp
+
     float _offtime; //temp copy of offtime
 
 
@@ -18,12 +20,12 @@ public class LightFlicker : MonoBehaviour
     void Start()
     {
         time = GetRandomTime(); //First random roll
-        _offtime = offTime; //Set temp value once, just in case
+        _offtime = offTimeMax; //Set temp value once, just in case
         if(light == null) //Try to find the light in children when not set
         {
             try { light = this.gameObject.GetComponentInChildren<Light2D>(); }
             catch { 
-                Debug.Log("ERROR: Can't find Lamp!");
+                Debug.Log("ERROR: Can't find Lamp! LAMP FLICKER OFFLINE");
                 this.enabled = false; //Deactivate this component to prevent errors
             };
         }
@@ -47,9 +49,14 @@ public class LightFlicker : MonoBehaviour
         return Random.Range(minTime, maxTime);
     }
 
+    float GetRandomOffTime()
+    {
+        return Random.Range(offTimeMin, offTimeMax);
+    }
+
     void Flick() //Flicks the lamp off and on again
     {
-        _offtime = offTime; //Set temp value up
+        _offtime = GetRandomOffTime(); //Set temp value up
         light.enabled = false; //Turn light off
     }
 }
