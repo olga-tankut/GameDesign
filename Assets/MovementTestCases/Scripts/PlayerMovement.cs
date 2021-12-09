@@ -17,7 +17,7 @@ public sealed class PlayerMovement : MonoBehaviour
     [SerializeField]private float accelerationSpeed = 1000.0f;
     [Range(0, 15)]
     [SerializeField]private float maxGroundSpeed = 4f;
-    float _maxGroundSpeed;
+    private float _maxGroundSpeed; //temp value for storing maxGroundSpeed
     [Range(0, 1000)]
     [SerializeField]private float breakForce = 100.0f;
     [Range(0, 5000)]
