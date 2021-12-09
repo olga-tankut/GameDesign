@@ -17,6 +17,7 @@ public sealed class PlayerMovement : MonoBehaviour
     [SerializeField]private float accelerationSpeed = 1000.0f;
     [Range(0, 15)]
     [SerializeField]private float maxGroundSpeed = 4f;
+    float _maxGroundSpeed;
     [Range(0, 1000)]
     [SerializeField]private float breakForce = 100.0f;
     [Range(0, 5000)]
@@ -116,7 +117,7 @@ public sealed class PlayerMovement : MonoBehaviour
         collider = GetComponent<CapsuleCollider2D>();
         colliderSize = collider.size; // starting horizontal
         startingVelocityOfSlide = Vector2.zero;
-
+        _maxGroundSpeed = maxGroundSpeed; //Set temp value _accelerationSpeed once, just in case
     }
 
     void Update()
@@ -183,7 +184,6 @@ public sealed class PlayerMovement : MonoBehaviour
             timeSinceLastContactWithWall = ForgivingFramesWallJump + 1;
         }
     }
-    
     private void SlideFixedUpdate()
     {
         if(Input.GetKeyDown(KeyCode.S))
@@ -218,7 +218,6 @@ public sealed class PlayerMovement : MonoBehaviour
             transform.Find("RayCastStart").transform.localPosition = raycastStartlocalPosition;
         }
     }
-
     private void DashUpdate()
     {
         //check if dash has been canceled
@@ -305,7 +304,6 @@ public sealed class PlayerMovement : MonoBehaviour
 
         timeSinceLastDash += Time.deltaTime;
     }
-
     private void MoveFixedUpdate()
     {
         // TODO: deaktivate stick to wall
@@ -657,5 +655,23 @@ public sealed class PlayerMovement : MonoBehaviour
     {
         
         return isWallRight;
+    }
+
+    bool reducedAcceleration = false; //Bool to check before reducing acceleration, preving possible wrong interactions
+    public void ReduceGroundSpeed(float groundSpeedReduction, float groundSpeedReductionTime)
+    {
+        if(!reducedAcceleration)
+        {
+            maxGroundSpeed = 1;
+            reducedAcceleration = true; //Reduction in progress
+            Debug.Log("Reduce Acceleration for a while");
+            //_maxGroundSpeed = maxGroundSpeed; //Save set accelerationSpeed
+        
+            //while(accelerationReductionTime > 0)
+            //{
+            //    accelerationReductionTime -= Time.deltaTime;
+            //}
+            //accelerationSpeed = _accelerationSpeed;
+        }
     }
 }
