@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 347443782}
   - component: {fileID: 347443781}
   - component: {fileID: 6687970465780012703}
-  - component: {fileID: 8506562450346084899}
   m_Layer: 0
   m_Name: small fan
   m_TagString: Untagged
@@ -126,7 +125,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fanSpeed: 2500
-  direction: 1
+  direction: 0
 --- !u!95 &6687970465780012703
 Animator:
   serializedVersion: 3
@@ -146,32 +145,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &8506562450346084899
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4648782021586452844}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7db70e0ea77f5ac47a8f4565a9406397, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ShadowGroup: 0
-  m_HasRenderer: 1
-  m_UseRendererSilhouette: 1
-  m_CastsShadows: 1
-  m_SelfShadows: 0
-  m_ApplyToSortingLayers: 00000000d91e1df6fb3d16e3a9a790c9
-  m_ShapePath:
-  - {x: -0.0000011324883, y: -0.5, z: 0}
-  - {x: 0.59259146, y: -0.5, z: 0}
-  - {x: 0.59259146, y: 0.5, z: 0}
-  - {x: -0.0000011324883, y: 0.5, z: 0}
-  m_ShapePathHash: 0
-  m_Mesh: {fileID: 0}
-  m_InstanceId: 33390
 --- !u!1001 &4605364064547539662
 PrefabInstance:
   m_ObjectHideFlags: 0
