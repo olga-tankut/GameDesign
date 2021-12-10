@@ -724,22 +724,21 @@ public sealed class PlayerMovement : MonoBehaviour
     bool reducedMaxSpeed = false; //Bool to check before reducing acceleration, preving possible wrong interactions
     public void ReduceGroundSpeed(float groundSpeedReduction, float groundSpeedReductionTime)
     {
+        _maxGroundSpeed = maxGroundSpeed;
         if(!reducedMaxSpeed)
         {
             Debug.Log("start max speed reduction");
-            //rb.velocity = new Vector2(GetCurrentDirectionTraveledX(), rb.velocity.y);
-            //rb.velocity = new Vector2(0,0);
-
-            maxGroundSpeed = 1;
             reducedMaxSpeed = true; //Reduction in progress
-            Debug.Log("Reduce Acceleration for a while");
-            //_maxGroundSpeed = maxGroundSpeed; //Save set accelerationSpeed
-        
-            //while(accelerationReductionTime > 0)
-            //{
-            //    accelerationReductionTime -= Time.deltaTime;
-            //}
-            //accelerationSpeed = _accelerationSpeed;
+            maxGroundSpeed -= groundSpeedReduction;
+            StartCoroutine(ReduceGroundSpeedTimer(groundSpeedReductionTime));
         }
+    }
+
+    private IEnumerator ReduceGroundSpeedTimer(float time)
+    {
+        yield return new WaitForSeconds(time);
+        maxGroundSpeed = _maxGroundSpeed;
+        reducedMaxSpeed = false;
+        Debug.Log("Slow down timer over");
     }
 }

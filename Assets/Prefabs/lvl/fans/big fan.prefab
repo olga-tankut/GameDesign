@@ -125,7 +125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 894a9a71874c14046b25de49cddc5a32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fanSpeed: 4000
+  fanSpeed: 4500
   direction: 1
 --- !u!95 &6645267169663039850
 Animator:
@@ -165,13 +165,13 @@ MonoBehaviour:
   m_SelfShadows: 0
   m_ApplyToSortingLayers: 00000000d91e1df6fb3d16e3a9a790c9
   m_ShapePath:
-  - {x: 0.0000009834766, y: -1.9907408, z: 0}
-  - {x: 0.9814825, y: -1.9907408, z: 0}
-  - {x: 0.9814825, y: 1.9907408, z: 0}
-  - {x: 0.0000009834766, y: 1.9907408, z: 0}
-  m_ShapePathHash: 0
+  - {x: -0.56915665, y: -1.9805775, z: 0}
+  - {x: -0.0043792725, y: -1.9873533, z: 0}
+  - {x: 0.00850296, y: 1.9907408, z: 0}
+  - {x: -0.5704422, y: 1.9941978, z: 0}
+  m_ShapePathHash: 1068107925
   m_Mesh: {fileID: 0}
-  m_InstanceId: 37728
+  m_InstanceId: 90622
 --- !u!1001 &8367173597438494271
 PrefabInstance:
   m_ObjectHideFlags: 0

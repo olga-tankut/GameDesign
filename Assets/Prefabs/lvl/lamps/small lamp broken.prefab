@@ -213,8 +213,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e81581e2bbe947419067baf06b08f93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reduceAccelerationSpeedBy: 500
-  reductionTime: 2
+  reduceGroundspeedBy: 5
+  reductionTime: 4
   destroyParent: 1
   destroyThis: 0
 --- !u!1 &6980916823765116185
