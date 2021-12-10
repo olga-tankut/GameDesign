@@ -13,7 +13,7 @@ public class PlayerSlowDown : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         //Debug.Log(collision.gameObject.name);
-        if (collision.gameObject.tag == "Untagged" && collision.gameObject.name == "Scripts")
+        if (collision.gameObject.tag == "Player" && collision.gameObject.name == "Scripts")
         {
             Debug.Log("Lamp hit Player");
             //PLAY SOUNDEFFEKT
@@ -29,7 +29,7 @@ public class PlayerSlowDown : MonoBehaviour
 
     void SlowDownPlayer()
     {
-        PlayerMovement.Instance.ReduceGroundSpeed(reduceGroundspeedBy, reductionTime);
+        PlayerMovement.instance.ReduceGroundSpeed(reduceGroundspeedBy, reductionTime);
     }
 
     void DestroyCheck() //Check what needs to be destoryed

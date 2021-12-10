@@ -83,23 +83,30 @@ public sealed class PlayerMovement : MonoBehaviour
     private int counter = 0;
 
     // Singelton pattern
-    private static PlayerMovement instance = null;
+    public static PlayerMovement instance;
 
-    private PlayerMovement()
+    void Awake()
     {
+        if (PlayerMovement.instance != null) Destroy(this);
+        else PlayerMovement.instance = this;
     }
 
-    public static PlayerMovement Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
-                instance = new PlayerMovement();
-            }
-            return instance;
-        }
-    }
+    //private PlayerMovement()
+    //{
+
+    //}
+
+    //public static PlayerMovement Instance
+    //{
+    //    get
+    //    {
+    //        if (instance == null)
+    //        {
+    //            instance = new PlayerMovement();
+    //        }
+    //        return instance;
+    //    }
+    //}
 
     void Start()
     {
@@ -117,7 +124,7 @@ public sealed class PlayerMovement : MonoBehaviour
         collider = GetComponent<CapsuleCollider2D>();
         colliderSize = collider.size; // starting horizontal
         startingVelocityOfSlide = Vector2.zero;
-        _maxGroundSpeed = maxGroundSpeed; //Set temp value _accelerationSpeed once, just in case
+        _maxGroundSpeed = maxGroundSpeed; //Set temp value maxGroundSpeed once, just in case
     }
 
     void Update()
@@ -714,13 +721,17 @@ public sealed class PlayerMovement : MonoBehaviour
         return isWallRight;
     }
 
-    bool reducedAcceleration = false; //Bool to check before reducing acceleration, preving possible wrong interactions
+    bool reducedMaxSpeed = false; //Bool to check before reducing acceleration, preving possible wrong interactions
     public void ReduceGroundSpeed(float groundSpeedReduction, float groundSpeedReductionTime)
     {
-        if(!reducedAcceleration)
+        if(!reducedMaxSpeed)
         {
+            Debug.Log("start max speed reduction");
+            //rb.velocity = new Vector2(GetCurrentDirectionTraveledX(), rb.velocity.y);
+            //rb.velocity = new Vector2(0,0);
+
             maxGroundSpeed = 1;
-            reducedAcceleration = true; //Reduction in progress
+            reducedMaxSpeed = true; //Reduction in progress
             Debug.Log("Reduce Acceleration for a while");
             //_maxGroundSpeed = maxGroundSpeed; //Save set accelerationSpeed
         

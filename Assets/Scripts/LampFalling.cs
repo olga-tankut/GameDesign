@@ -20,7 +20,7 @@ public class LampFalling : MonoBehaviour
     {
         //Debug.Log("Trigger enter");
         //Check if it's the player
-        if (collision.gameObject.tag == "Untagged" && collision.gameObject.name == "Scripts")
+        if (collision.gameObject.tag == "Player" && collision.gameObject.name == "Scripts")
         {
             Fall();
         }
