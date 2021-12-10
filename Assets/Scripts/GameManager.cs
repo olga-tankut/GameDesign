@@ -4,8 +4,8 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-   public static GameManager Instance = null;
-
+   public static GameManager Instance;
+    
    public bool IsGameplayActive = true;
 
    public float restartDelay = 1f;
@@ -15,7 +15,8 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this;
+        if (GameManager.Instance != null) Destroy(this);
+        else { Instance = this; }
     }
 
     private void Start() {

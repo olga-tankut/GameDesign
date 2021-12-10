@@ -31,7 +31,7 @@ public class Fan : MonoBehaviour
         //Debug.Log("Fan Trigger entered");
         //Debug.Log(other.transform.tag);
         //Debug.Log(other.gameObject.name);
-        if(other.transform.tag == "Untagged" && other.transform.name == "Scripts")
+        if(other.transform.tag == "Player" && other.transform.name == "Scripts")
         {
             //Rigidbody2D prb = other.gameObject.GetComponent<Rigidbody2D>();
             Rigidbody2D prb = other.gameObject.GetComponentInParent<Rigidbody2D>();
