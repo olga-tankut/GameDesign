@@ -75,7 +75,7 @@ public sealed class PlayerMovement : MonoBehaviour
     private Vector3 playerScaling;
     private CapsuleCollider2D collider;
     private Vector2 colliderSize;
-    private long startingTimeOfSlide = 0;
+    private long startingTimeOfSlide = DateTimeOffset.Now.ToUnixTimeMilliseconds();
     private Vector2 startingVelocityOfSlide;
     private static bool isWallRight;
     private float directionBuffer;
@@ -151,12 +151,31 @@ public sealed class PlayerMovement : MonoBehaviour
         }
         if(counter == 10)
         {
+            //Debug.Log(startingVelocityOfSlide);
+            //Debug.Log(IsOnGround() + ", " + IsOnSlope() + ", " + rb.velocity.x);
+            //Debug.Log(rb.velocity.x);
+            //Debug.Log(isSliding);
+            if(!IsOnGround())
+            {
+                //Debug.Log("X");
+            }
+            if(Input.GetKey(KeyCode.S))
+            {
+                //Debug.Log(rb.velocity.x);
+            }
             counter = 0;
         }
         else
         {
             counter++;
         }
+
+        // failsafe for to high groundSpeed
+        if((rb.velocity.x > (maxGroundSpeed * 1.2f) || rb.velocity.x < (-maxGroundSpeed * 1.2f)) && !isDashing )
+        {
+            rb.velocity = new Vector2(maxGroundSpeed * GetCurrentDirectionTraveledX() * 1.2f, rb.velocity.y);
+        }
+
     }
 
     private void WallJumpFixedUpdate()
@@ -185,11 +204,30 @@ public sealed class PlayerMovement : MonoBehaviour
         }
     }
     private void SlideFixedUpdate()
-    {
+    {   
+        // handels starting time of slide
         if(Input.GetKeyDown(KeyCode.S))
         {
             startingTimeOfSlide = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-            startingVelocityOfSlide = rb.velocity;
+            // if slide speed is to fast
+            if(rb.velocity.x > maxGroundSpeed)
+            {
+                // set max speed positive
+                //Debug.Log("max slide speed reached");
+                startingVelocityOfSlide.y = rb.velocity.y; // in case of problem set it to 0
+                startingVelocityOfSlide.x = maxGroundSpeed;
+            }
+            else if(rb.velocity.x < -maxGroundSpeed)
+            {
+                //set max speed negative
+                startingVelocityOfSlide.y = rb.velocity.y; // in case of problem set it to 0
+                startingVelocityOfSlide.x = -maxGroundSpeed;
+            }
+            else
+            {
+                startingVelocityOfSlide = rb.velocity;
+            }
+            
         }
         if(Input.GetKey(KeyCode.S) && IsOnGround())
         {
@@ -319,7 +357,7 @@ public sealed class PlayerMovement : MonoBehaviour
                 rb.AddForce(Vector2.right * horizontalInput * accelerationSpeed * Time.fixedDeltaTime);
             }
             // ai movement
-            else if(!IsOnGround() && !IsAtWall())
+            else if(!IsOnGround() && !IsAtWall() /*&& !isSliding*/)
             {
                 if((DateTimeOffset.Now.ToUnixTimeMilliseconds() - timeSinceLastContactWithWall) < deaktivationFramesAfterWallJump)
                 {
@@ -376,9 +414,32 @@ public sealed class PlayerMovement : MonoBehaviour
             }
 
 
-            Vector2 slideVelocityTemp = new Vector2(GetCurrentDirectionTraveledX() * 
-            Math.Abs((-(Math.Abs((float)(secondsElapsedSinceStartofSlide * secondsElapsedSinceStartofSlide * secondsElapsedSinceStartofSlide))/ slidingLength)
-             + Math.Abs(startingVelocityOfSlide.x))), rb.velocity.y);
+            Vector2 slideVelocityTemp = new Vector2(((-(Math.Abs((float)(secondsElapsedSinceStartofSlide * secondsElapsedSinceStartofSlide * secondsElapsedSinceStartofSlide)))/ slidingLength)
+             + Math.Abs(startingVelocityOfSlide.x)), rb.velocity.y);
+
+            // if slideVelocityTemp gets negativ it needs to be set to 0
+            if(slideVelocityTemp.x < 0)
+            {
+                slideVelocityTemp.x = 0;
+            }
+            else
+            {
+                slideVelocityTemp.x *= GetCurrentDirectionTraveledX();
+            }
+
+            //Debug.Log(slideVelocityTemp + ", " + startingVelocityOfSlide + ", " + secondsElapsedSinceStartofSlide + ", " + rb.velocity.x);
+
+            if(slideVelocityTemp.x > maxGroundSpeed)
+            {
+                //Debug.Log("slideVelocityTemp is at max");
+                slideVelocityTemp.x = maxGroundSpeed;
+            }
+
+            if(slideVelocityTemp.x < -maxGroundSpeed)
+            {
+                //Debug.Log("x: " + startingVelocityOfSlide + ", "+ secondsElapsedSinceStartofSlide + ", " + slideVelocityTemp + ",x " + startingTimeOfSlide);
+                slideVelocityTemp.x = -maxGroundSpeed;
+            }
 
             if(slideVelocityTemp.x > 1 || slideVelocityTemp.x < -1)
             {
@@ -394,12 +455,6 @@ public sealed class PlayerMovement : MonoBehaviour
         {
             rb.AddForce(new Vector2((float)x * timeSinceLastFrameUpdate * breakingStrength * -(GetCurrentDirectionTraveledX()), 0));
         }
-        
-        /*if(Math.Abs(rb.velocity.x) > 1.0f)
-        {
-            Debug.Log("Force: " + ((float)x * timeSinceLastFrameUpdate * breakingStrength * -(GetCurrentDirectionTraveledX()) * slideMultiplyer) + ", " + slideMultiplyer);
-        }*/
-        
     }
 
     private void JumpFixedUpdate()
@@ -492,7 +547,8 @@ public sealed class PlayerMovement : MonoBehaviour
         {
             wallWithLastContactPosition = new Vector2(transform.position.x - 1, transform.position.y);
         }
-        addConservedEnergyToMomentum();
+            addConservedEnergyToMomentum();
+        
     }
 
     private void OnCollisionExit2D(Collision2D collisionInfo)
@@ -503,6 +559,7 @@ public sealed class PlayerMovement : MonoBehaviour
     private void addConservedEnergyToMomentum()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
+        // TODO: rewrite it as percentage conserved
         rb.AddForce(Vector2.right * horizontalInput * accelerationSpeed * Time.fixedDeltaTime * movementEnergieConservationMultiplyer);
     }
 
