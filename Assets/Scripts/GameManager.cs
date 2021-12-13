@@ -23,10 +23,15 @@ public class GameManager : MonoBehaviour
     }
 
     private void Start() {
-        pauseScreen = GameObject.FindGameObjectWithTag("PauseScreen");
+        /*pauseScreen = GameObject.FindGameObjectWithTag("PauseScreen");
         gameScreen = GameObject.FindGameObjectWithTag("GameScreen");
         giveTryScreen = GameObject.FindGameObjectWithTag("GiveTryScreen");
-        winScreen = GameObject.FindGameObjectWithTag("WinScreen");
+        winScreen = GameObject.FindGameObjectWithTag("WinScreen");*/
+
+        pauseScreen = transform.parent.Find("PauseScreen").gameObject;
+        gameScreen = transform.parent.Find("GameScreen").gameObject;
+        giveTryScreen = transform.parent.Find("GiveTryScreen").gameObject;
+        winScreen = transform.parent.Find("WinScreen").gameObject;
 
         pauseScreen.SetActive(false);
         gameScreen.SetActive(true);
@@ -49,7 +54,7 @@ public class GameManager : MonoBehaviour
 
     public void EndGame()
     {
-        Debug.Log("Game over");
+        Debug.Log("Game over / Restart Level?");
         Invoke("RestartLevel", restartDelay);     
     } 
     
