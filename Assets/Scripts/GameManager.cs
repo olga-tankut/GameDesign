@@ -9,8 +9,11 @@ public class GameManager : MonoBehaviour
    public bool IsGameplayActive = true;
 
    public float restartDelay = 1f;
-   public GameObject pauseScreen;
-   public GameObject gameScreen;
+   private GameObject pauseScreen;
+   private GameObject gameScreen;
+   private GameObject winScreen;
+   private GameObject giveTryScreen;
+   
    public bool gameIsPaused = false;
 
     private void Awake()
@@ -20,10 +23,15 @@ public class GameManager : MonoBehaviour
     }
 
     private void Start() {
-       pauseScreen = GameObject.FindGameObjectWithTag("PauseScreen");
-       gameScreen = GameObject.FindGameObjectWithTag("GameScreen");
-       pauseScreen.SetActive(false);
-       gameScreen.SetActive(true);
+        pauseScreen = GameObject.FindGameObjectWithTag("PauseScreen");
+        gameScreen = GameObject.FindGameObjectWithTag("GameScreen");
+        giveTryScreen = GameObject.FindGameObjectWithTag("GiveTryScreen");
+        winScreen = GameObject.FindGameObjectWithTag("WinScreen");
+
+        pauseScreen.SetActive(false);
+        gameScreen.SetActive(true);
+        giveTryScreen.SetActive(false);
+        winScreen.SetActive(false);
    }
 
    private void Update() {

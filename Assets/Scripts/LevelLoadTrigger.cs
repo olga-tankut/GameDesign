@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class LevelLoadTrigger : MonoBehaviour
 {
 
-    public string nextScene; // name of the nextScene loaded
+    public string nextScene = null; // name of the nextScene loaded
     // Start is called before the first frame update
     void Start()
     {
@@ -19,12 +19,24 @@ public class LevelLoadTrigger : MonoBehaviour
         
     }
 
-    private void OnTriggerEnter2D(Collider2D other) 
-    {
-        if(other.gameObject.tag == "Player")
+    private void OnTriggerEnter2D(Collider2D other) {
+        // if no alternative Scene is typed in load standard next scene
+        if(string.IsNullOrEmpty(nextScene))
         {
-            GameManager.Instance.LoadNextLevel();
+            if(other.gameObject.transform.parent.tag == "Player")
+            {
+                GameManager.Instance.LoadNextLevel();
+            }
         }
-        
+        else
+        {
+            LoadNextLevel();
+        }
+    }
+
+    public void LoadNextLevel()
+    {
+        Debug.Log("you have overriden the next scene in the Build Load order with a custom one");
+        SceneManager.LoadScene(nextScene);
     }
 }
