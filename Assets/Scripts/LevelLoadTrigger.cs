@@ -21,7 +21,6 @@ public class LevelLoadTrigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other) 
     {
-        Debug.Log(PlayerMovement.Instance.ToString());
         
         if (other.gameObject.tag == "Player")
         {  

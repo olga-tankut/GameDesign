@@ -26,12 +26,8 @@ public class GameManager : MonoBehaviour
     private void Start() {
         pauseScreen = transform.parent.transform.Find("PauseScreen").gameObject;
         gameScreen = transform.parent.transform.Find("GameScreen").gameObject;
-        gameOverScreen = transform.parent.transform.Find("GameOverScreen").gameObject;
-        gameWinScreen = transform.parent.transform.Find("GameWinScreen").gameObject;
         pauseScreen.SetActive(false);
         gameScreen.SetActive(true);
-        gameOverScreen.SetActive(false);
-        gameWinScreen.SetActive(false);
         FindObjectOfType<AudioManager>().Play("Game");
     }
 
@@ -53,7 +49,6 @@ public class GameManager : MonoBehaviour
         if (gameHasEnded == false)
         {
             gameHasEnded = true;
-            gameOverScreen.SetActive(true);
             FindObjectOfType<AudioManager>().Play("Lose");
             Invoke("RestartLevel", restartDelay);
         }   
