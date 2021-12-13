@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2561163015322806912}
   - component: {fileID: 2561163015322806973}
   - component: {fileID: 2561163015322806974}
+  - component: {fileID: 4745758214418099805}
   m_Layer: 0
   m_Name: box 17
   m_TagString: Cardboard Box
@@ -52,7 +53,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -131,3 +132,29 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.6944444, y: 0.6851852}
   m_EdgeRadius: 0
+--- !u!114 &4745758214418099805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2561163015322806913}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db70e0ea77f5ac47a8f4565a9406397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShadowGroup: 0
+  m_HasRenderer: 0
+  m_UseRendererSilhouette: 1
+  m_CastsShadows: 1
+  m_SelfShadows: 0
+  m_ApplyToSortingLayers: 00000000d91e1df6fb3d16e3a9a790c9
+  m_ShapePath:
+  - {x: -0.3472222, y: 0, z: 0}
+  - {x: 0.3472222, y: 0, z: 0}
+  - {x: 0.3472222, y: 0.6851852, z: 0}
+  - {x: -0.3472222, y: 0.6851852, z: 0}
+  m_ShapePathHash: 0
+  m_Mesh: {fileID: 0}
+  m_InstanceId: -17134

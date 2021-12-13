@@ -17,6 +17,7 @@ public sealed class PlayerMovement : MonoBehaviour
     [SerializeField]private float accelerationSpeed = 1000.0f;
     [Range(0, 15)]
     [SerializeField]private float maxGroundSpeed = 4f;
+    private float _maxGroundSpeed; //temp value for storing maxGroundSpeed
     [Range(0, 1000)]
     [SerializeField]private float breakForce = 100.0f;
     [Range(0, 5000)]
@@ -46,8 +47,9 @@ public sealed class PlayerMovement : MonoBehaviour
     [SerializeField]private float wallJumpStrength = 5f;
     [Range(0, 3)]
     [SerializeField]private float upwardForceOnSlopes = 1.0f;
-    
-    //public Animator animator;
+    // 
+    [Range(0, 1000)]
+    private static int deaktivationFramesAfterWallJump = 500; // ms
 
     private Rigidbody2D rb;
     private Collision2D isInContactWithCollider;
@@ -57,9 +59,10 @@ public sealed class PlayerMovement : MonoBehaviour
     private static bool isDashing = false;
     private static bool isJumping = false;
     private static bool isOnSlope = false;
+    private static bool isAtWall = false;
     private float startingGravity;
     private float slideMultiplyer = 1.0f;
-    private long timeSinceLastContactWithWall = 0; // in ms
+    private static long timeSinceLastContactWithWall = 0; // in ms
     private long timeSinceStartOfDash = 0;
     private Vector2 wallWithLastContactPosition;
     private ContactPoint2D[] colliderCurrentlyinContactWith = new ContactPoint2D[5];
@@ -72,29 +75,38 @@ public sealed class PlayerMovement : MonoBehaviour
     private Vector3 playerScaling;
     private CapsuleCollider2D collider;
     private Vector2 colliderSize;
-    private long startingTimeOfSlide = 0;
+    private long startingTimeOfSlide = DateTimeOffset.Now.ToUnixTimeMilliseconds();
     private Vector2 startingVelocityOfSlide;
+    private static bool isWallRight;
+    private float directionBuffer;
 
     private int counter = 0;
 
     // Singelton pattern
-    public static PlayerMovement instance = null;
+    public static PlayerMovement instance;
 
-    private PlayerMovement()
+    void Awake()
     {
+        if (PlayerMovement.instance != null) Destroy(this);
+        else PlayerMovement.instance = this;
     }
 
-    public static PlayerMovement Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
-                instance = new PlayerMovement();
-            }
-            return instance;
-        }
-    }
+    //private PlayerMovement()
+    //{
+
+    //}
+
+    //public static PlayerMovement Instance
+    //{
+    //    get
+    //    {
+    //        if (instance == null)
+    //        {
+    //            instance = new PlayerMovement();
+    //        }
+    //        return instance;
+    //    }
+    //}
 
     void Start()
     {
@@ -105,7 +117,6 @@ public sealed class PlayerMovement : MonoBehaviour
         startingGravity = rb.gravityScale;
         slideMultiplyer = 1.0f;
         timeSinceLastContactWithWall = ForgivingFramesWallJump + 1;
-
         timeOfHitOfSlope = 0; // 1970-01-01 00:00
         timeOfStartOfFall = 0;
         raycastStartlocalPosition = transform.Find("RayCastStart").transform.localPosition;
@@ -113,7 +124,7 @@ public sealed class PlayerMovement : MonoBehaviour
         collider = GetComponent<CapsuleCollider2D>();
         colliderSize = collider.size; // starting horizontal
         startingVelocityOfSlide = Vector2.zero;
-
+        _maxGroundSpeed = maxGroundSpeed; //Set temp value maxGroundSpeed once, just in case
     }
 
     void Update()
@@ -125,7 +136,6 @@ public sealed class PlayerMovement : MonoBehaviour
             {
 
                 isJumping = true;
-                FindObjectOfType<AudioManager>().Play("Jump");
                 // multi jumps are less strong because of rb.velocity
                 rb.velocity = Vector2.up * jumpVelocity + rb.velocity;
             }
@@ -139,6 +149,8 @@ public sealed class PlayerMovement : MonoBehaviour
         JumpFixedUpdate();
         SlideFixedUpdate();
         MoveFixedUpdate();
+        // to update GetIsAtWall
+        IsAtWall();
         // cancel Jumping animation on slopes
         if(IsOnSlope() && !Input.GetKey(KeyCode.Space))
         {
@@ -146,13 +158,31 @@ public sealed class PlayerMovement : MonoBehaviour
         }
         if(counter == 10)
         {
-            // Debug.Log(IsOnGround() + ", " + IsOnSlope());
+            //Debug.Log(startingVelocityOfSlide);
+            //Debug.Log(IsOnGround() + ", " + IsOnSlope() + ", " + rb.velocity.x);
+            //Debug.Log(rb.velocity.x);
+            //Debug.Log(isSliding);
+            if(!IsOnGround())
+            {
+                //Debug.Log("X");
+            }
+            if(Input.GetKey(KeyCode.S))
+            {
+                //Debug.Log(rb.velocity.x);
+            }
             counter = 0;
         }
         else
         {
             counter++;
         }
+
+        // failsafe for to high groundSpeed
+        if((rb.velocity.x > (maxGroundSpeed * 1.2f) || rb.velocity.x < (-maxGroundSpeed * 1.2f)) && !isDashing )
+        {
+            rb.velocity = new Vector2(maxGroundSpeed * GetCurrentDirectionTraveledX() * 1.2f, rb.velocity.y);
+        }
+
     }
 
     private void WallJumpFixedUpdate()
@@ -160,10 +190,9 @@ public sealed class PlayerMovement : MonoBehaviour
         if(ForgivingFramesWallJump > (DateTimeOffset.Now.ToUnixTimeMilliseconds() - timeSinceLastContactWithWall) 
             && Input.GetKeyDown(KeyCode.Space) && !IsOnGround() && wallJumpIsAktive)
         {
-            FindObjectOfType<AudioManager>().Play("Walljump");
-
+            
             // left
-            if ((wallWithLastContactPosition.x - transform.position.x) > 0)
+            if((wallWithLastContactPosition.x - transform.position.x) > 0)
             {
                 Debug.Log("Walljump");
                 rb.AddForce(new Vector2(-1, 3) * wallJumpStrength, ForceMode2D.Impulse);
@@ -178,15 +207,34 @@ public sealed class PlayerMovement : MonoBehaviour
             {
                 Debug.Log("ERROR WallJump in the Wall: " + wallWithLastContactPosition);
             }
+            timeSinceLastContactWithWall = ForgivingFramesWallJump + 1;
         }
     }
-    
     private void SlideFixedUpdate()
-    {
+    {   
+        // handels starting time of slide
         if(Input.GetKeyDown(KeyCode.S))
         {
             startingTimeOfSlide = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-            startingVelocityOfSlide = rb.velocity;
+            // if slide speed is to fast
+            if(rb.velocity.x > maxGroundSpeed)
+            {
+                // set max speed positive
+                //Debug.Log("max slide speed reached");
+                startingVelocityOfSlide.y = rb.velocity.y; // in case of problem set it to 0
+                startingVelocityOfSlide.x = maxGroundSpeed;
+            }
+            else if(rb.velocity.x < -maxGroundSpeed)
+            {
+                //set max speed negative
+                startingVelocityOfSlide.y = rb.velocity.y; // in case of problem set it to 0
+                startingVelocityOfSlide.x = -maxGroundSpeed;
+            }
+            else
+            {
+                startingVelocityOfSlide = rb.velocity;
+            }
+            
         }
         if(Input.GetKey(KeyCode.S) && IsOnGround())
         {
@@ -215,7 +263,6 @@ public sealed class PlayerMovement : MonoBehaviour
             transform.Find("RayCastStart").transform.localPosition = raycastStartlocalPosition;
         }
     }
-
     private void DashUpdate()
     {
         //check if dash has been canceled
@@ -302,7 +349,6 @@ public sealed class PlayerMovement : MonoBehaviour
 
         timeSinceLastDash += Time.deltaTime;
     }
-
     private void MoveFixedUpdate()
     {
         // TODO: deaktivate stick to wall
@@ -318,9 +364,17 @@ public sealed class PlayerMovement : MonoBehaviour
                 rb.AddForce(Vector2.right * horizontalInput * accelerationSpeed * Time.fixedDeltaTime);
             }
             // ai movement
-            else if(!IsOnGround() && !IsAtWall())
+            else if(!IsOnGround() && !IsAtWall() /*&& !isSliding*/)
             {
-                rb.AddForce(Vector2.right * horizontalInput * accelerationSpeed * Time.fixedDeltaTime * airMovementMultiplyer);
+                if((DateTimeOffset.Now.ToUnixTimeMilliseconds() - timeSinceLastContactWithWall) < deaktivationFramesAfterWallJump)
+                {
+                    // deaktiviere steuerung 
+                    rb.AddForce(Vector2.right * GetCurrentDirectionTraveledX() * accelerationSpeed * Time.fixedDeltaTime * airMovementMultiplyer);
+                }
+                else
+                {
+                    rb.AddForce(Vector2.right * horizontalInput * accelerationSpeed * Time.fixedDeltaTime * airMovementMultiplyer);
+                }
             }
 
             if(IsOnSlope() && !isSliding)
@@ -355,12 +409,46 @@ public sealed class PlayerMovement : MonoBehaviour
         {
             // long secondsElapsedSinceStartofSlide = (DateTimeOffset.Now.ToUnixTimeMilliseconds() / 1000) - (startingTimeOfSlide / 1000);
             double secondsElapsedSinceStartofSlide = (Convert.ToDouble(DateTimeOffset.Now.ToUnixTimeMilliseconds()) / 1000) - (Convert.ToDouble(startingTimeOfSlide) / 1000);
-            
-            Vector2 slideVelocityTemp = new Vector2(GetCurrentDirectionTraveledX() * 
-            (-(Math.Abs((float)(secondsElapsedSinceStartofSlide * secondsElapsedSinceStartofSlide * secondsElapsedSinceStartofSlide))/ slidingLength)
-             + startingVelocityOfSlide.x), rb.velocity.y);
+            float direction = 0;
+            if(GetCurrentDirectionTraveledX() == 0)
+            {
+                direction = directionBuffer;
+            }
+            else
+            {
+                directionBuffer = GetCurrentDirectionTraveledX();
+                direction = GetCurrentDirectionTraveledX();
+            }
 
-            if(slideVelocityTemp.x > 1)
+
+            Vector2 slideVelocityTemp = new Vector2(((-(Math.Abs((float)(secondsElapsedSinceStartofSlide * secondsElapsedSinceStartofSlide * secondsElapsedSinceStartofSlide)))/ slidingLength)
+             + Math.Abs(startingVelocityOfSlide.x)), rb.velocity.y);
+
+            // if slideVelocityTemp gets negativ it needs to be set to 0
+            if(slideVelocityTemp.x < 0)
+            {
+                slideVelocityTemp.x = 0;
+            }
+            else
+            {
+                slideVelocityTemp.x *= GetCurrentDirectionTraveledX();
+            }
+
+            //Debug.Log(slideVelocityTemp + ", " + startingVelocityOfSlide + ", " + secondsElapsedSinceStartofSlide + ", " + rb.velocity.x);
+
+            if(slideVelocityTemp.x > maxGroundSpeed)
+            {
+                //Debug.Log("slideVelocityTemp is at max");
+                slideVelocityTemp.x = maxGroundSpeed;
+            }
+
+            if(slideVelocityTemp.x < -maxGroundSpeed)
+            {
+                //Debug.Log("x: " + startingVelocityOfSlide + ", "+ secondsElapsedSinceStartofSlide + ", " + slideVelocityTemp + ",x " + startingTimeOfSlide);
+                slideVelocityTemp.x = -maxGroundSpeed;
+            }
+
+            if(slideVelocityTemp.x > 1 || slideVelocityTemp.x < -1)
             {
                 rb.velocity = slideVelocityTemp;
             }
@@ -374,12 +462,6 @@ public sealed class PlayerMovement : MonoBehaviour
         {
             rb.AddForce(new Vector2((float)x * timeSinceLastFrameUpdate * breakingStrength * -(GetCurrentDirectionTraveledX()), 0));
         }
-        
-        /*if(Math.Abs(rb.velocity.x) > 1.0f)
-        {
-            Debug.Log("Force: " + ((float)x * timeSinceLastFrameUpdate * breakingStrength * -(GetCurrentDirectionTraveledX()) * slideMultiplyer) + ", " + slideMultiplyer);
-        }*/
-        
     }
 
     private void JumpFixedUpdate()
@@ -462,26 +544,18 @@ public sealed class PlayerMovement : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collisionInfo)
     {
         isInContactWithCollider = collisionInfo;
-        // old RayCast less aproach
-        /*if(collisionInfo.gameObject.tag == "Wall")
-        {
-            timeSinceLastContactWithWall = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-            wallWithLastContactPosition = collisionInfo.gameObject.transform.position;
-            Debug.Log("Collision with wall: " + collisionInfo.gameObject.tag);
-        }*/
         //right
         if(RayCastHitDetection()[0] != null && RayCastHitDetection()[0] == "LVL")
         {
-            timeSinceLastContactWithWall = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             wallWithLastContactPosition = new Vector2(transform.position.x + 1, transform.position.y);
         }
 
         if(RayCastHitDetection()[4] != null && RayCastHitDetection()[4] == "LVL")
         {
-            timeSinceLastContactWithWall = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             wallWithLastContactPosition = new Vector2(transform.position.x - 1, transform.position.y);
         }
-        addConservedEnergyToMomentum();
+            addConservedEnergyToMomentum();
+        
     }
 
     private void OnCollisionExit2D(Collision2D collisionInfo)
@@ -492,6 +566,7 @@ public sealed class PlayerMovement : MonoBehaviour
     private void addConservedEnergyToMomentum()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
+        // TODO: rewrite it as percentage conserved
         rb.AddForce(Vector2.right * horizontalInput * accelerationSpeed * Time.fixedDeltaTime * movementEnergieConservationMultiplyer);
     }
 
@@ -577,25 +652,23 @@ public sealed class PlayerMovement : MonoBehaviour
     {
         if(RayCastHitDetection()[0] == "LVL" && RayCastHitDetection()[1] == "LVL" && RayCastHitDetection()[2] == null)
         {
+            timeSinceLastContactWithWall = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            isWallRight = true;
+            isAtWall = true;
             return true;
         }
 
         if(RayCastHitDetection()[4] == "LVL" && RayCastHitDetection()[3] == "LVL" && RayCastHitDetection()[2] == null)
         {
+            timeSinceLastContactWithWall = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            isWallRight = false;
+            isAtWall = true;
             return true;
         }
 
+        isAtWall = false;
         return false;
     }
-
-    /*public bool isx()
-    {
-        return false;
-    }
-    public static bool testStatic()
-    {
-        return Instance.isx();
-    }*/
 
     public static bool GetIsJumping()
     {
@@ -625,7 +698,47 @@ public sealed class PlayerMovement : MonoBehaviour
     }
 
     public static bool GetIsAtWall()
-    {   
-        return instance.IsAtWall();
+    {
+        return isAtWall;
+    }
+
+    public static bool GetDeaktivateFacingChangeAfterWallJump()
+    {
+        if((DateTimeOffset.Now.ToUnixTimeMilliseconds() - timeSinceLastContactWithWall) < deaktivationFramesAfterWallJump)
+        {
+            // deaktiviere steuerung 
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public static bool GetIsWallRight()
+    {
+        
+        return isWallRight;
+    }
+
+    bool reducedMaxSpeed = false; //Bool to check before reducing acceleration, preving possible wrong interactions
+    public void ReduceGroundSpeed(float groundSpeedReduction, float groundSpeedReductionTime)
+    {
+        _maxGroundSpeed = maxGroundSpeed;
+        if(!reducedMaxSpeed)
+        {
+            Debug.Log("start max speed reduction");
+            reducedMaxSpeed = true; //Reduction in progress
+            maxGroundSpeed -= groundSpeedReduction;
+            StartCoroutine(ReduceGroundSpeedTimer(groundSpeedReductionTime));
+        }
+    }
+
+    private IEnumerator ReduceGroundSpeedTimer(float time)
+    {
+        yield return new WaitForSeconds(time);
+        maxGroundSpeed = _maxGroundSpeed;
+        reducedMaxSpeed = false;
+        Debug.Log("Slow down timer over");
     }
 }

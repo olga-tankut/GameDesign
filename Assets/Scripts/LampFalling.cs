@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Use this script to let a lamp fall and hit the player
 public class LampFalling : MonoBehaviour
 {
     private SpriteRenderer sprender;
@@ -10,7 +11,6 @@ public class LampFalling : MonoBehaviour
     private bool canCollided;
 
     protected int damage = 30;
-
 
     // Start is called before the first frame update
     void Start()
@@ -22,12 +22,16 @@ public class LampFalling : MonoBehaviour
         hasFallen = false;
         canCollided = true;
     }
-
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-       
+        //Debug.Log("Trigger enter");
+        //Check if it's the player
+        if (collision.gameObject.tag == "Player" && collision.gameObject.name == "Scripts")
+        {
+            Fall();
+        }
     }
+
     void Fall()
     {
         if (hasFallen == false)
@@ -35,7 +39,6 @@ public class LampFalling : MonoBehaviour
             hasFallen = true;
             rb.WakeUp();
             rb.isKinematic = false;
-            Debug.Log("be");   
         }    
     }
 
@@ -44,18 +47,8 @@ public class LampFalling : MonoBehaviour
         if (canCollided == true)
         {
             canCollided = false;
-            Debug.Log("fall");
             FindObjectOfType<AudioManager>().Play("Boom");  
         }   
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-
-        if (collision.gameObject.tag == "Player")
-        {
-            Fall();
-        }
     }
 }
 

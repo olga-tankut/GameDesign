@@ -4,21 +4,23 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-   public static GameManager Instance = null;
+   public static GameManager Instance;
 
-   public float restartDelay = 1.5f;
+   public float restartDelay = 1f;
    private GameObject pauseScreen;
    private GameObject gameScreen;
    private GameObject gameOverScreen;
    private GameObject gameWinScreen;
 
+
    public bool gameIsPaused = false;
    private bool gameHasEnded = false;
-   
+
 
     private void Awake()
     {
-        Instance = this;
+        if (GameManager.Instance != null) Destroy(this);
+        else { Instance = this; }
     }
 
     private void Start() {

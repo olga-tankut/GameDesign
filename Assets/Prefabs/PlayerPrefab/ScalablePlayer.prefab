@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 630522941}
   m_Layer: 0
   m_Name: Scripts
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -52,18 +52,18 @@ MonoBehaviour:
   accelerationSpeed: 1200
   maxGroundSpeed: 7
   breakForce: 600
-  dashCooldown: 600
+  dashCooldown: 4000
   movementEnergieConservationMultiplyer: 5
   airMovementMultiplyer: 3
-  maxAirSpeed: 4
+  maxAirSpeed: 3
   multiJumpIsActive: 0
   airMovementIsActive: 0
   dashingLength: 4000
   dashBreakingStrength: 1000
   dashingStrength: 12
-  slidingLength: 1.1
+  slidingLength: 1
   wallJumpIsAktive: 1
-  ForgivingFramesWallJump: 600
+  ForgivingFramesWallJump: 2000
   ForgivingFramesDashCancel: 300
   wallJumpStrength: 5
   upwardForceOnSlopes: 1
@@ -81,6 +81,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
   facingRight: 1
+  facingAwayFromWall: 0
 --- !u!70 &630522941
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -94,7 +95,7 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.000000059604645, y: 0}
+  m_Offset: {x: 0, y: 0}
   m_Size: {x: 0.8322786, y: 2.8868656}
   m_Direction: 0
 --- !u!1 &3637744018766222363
@@ -110,7 +111,7 @@ GameObject:
   - component: {fileID: 5528205222924326757}
   m_Layer: 0
   m_Name: ScalablePlayer
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -262,7 +263,7 @@ GameObject:
   - component: {fileID: 3637744019075371563}
   m_Layer: 0
   m_Name: SpriteLayer
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -300,7 +301,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -393,7 +394,7 @@ GameObject:
   - component: {fileID: 3637744019447528180}
   m_Layer: 0
   m_Name: ColliderLayer
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
