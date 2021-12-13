@@ -50,17 +50,17 @@ MonoBehaviour:
   fallMultiplier: 4
   lowJumpMultiplier: 5
   accelerationSpeed: 1200
-  maxGroundSpeed: 7
+  maxGroundSpeed: 10.8
   breakForce: 600
-  dashCooldown: 4000
-  movementEnergieConservationMultiplyer: 5
+  dashCooldown: 3200
+  movementEnergieConservationMultiplyer: 8
   airMovementMultiplyer: 3
   maxAirSpeed: 3
   multiJumpIsActive: 0
   airMovementIsActive: 0
-  dashingLength: 4000
+  dashingLength: 6830
   dashBreakingStrength: 1000
-  dashingStrength: 12
+  dashingStrength: 15.6
   slidingLength: 1
   wallJumpIsAktive: 1
   ForgivingFramesWallJump: 2000
