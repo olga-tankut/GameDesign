@@ -1,32 +1,49 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-   bool gameHasEnded = false;
+   public static GameManager Instance;
+    
+   public bool IsGameplayActive = true;
+
    public float restartDelay = 1f;
-   private GameObject pauseScreen;
-   private GameObject gameScreen;
+   public GameObject pauseScreen;
+   public GameObject gameScreen;
    public bool gameIsPaused = false;
 
-   private void Start() {
-       pauseScreen = transform.parent.transform.Find("PauseScreen").gameObject;
-       gameScreen = transform.parent.transform.Find("GameScreen").gameObject;
+    private void Awake()
+    {
+        if (GameManager.Instance != null) Destroy(this);
+        else { Instance = this; }
+    }
+
+    private void Start() {
+       pauseScreen = GameObject.FindGameObjectWithTag("PauseScreen");
+       gameScreen = GameObject.FindGameObjectWithTag("GameScreen");
        pauseScreen.SetActive(false);
        gameScreen.SetActive(true);
    }
 
    private void Update() {
-       if(Input.GetKeyDown(KeyCode.Escape))
+
+        if (Input.GetKeyDown(KeyCode.Escape))
        {
-           // Pausing
-           PauseLevel();
+            // Pausing
+            PauseLevel();
        }
        if(Input.GetKeyDown(KeyCode.R))
        {
            RestartLevel();
        }
    }
+
+    public void EndGame()
+    {
+        Debug.Log("Game over");
+        Invoke("RestartLevel", restartDelay);     
+    } 
     
     public void RestartLevel()
     {
@@ -44,14 +61,18 @@ public class GameManager : MonoBehaviour
         {
             gameScreen.SetActive(false);
             pauseScreen.SetActive(true);
-            gameIsPaused = true; 
+            gameIsPaused = true;
         }
         else
         {
             gameScreen.SetActive(true);
             pauseScreen.SetActive(false);
-            gameIsPaused = false; 
-        }
-        
+            gameIsPaused = false;
+        }   
+    }
+
+    public void LoadNextLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }

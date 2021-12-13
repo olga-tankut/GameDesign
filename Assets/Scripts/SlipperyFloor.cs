@@ -30,7 +30,7 @@ public class SlipperyFloor : MonoBehaviour
     }
     protected void OnCollisionEnter2D(Collision2D collision)
     {
-        prb.GetComponent<Rigidbody2D>().velocity = player.GetComponent<Rigidbody2D>().velocity * acceleration * Time.deltaTime;
+        prb.GetComponent<Rigidbody2D>().velocity = pm.GetComponent<Rigidbody2D>().velocity * acceleration * Time.deltaTime;
     }
     protected void OnCollisionExit2D(Collision2D collision)
     {

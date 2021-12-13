@@ -17,6 +17,7 @@ public sealed class PlayerMovement : MonoBehaviour
     [SerializeField]private float accelerationSpeed = 1000.0f;
     [Range(0, 15)]
     [SerializeField]private float maxGroundSpeed = 4f;
+    private float _maxGroundSpeed; //temp value for storing maxGroundSpeed
     [Range(0, 1000)]
     [SerializeField]private float breakForce = 100.0f;
     [Range(0, 5000)]
@@ -82,23 +83,30 @@ public sealed class PlayerMovement : MonoBehaviour
     private int counter = 0;
 
     // Singelton pattern
-    private static PlayerMovement instance = null;
+    public static PlayerMovement instance;
 
-    private PlayerMovement()
+    void Awake()
     {
+        if (PlayerMovement.instance != null) Destroy(this);
+        else PlayerMovement.instance = this;
     }
 
-    public static PlayerMovement Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
-                instance = new PlayerMovement();
-            }
-            return instance;
-        }
-    }
+    //private PlayerMovement()
+    //{
+
+    //}
+
+    //public static PlayerMovement Instance
+    //{
+    //    get
+    //    {
+    //        if (instance == null)
+    //        {
+    //            instance = new PlayerMovement();
+    //        }
+    //        return instance;
+    //    }
+    //}
 
     void Start()
     {
@@ -116,7 +124,7 @@ public sealed class PlayerMovement : MonoBehaviour
         collider = GetComponent<CapsuleCollider2D>();
         colliderSize = collider.size; // starting horizontal
         startingVelocityOfSlide = Vector2.zero;
-
+        _maxGroundSpeed = maxGroundSpeed; //Set temp value maxGroundSpeed once, just in case
     }
 
     void Update()
@@ -202,7 +210,6 @@ public sealed class PlayerMovement : MonoBehaviour
             timeSinceLastContactWithWall = ForgivingFramesWallJump + 1;
         }
     }
-    
     private void SlideFixedUpdate()
     {   
         // handels starting time of slide
@@ -256,7 +263,6 @@ public sealed class PlayerMovement : MonoBehaviour
             transform.Find("RayCastStart").transform.localPosition = raycastStartlocalPosition;
         }
     }
-
     private void DashUpdate()
     {
         //check if dash has been canceled
@@ -343,7 +349,6 @@ public sealed class PlayerMovement : MonoBehaviour
 
         timeSinceLastDash += Time.deltaTime;
     }
-
     private void MoveFixedUpdate()
     {
         // TODO: deaktivate stick to wall
@@ -714,5 +719,26 @@ public sealed class PlayerMovement : MonoBehaviour
     {
         
         return isWallRight;
+    }
+
+    bool reducedMaxSpeed = false; //Bool to check before reducing acceleration, preving possible wrong interactions
+    public void ReduceGroundSpeed(float groundSpeedReduction, float groundSpeedReductionTime)
+    {
+        _maxGroundSpeed = maxGroundSpeed;
+        if(!reducedMaxSpeed)
+        {
+            Debug.Log("start max speed reduction");
+            reducedMaxSpeed = true; //Reduction in progress
+            maxGroundSpeed -= groundSpeedReduction;
+            StartCoroutine(ReduceGroundSpeedTimer(groundSpeedReductionTime));
+        }
+    }
+
+    private IEnumerator ReduceGroundSpeedTimer(float time)
+    {
+        yield return new WaitForSeconds(time);
+        maxGroundSpeed = _maxGroundSpeed;
+        reducedMaxSpeed = false;
+        Debug.Log("Slow down timer over");
     }
 }

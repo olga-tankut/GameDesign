@@ -6,8 +6,6 @@ public class Fan : MonoBehaviour
 {
     Collider2D fanCollider;
     PlayerMovement pm;
-    Rigidbody2D prb;
-    GameObject p;
     public float fanSpeed = 500;
 
     public enum Direction
@@ -22,10 +20,6 @@ public class Fan : MonoBehaviour
     void Start()
     {
         fanCollider = GetComponent<Collider2D>();
-        p = GameObject.FindGameObjectWithTag("Player");
-        pm = p.GetComponent<PlayerMovement>();
-        prb = p.GetComponent<Rigidbody2D>();
-        if (p == null) Debug.Log("Player missing, is player tagged?");
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -34,11 +28,29 @@ public class Fan : MonoBehaviour
     }
     void OnTriggerStay2D(Collider2D other)
     {
-        //Debug.Log("Object is in trigger");
-        if (direction == Direction.up) prb.AddForce(Vector2.up * fanSpeed * Time.fixedDeltaTime);
-        if(direction == Direction.right) prb.AddForce(Vector2.right * fanSpeed * Time.fixedDeltaTime);
-        if (direction == Direction.down) prb.AddForce(Vector2.down * fanSpeed * Time.fixedDeltaTime);
-        if (direction == Direction.left) prb.AddForce(Vector2.left * fanSpeed * Time.fixedDeltaTime);
+        //Debug.Log("Fan Trigger entered");
+        //Debug.Log(other.transform.tag);
+        //Debug.Log(other.gameObject.name);
+        if(other.transform.tag == "Player" && other.transform.name == "Scripts")
+        {
+            //Rigidbody2D prb = other.gameObject.GetComponent<Rigidbody2D>();
+            Rigidbody2D prb = other.gameObject.GetComponentInParent<Rigidbody2D>();
+
+            if (direction == Direction.up) prb.AddForce(Vector2.up * fanSpeed * Time.fixedDeltaTime);
+            if(direction == Direction.right) prb.AddForce(Vector2.right * fanSpeed * Time.fixedDeltaTime);
+            if (direction == Direction.down) prb.AddForce(Vector2.down * fanSpeed * Time.fixedDeltaTime);
+            if (direction == Direction.left) prb.AddForce(Vector2.left * fanSpeed * Time.fixedDeltaTime);
+        }
+        if (other.transform.tag == "Cardboard Box")
+        {
+            Rigidbody2D brb = other.gameObject.GetComponent<Rigidbody2D>();
+            if (direction == Direction.up) brb.AddForce(Vector2.up * fanSpeed * Time.fixedDeltaTime);
+            if (direction == Direction.right) brb.AddForce(Vector2.right * fanSpeed * Time.fixedDeltaTime);
+            if (direction == Direction.down) brb.AddForce(Vector2.down * fanSpeed * Time.fixedDeltaTime);
+            if (direction == Direction.left) brb.AddForce(Vector2.left * fanSpeed * Time.fixedDeltaTime);
+        }
+
+
     }
     void OnTriggerExit2D(Collider2D other)
     {

@@ -5,6 +5,12 @@ using UnityEngine;
 public class PlayerCollision : MonoBehaviour
 {
     public PlayerMovement movement;
+   
+
+    private void Start()
+    {
+
+    }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -12,6 +18,8 @@ public class PlayerCollision : MonoBehaviour
         {
             Debug.Log("Dead!");
             //GetComponent<PlayerMovement>().enabled = false;
+            GameManager.Instance.EndGame();
         }
     }
+   
 }
