@@ -8,8 +8,7 @@ public class Timer : MonoBehaviour
 {
     private TextMeshProUGUI timer;
     [SerializeField] private float timeLeft = 20.0f;
-
-    public bool timerIsRunning = false;
+    public static bool timerIsRunning = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -37,7 +36,7 @@ public class Timer : MonoBehaviour
         }
     }
 
-    void DisplayTime(float timeToDisplay)
+    private void DisplayTime(float timeToDisplay)
     {
         timeToDisplay += 1;
         float seconds = Mathf.FloorToInt(timeToDisplay % 60);

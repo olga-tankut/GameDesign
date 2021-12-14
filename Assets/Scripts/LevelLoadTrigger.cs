@@ -25,11 +25,13 @@ public class LevelLoadTrigger : MonoBehaviour
         {
             if(other.gameObject.transform.parent.tag == "Player")
             {
+                Timer.timerIsRunning = false;
                 GameManager.Instance.LoadNextLevel();
             }
         }
         else
         {
+            Timer.timerIsRunning = false;
             LoadNextLevel();
         }
     }
