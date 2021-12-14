@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,9 +9,6 @@ public class GameManager : MonoBehaviour
    public bool IsGameplayActive = true;
 
    public float restartDelay = 1f;
-   public GameObject pauseScreen;
-   public GameObject gameScreen;
-   public GameObject winScreen;
    private GameObject pauseScreen;
    private GameObject gameScreen;
    private GameObject winScreen;
@@ -27,11 +23,6 @@ public class GameManager : MonoBehaviour
     }
 
     private void Start() {
-       //pauseScreen = GameObject.FindGameObjectWithTag("PauseScreen");
-       //gameScreen = GameObject.FindGameObjectWithTag("GameScreen");
-       pauseScreen.SetActive(false);
-       winScreen.SetActive(false);
-       gameScreen.SetActive(true);
         /*pauseScreen = GameObject.FindGameObjectWithTag("PauseScreen");
         gameScreen = GameObject.FindGameObjectWithTag("GameScreen");
         giveTryScreen = GameObject.FindGameObjectWithTag("GiveTryScreen");
@@ -93,26 +84,8 @@ public class GameManager : MonoBehaviour
         }   
     }
 
-    public void LoadNextLevel() //Load next lvl without a timer, used for buttons
+    public void LoadNextLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-    }
-
-    public void LoadNextLevel(float delay, int index) //Load next lvl with a delay + index
-    {
-        winScreen.SetActive(true); //Activate winScreen
-        StartCoroutine(LoadDelay(delay, index)); //Start delay
-    }
-
-    public void LoadNextLevel(float delay) //Load next lvl with a delay + NEXT index
-    {
-        winScreen.SetActive(true); //Activate winScreen
-        StartCoroutine(LoadDelay(delay, SceneManager.GetActiveScene().buildIndex + 1)); //Start delay
-    }
-
-    private IEnumerator LoadDelay(float time, int index) //Scene loader that loads next lvl after delay
-    {
-       yield return new WaitForSeconds(time);
-       SceneManager.LoadScene(index);
     }
 }
