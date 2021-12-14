@@ -67,6 +67,7 @@ MonoBehaviour:
   ForgivingFramesDashCancel: 300
   wallJumpStrength: 5
   upwardForceOnSlopes: 1
+  wallJumpForgivingFramesBeforeHit: 50
 --- !u!114 &3637744018097900088
 MonoBehaviour:
   m_ObjectHideFlags: 0

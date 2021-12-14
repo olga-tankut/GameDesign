@@ -71,7 +71,7 @@ public class PlayerAnimationControl : MonoBehaviour
         }
         else
         {
-        if(!PlayerMovement.GetDeaktivateFacingChangeAfterWallJump())
+        if(!PlayerMovement.GetDeaktivateFacingChangeAfterWallJump() || PlayerMovement.instance.IsOnGround())
         {
             float h = Input.GetAxis("Horizontal");
             if(h > 0 && !facingRight)
