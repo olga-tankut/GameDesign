@@ -72,18 +72,22 @@ public class GameManager : MonoBehaviour
 
     private void PauseLevel()
     {
-        if(!gameIsPaused)
+        if (!gameIsPaused)
         {
+            AudioManager.instance.Stop("Game");
+            AudioManager.instance.Play("MainMenu");
             gameScreen.SetActive(false);
             pauseScreen.SetActive(true);
             gameIsPaused = true;
         }
         else
         {
+            AudioManager.instance.Stop("MainMenu");
+            AudioManager.instance.Play("Game");
             gameScreen.SetActive(true);
             pauseScreen.SetActive(false);
             gameIsPaused = false;
-        }   
+        }
     }
 
     public void LoadNextLevel() //Load next lvl without a timer, used for buttons
