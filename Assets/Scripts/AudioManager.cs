@@ -31,7 +31,7 @@ public class AudioManager : MonoBehaviour
 
     private void Start()
     {
-        
+        Play("Game");
     }
 
     // Update is called once per frame
