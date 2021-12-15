@@ -8,7 +8,7 @@ public class GameManagerMainMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        FindObjectOfType<AudioManager>().Play("MainMenu");
+        AudioManager.instance.Play("MainMenu");
     }
 
     // Update is called once per frame
@@ -20,7 +20,7 @@ public class GameManagerMainMenu : MonoBehaviour
     // the parameter is the name of the Level to load
     public void LoadScene(string levelToLoad)
     {
-        FindObjectOfType<AudioManager>().Stop("MainMenu");
+        AudioManager.instance.Stop("MainMenu");
         SceneManager.LoadScene(levelToLoad);
         Debug.Log("Make sure all new Scenes/Levels follow the naming convention");
         Debug.Log("Currently loaded scene: " + levelToLoad);

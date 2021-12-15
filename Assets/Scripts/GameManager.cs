@@ -56,19 +56,21 @@ public class GameManager : MonoBehaviour
 
     public void EndGame()
     {
-        Debug.Log("Game over / Restart Level?");
+        //Debug.Log("Game over / Restart Level?");
         Invoke("RestartLevel", restartDelay);     
     } 
     
     public void RestartLevel()
     {
-        FindObjectOfType<AudioManager>().Stop("MainMenu");
+        AudioManager.instance.Stop("MainMenu");
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void BackToMainMenu()
     {
-        SceneManager.LoadScene("MainMenu");
+        //AudioManager.instance.Play("Button");
+        LoadNextLevel(1f, 0);
+        //SceneManager.LoadScene("MainMenu");
     }
 
     private void PauseLevel()

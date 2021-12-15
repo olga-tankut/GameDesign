@@ -140,7 +140,7 @@ public sealed class PlayerMovement : MonoBehaviour
             // big jump
             if(Input.GetButtonDown("Jump"))
             {
-
+                AudioManager.instance.Play("Jump");
                 isJumping = true;
                 // multi jumps are less strong because of rb.velocity
                 rb.velocity = Vector2.up * jumpVelocity + rb.velocity;

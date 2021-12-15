@@ -15,7 +15,7 @@ public class AudioManager : MonoBehaviour
            instance = this;
        else
        {
-            Destroy(gameObject);
+            Destroy(this);
             return;
        }
        
@@ -45,6 +45,7 @@ public class AudioManager : MonoBehaviour
             return;
         }
         s.source.Play();
+
     }
 
     public void Stop(string name)
