@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 2256751893830134920}
   - component: {fileID: 2256751893830134921}
   - component: {fileID: -3759608407947298544}
+  - component: {fileID: -4366627498175379764}
+  - component: {fileID: -1787282718497318799}
   m_Layer: 0
   m_Name: box 2
   m_TagString: Cardboard Box
@@ -158,3 +160,42 @@ MonoBehaviour:
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
   m_InstanceId: -17110
+--- !u!114 &-4366627498175379764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2256751893830134933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89fe0462cf982b041b326d93bb5b8adb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundName: BoxContact
+--- !u!61 &-1787282718497318799
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2256751893830134933}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0.9583333}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0}
+    oldSize: {x: 1.925926, y: 1.9166666}
+    newSize: {x: 1.925926, y: 1.9166666}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.925926, y: 1.9166666}
+  m_EdgeRadius: 0
