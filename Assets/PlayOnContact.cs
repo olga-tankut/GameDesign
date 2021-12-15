@@ -6,6 +6,8 @@ public class PlayOnContact : MonoBehaviour
 {
     public string soundName = "BoxContact";
     public float soundOffTime = 1f; //The downtime off the soundeffekt after playing
+    public bool specialTagOnly = false; //Only trigger when a special tag is entering
+    public string tag;
     bool enabled = false; //at the beginnen, let falling parts fall in place and NOT make a sound
 
     private void Start()
@@ -20,7 +22,10 @@ public class PlayOnContact : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Play();   
+        if (specialTagOnly)
+        {
+            if (collision.tag == tag) Play();
+        } else Play();   
     }
 
     void Play()

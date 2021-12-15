@@ -50,20 +50,27 @@ public class GameManager : MonoBehaviour
        }
        if(Input.GetKeyDown(KeyCode.R))
        {
-           RestartLevel();
+            RestartLevelNoUI();
        }
    }
 
     public void EndGame()
     {
         //Debug.Log("Game over / Restart Level?");
-        Invoke("RestartLevel", restartDelay);     
+        //Invoke("RestartLevel", restartDelay);  
+        RestartLevel();
     } 
     
     public void RestartLevel()
     {
-        AudioManager.instance.Stop("MainMenu");
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        AudioManager.instance.Play("LvLFail"); //Play short sound effekt
+        giveTryScreen.SetActive(true);
+        StartCoroutine(LoadDelay(restartDelay, SceneManager.GetActiveScene().buildIndex));
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+    void RestartLevelNoUI() //Used for pressing the 'R' Key
+    {
+        StartCoroutine(LoadDelay(0.5f, SceneManager.GetActiveScene().buildIndex));
     }
 
     public void BackToMainMenu()

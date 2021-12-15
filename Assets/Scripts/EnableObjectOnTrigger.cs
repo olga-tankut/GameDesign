@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class EnableObjectOnTrigger : MonoBehaviour
 {
+    public bool specialTagOnly = false;
+    public string tag;
     public List<GameObject> objectList;
     private void Start()
     {
@@ -17,7 +19,10 @@ public class EnableObjectOnTrigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        ActivateObjects();
+        if(specialTagOnly)
+        {
+            if (collision.tag == tag) ActivateObjects();
+        } else ActivateObjects();
     }
 
     void ActivateObjects()

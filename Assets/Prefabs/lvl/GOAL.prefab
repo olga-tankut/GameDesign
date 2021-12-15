@@ -9748,7 +9748,7 @@ MonoBehaviour:
   - {x: -0.097222224, y: 0.5694444, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 173722
+  m_InstanceId: 233446
 --- !u!1 &7509947802909012485
 GameObject:
   m_ObjectHideFlags: 0
@@ -9760,7 +9760,7 @@ GameObject:
   - component: {fileID: 7509947802909012490}
   m_Layer: 0
   m_Name: GOAL
-  m_TagString: Untagged
+  m_TagString: Finish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9891,7 +9891,7 @@ MonoBehaviour:
   - {x: -0.097222224, y: 0.5694444, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 173720
+  m_InstanceId: 233444
 --- !u!1 &7509947803940615115
 GameObject:
   m_ObjectHideFlags: 0
@@ -10046,7 +10046,7 @@ MonoBehaviour:
   - {x: -0.5833333, y: 0.2777778, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 173744
+  m_InstanceId: 233468
 --- !u!114 &1026420367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10059,6 +10059,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fd766d9dd761374696b7f0d84c5440f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  specialTagOnly: 1
+  tag: Player
   objectList:
   - {fileID: 1718728736659252298}
   - {fileID: 1188291592}
@@ -10076,3 +10078,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundName: Win
   soundOffTime: 99
+  specialTagOnly: 1
+  tag: Player
