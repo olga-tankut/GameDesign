@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     {
         if (GameManager.Instance != null) Destroy(this);
         else { Instance = this; }
+        AudioManager.instance.Play("Game");
     }
 
     private void Start() {
