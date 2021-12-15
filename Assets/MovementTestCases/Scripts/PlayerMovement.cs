@@ -363,7 +363,7 @@ public sealed class PlayerMovement : MonoBehaviour
                 // dash als abgelaufen markieren
                 timeInDash  = dashingLength + 0.1f;
 
-                // momentum cancell
+                // momentum cancel
                 rb.velocity = new Vector2(0, rb.velocity.y);
                 //rb.gravityScale = startingGravity;
             }
@@ -448,7 +448,7 @@ public sealed class PlayerMovement : MonoBehaviour
             {
                 rb.AddForce(Vector2.right * horizontalInput * accelerationSpeed * Time.fixedDeltaTime);
             }
-            // ai movement
+            // air movement
             else if(!IsOnGround() && !IsAtWall() /*&& !isSliding*/)
             {
                 if((DateTimeOffset.Now.ToUnixTimeMilliseconds() - timeSinceLastContactWithWall) < deaktivationFramesAfterWallJump)

@@ -19,27 +19,27 @@ public class Timer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(timerIsRunning)
+        if(timerIsRunning) // is timer stopped?
         {
-            if (timeLeft >= 0)
+            if (timeLeft >= 0) // is timer over?
             {
-                timeLeft -= Time.deltaTime;
-                DisplayTime(timeLeft);
+                timeLeft -= Time.deltaTime; // count down
+                DisplayTime(timeLeft); // update Timer UI
             }
             else
             {
-                timeLeft = 0;
-                timerIsRunning = false;
+                timeLeft = 0; // if timer below 0 set timer to 0
+                timerIsRunning = false; // stop timer
                 timer.text = "0";
-                GameManager.Instance.EndGame();
+                GameManager.Instance.EndGame(); // restart Level
             }
         }
     }
-
+    // Updates UI timer
     private void DisplayTime(float timeToDisplay)
     {
         timeToDisplay += 1;
-        float seconds = Mathf.FloorToInt(timeToDisplay % 60);
-        timer.text = string.Format("{0:00}", seconds);
+        float seconds = Mathf.FloorToInt(timeToDisplay % 60); // get seconds
+        timer.text = string.Format("{0:00}", seconds); // display the new value
     }
 }
