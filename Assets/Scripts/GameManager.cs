@@ -66,17 +66,20 @@ public class GameManager : MonoBehaviour
         AudioManager.instance.Play("LvLFail"); //Play short sound effekt
         giveTryScreen.SetActive(true);
         StartCoroutine(LoadDelay(restartDelay, SceneManager.GetActiveScene().buildIndex));
+        Time.timeScale = 1f; //Set time scale to normal, just in case
         //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
     public void RestartLevelNoUI() //Used for pressing the 'R' Key
     {
         StartCoroutine(LoadDelay(0.5f, SceneManager.GetActiveScene().buildIndex));
+        Time.timeScale = 1f; //Set time scale to normal, just in case
     }
 
     public void BackToMainMenu()
     {
         //AudioManager.instance.Play("Button");
         StartCoroutine(LoadDelay(0.5f, 0)); //Load Main Menu
+        Time.timeScale = 1f; //Set time scale to normal, just in case
         //SceneManager.LoadScene("MainMenu");
     }
 
@@ -86,6 +89,7 @@ public class GameManager : MonoBehaviour
         {
             AudioManager.instance.Stop("Game");
             AudioManager.instance.Play("MainMenu");
+            Time.timeScale = 0f; //Set time scale to 0 to pause everything
             gameScreen.SetActive(false);
             pauseScreen.SetActive(true);
             gameIsPaused = true;
@@ -94,6 +98,7 @@ public class GameManager : MonoBehaviour
         {
             AudioManager.instance.Stop("MainMenu");
             AudioManager.instance.Play("Game");
+            Time.timeScale = 1f; //Set time scale to normal
             gameScreen.SetActive(true);
             pauseScreen.SetActive(false);
             gameIsPaused = false;

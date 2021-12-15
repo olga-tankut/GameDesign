@@ -43,10 +43,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e89d5e2d7a9f2b478a52cee3d89553f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startAudioName: 
   sounds:
   - name: MainMenu
     clip: {fileID: 8300000, guid: 6441e80868dc1d04f90cfa2ef4fdd9ad, type: 3}
-    volume: 0.02
+    volume: 0.15
     pitch: 1
     loop: 1
     source: {fileID: 0}

@@ -20,11 +20,18 @@ public class GameManagerMainMenu : MonoBehaviour
     // the parameter is the name of the Level to load
     public void LoadScene(string levelToLoad)
     {
-        AudioManager.instance.Stop("MainMenu");
-        SceneManager.LoadScene(levelToLoad);
-        Debug.Log("Make sure all new Scenes/Levels follow the naming convention");
-        Debug.Log("Currently loaded scene: " + levelToLoad);
+        //AudioManager.instance.Stop("MainMenu");
+        StartCoroutine(DelayLoad(levelToLoad));
+        //Debug.Log("Make sure all new Scenes/Levels follow the naming convention");
+        //Debug.Log("Currently loaded scene: " + levelToLoad);
     }
+
+    IEnumerator DelayLoad(string levelToLoad)
+    {
+        yield return new WaitForSeconds(0.6f);
+        SceneManager.LoadScene(levelToLoad);
+    }
+
     public void QuitGame()
     {
         Application.Quit();

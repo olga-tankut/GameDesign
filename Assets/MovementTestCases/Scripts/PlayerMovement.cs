@@ -407,7 +407,7 @@ public sealed class PlayerMovement : MonoBehaviour
             }
             else
             {
-                Debug.Log("Dash is not ready! Time until next dash: " + ((dashCooldown / 1000) - timeSinceLastDash) + " seconds.");
+                //Debug.Log("Dash is not ready! Time until next dash: " + ((dashCooldown / 1000) - timeSinceLastDash) + " seconds.");
             }
         }
 
@@ -849,7 +849,7 @@ public sealed class PlayerMovement : MonoBehaviour
         _maxGroundSpeed = maxGroundSpeed;
         if(!reducedMaxSpeed)
         {
-            Debug.Log("start max speed reduction");
+            //Debug.Log("start max speed reduction");
             reducedMaxSpeed = true; //Reduction in progress
             maxGroundSpeed -= groundSpeedReduction;
             StartCoroutine(ReduceGroundSpeedTimer(groundSpeedReductionTime));
