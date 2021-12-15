@@ -7,6 +7,10 @@ public class LampFalling : MonoBehaviour
 {
     private SpriteRenderer sprender;
     private Rigidbody2D rb;
+    private bool hasFallen;
+    private bool canCollided;
+
+    protected int damage = 30;
 
     // Start is called before the first frame update
     void Start()
@@ -15,6 +19,8 @@ public class LampFalling : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         rb.Sleep();
         rb.isKinematic = true;
+        hasFallen = false;
+        canCollided = true;
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -28,19 +34,21 @@ public class LampFalling : MonoBehaviour
 
     void Fall()
     {
-        //Debug.Log("wakeup");
-        rb.WakeUp();
-        rb.isKinematic = false;
+        if (hasFallen == false)
+        {
+            hasFallen = true;
+            rb.WakeUp();
+            rb.isKinematic = false;
+        }    
     }
 
-    //protected void OnCollisionEnter2D(Collision2D collision)
-    //{
-    //    Debug.Log("Trigger Zone entered");
-    //    if (collision.gameObject.tag == "Untagged" && collision.gameObject.name == "Scripts")
-    //    {
-    //        Fall();
-    //    }
-    //}
-
+    protected void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (canCollided == true)
+        {
+            canCollided = false;
+            FindObjectOfType<AudioManager>().Play("Boom");  
+        }   
+    }
 }
 

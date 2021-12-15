@@ -15,10 +15,9 @@ TagManager:
   - LampBrokenLeft
   - LampBrokenRight
   - HealthBar
+  - GameOverScreen
   - GiveTryScreen
-  - PauseScreen
-  - GameScreen
-  - WinScreen
+  - AudioManager
   layers:
   - Default
   - TransparentFX
