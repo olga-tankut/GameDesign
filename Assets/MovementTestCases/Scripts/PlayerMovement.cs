@@ -166,9 +166,12 @@ public sealed class PlayerMovement : MonoBehaviour
         if(counter == 10)
         {
             //Debug.Log(startingVelocityOfSlide);
-            //Debug.Log(IsOnGround() + ", " + IsOnSlope() + ", " + rb.velocity.x);
+            //Debug.Log(IsOnGround() + ", " + IsOnSlope() + ", " + rb.velocity.x + ", " + IsAtWall());
+            //Debug.Log(IsAtWall() + ", " + (RayCastHitDetection()[6] == null) +", "+ RayCastHitDetection()[5] + ", " + RayCastHitDetection()[0] + ", " + RayCastHitDetection()[2]);
             //Debug.Log(rb.velocity.x);
             //Debug.Log(isSliding);
+            //Debug.Log(IsAtWall());
+            Debug.Log(rb.velocity + ", " + rb.gravityScale);
             if(!IsOnGround())
             {
                 //Debug.Log("X");
@@ -362,6 +365,7 @@ public sealed class PlayerMovement : MonoBehaviour
 
                 // momentum cancell
                 rb.velocity = new Vector2(0, rb.velocity.y);
+                //rb.gravityScale = startingGravity;
             }
         }
         // while sliding dashing is forbidden
@@ -610,6 +614,10 @@ public sealed class PlayerMovement : MonoBehaviour
                 return false;
             }
 
+            if((RayCastHitDetection()[8] == "LVL" || RayCastHitDetection()[6] == "LVL") && (RayCastHitDetection()[2] == null || RayCastHitDetection()[2] == "Untagged"))
+            {
+                return false;
+            }
             // to prevent wall jumps on ground when the forgiving frames last
             timeSinceLastContactWithWall = ForgivingFramesWallJump + 1;
             // refresh dash after every ground contact
@@ -678,11 +686,11 @@ public sealed class PlayerMovement : MonoBehaviour
         RaycastHit2D[] rightDown = Physics2D.RaycastAll(transform.Find("RayCastStart").transform.position, new Vector2(1, -1), raycastLength * 1.2f);
 
         RaycastHit2D[] leftUp = Physics2D.RaycastAll(new Vector2(transform.Find("RayCastStart").transform.position.x, 
-                                transform.Find("RayCastStart").transform.position.y + (playerHeight * 2.4f)), Vector2.left, raycastLength);
+                                transform.Find("RayCastStart").transform.position.y + (playerHeight * 2.3f)), Vector2.left, raycastLength *2);
         RaycastHit2D[] leftMiddle = Physics2D.RaycastAll(new Vector2(transform.Find("RayCastStart").transform.position.x, 
                                 transform.Find("RayCastStart").transform.position.y + (playerHeight * 1.2f)), Vector2.left, raycastLength);
         RaycastHit2D[] rightUp = Physics2D.RaycastAll(new Vector2(transform.Find("RayCastStart").transform.position.x, 
-                                transform.Find("RayCastStart").transform.position.y + (playerHeight * 2.4f)), Vector2.right, raycastLength);
+                                transform.Find("RayCastStart").transform.position.y + (playerHeight * 2.3f)), Vector2.right, raycastLength);
         RaycastHit2D[] rightMiddle = Physics2D.RaycastAll(new Vector2(transform.Find("RayCastStart").transform.position.x, 
                                 transform.Find("RayCastStart").transform.position.y + (playerHeight * 1.2f)), Vector2.right, raycastLength);
 
@@ -693,11 +701,11 @@ public sealed class PlayerMovement : MonoBehaviour
         Debug.DrawRay(transform.Find("RayCastStart").transform.position, new Vector2(1, -1) * raycastLength, Color.yellow);
 
         Debug.DrawRay(new Vector2(transform.Find("RayCastStart").transform.position.x, 
-                                transform.Find("RayCastStart").transform.position.y + (playerHeight * 2.4f)), Vector2.left * raycastLength, Color.blue);
+                                transform.Find("RayCastStart").transform.position.y + (playerHeight * 2.3f)), Vector2.left * raycastLength, Color.blue);
         Debug.DrawRay(new Vector2(transform.Find("RayCastStart").transform.position.x, 
                                 transform.Find("RayCastStart").transform.position.y + (playerHeight * 1.2f)), Vector2.left * raycastLength, Color.blue);
         Debug.DrawRay(new Vector2(transform.Find("RayCastStart").transform.position.x, 
-                                transform.Find("RayCastStart").transform.position.y + (playerHeight * 2.4f)), Vector2.right * raycastLength, Color.blue);
+                                transform.Find("RayCastStart").transform.position.y + (playerHeight * 2.3f)), Vector2.right * raycastLength, Color.blue);
         Debug.DrawRay(new Vector2(transform.Find("RayCastStart").transform.position.x, 
                                 transform.Find("RayCastStart").transform.position.y + (playerHeight * 1.2f)), Vector2.right * raycastLength, Color.blue);
 
@@ -718,19 +726,24 @@ public sealed class PlayerMovement : MonoBehaviour
         l.Add(leftUp);      // 8
 
         
-        for(int y = 0; y < 5; y++)
+        for(int y = 0; y < l.Count; y++)
         {
             if(l[y].Length > 1)
             {
                 // the first contact is the player collider 
                 x.Add(l[y][1].collider.gameObject.tag);
+                /*if(y > 4)
+                {
+                    Debug.Log("added " + y +", " + l.Count);
+                    Debug.Log(l[y][1].collider.gameObject.tag);
+                }*/
+                
             }
             else
             {
                 x.Add(null);
             }
         }
-
         return x;
     }
 
@@ -759,7 +772,7 @@ public sealed class PlayerMovement : MonoBehaviour
     
     private bool IsAtWall()
     {
-        if(RayCastHitDetection()[0] == "LVL" && RayCastHitDetection()[1] == "LVL" && RayCastHitDetection()[2] == null)
+        if((RayCastHitDetection()[0] == "LVL" || RayCastHitDetection()[5] == "LVL" || RayCastHitDetection()[6] == "LVL") /*&& RayCastHitDetection()[2] == null*/)
         {
             timeSinceLastContactWithWall = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             isWallRight = true;
@@ -767,7 +780,7 @@ public sealed class PlayerMovement : MonoBehaviour
             return true;
         }
 
-        if(RayCastHitDetection()[4] == "LVL" && RayCastHitDetection()[3] == "LVL" && RayCastHitDetection()[2] == null)
+        if((RayCastHitDetection()[4] == "LVL" || RayCastHitDetection()[7] == "LVL" || RayCastHitDetection()[8] == "LVL") /*&& RayCastHitDetection()[2] == null*/)
         {
             timeSinceLastContactWithWall = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             isWallRight = false;
