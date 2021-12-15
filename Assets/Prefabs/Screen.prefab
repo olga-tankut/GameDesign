@@ -783,14 +783,14 @@ PrefabInstance:
     - {fileID: 6369941119507563380, guid: 11757d0778e180a4aba03eab897d62ba, type: 3}
     - {fileID: 2164261506820054959, guid: 11757d0778e180a4aba03eab897d62ba, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 11757d0778e180a4aba03eab897d62ba, type: 3}
---- !u!224 &398724476280303300 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 1090012213820462234, guid: 11757d0778e180a4aba03eab897d62ba, type: 3}
-  m_PrefabInstance: {fileID: 767878687892437598}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &4329968970811828435 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3944922717045133965, guid: 11757d0778e180a4aba03eab897d62ba, type: 3}
+  m_PrefabInstance: {fileID: 767878687892437598}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &398724476280303300 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 1090012213820462234, guid: 11757d0778e180a4aba03eab897d62ba, type: 3}
   m_PrefabInstance: {fileID: 767878687892437598}
   m_PrefabAsset: {fileID: 0}
 --- !u!224 &381078793861650894 stripped
@@ -1220,11 +1220,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5148782108365445315, guid: 354668e30a06f125fb2f419e74204e82, type: 3}
   m_PrefabInstance: {fileID: 2398266851907232387}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1622684739550744321 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4020788483363237250, guid: 354668e30a06f125fb2f419e74204e82, type: 3}
-  m_PrefabInstance: {fileID: 2398266851907232387}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3060857965703528203
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1235,6 +1230,10 @@ PrefabInstance:
     - target: {fileID: 705597748450098577, guid: 14033f023ac382c49a5dd4d2a1741e3b, type: 3}
       propertyPath: m_Name
       value: WinScreen
+      objectReference: {fileID: 0}
+    - target: {fileID: 705597748450098577, guid: 14033f023ac382c49a5dd4d2a1741e3b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2709912054013902252, guid: 14033f023ac382c49a5dd4d2a1741e3b, type: 3}
       propertyPath: m_Pivot.x
@@ -1330,11 +1329,6 @@ PrefabInstance:
       objectReference: {fileID: 1451846888277778614}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 14033f023ac382c49a5dd4d2a1741e3b, type: 3}
---- !u!1 &2571717512160871066 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 705597748450098577, guid: 14033f023ac382c49a5dd4d2a1741e3b, type: 3}
-  m_PrefabInstance: {fileID: 3060857965703528203}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1144425292671140519 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2709912054013902252, guid: 14033f023ac382c49a5dd4d2a1741e3b, type: 3}
@@ -1370,6 +1364,10 @@ PrefabInstance:
     - target: {fileID: 2411232270515514632, guid: cedda197e4cb6a77992bed69a7d0c409, type: 3}
       propertyPath: m_Name
       value: GameScreen
+      objectReference: {fileID: 0}
+    - target: {fileID: 2411232270515514632, guid: cedda197e4cb6a77992bed69a7d0c409, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2411232270515514636, guid: cedda197e4cb6a77992bed69a7d0c409, type: 3}
       propertyPath: m_Pivot.x
@@ -1486,11 +1484,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2411232270515514636, guid: cedda197e4cb6a77992bed69a7d0c409, type: 3}
   m_PrefabInstance: {fileID: 8336665207663223153}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &5964914557193735289 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2411232270515514632, guid: cedda197e4cb6a77992bed69a7d0c409, type: 3}
-  m_PrefabInstance: {fileID: 8336665207663223153}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8336665208307400589
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1546,18 +1539,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
-    - target: {fileID: 7463651896675835707, guid: bbff56a7569415a489d5b501f63b5410, type: 3}
-      propertyPath: winScreen
-      value: 
-      objectReference: {fileID: 2571717512160871066}
-    - target: {fileID: 7463651896675835707, guid: bbff56a7569415a489d5b501f63b5410, type: 3}
-      propertyPath: gameScreen
-      value: 
-      objectReference: {fileID: 5964914557193735289}
-    - target: {fileID: 7463651896675835707, guid: bbff56a7569415a489d5b501f63b5410, type: 3}
-      propertyPath: pauseScreen
-      value: 
-      objectReference: {fileID: 1622684739550744321}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bbff56a7569415a489d5b501f63b5410, type: 3}
 --- !u!114 &1451846888277778614 stripped
