@@ -213,8 +213,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e81581e2bbe947419067baf06b08f93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reduceGroundspeedBy: 5
-  reductionTime: 4
+  reduceGroundspeedBy: 8
+  reductionTime: 5
   destroyParent: 1
   destroyThis: 0
 --- !u!1 &6980916823765116185
@@ -268,7 +268,7 @@ Rigidbody2D:
   m_Mass: 10
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 15.7
+  m_GravityScale: 33
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 2

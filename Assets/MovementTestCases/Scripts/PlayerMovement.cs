@@ -171,7 +171,7 @@ public sealed class PlayerMovement : MonoBehaviour
             //Debug.Log(rb.velocity.x);
             //Debug.Log(isSliding);
             //Debug.Log(IsAtWall());
-            Debug.Log(rb.velocity + ", " + rb.gravityScale);
+            //Debug.Log(rb.velocity + ", " + rb.gravityScale);
             if(!IsOnGround())
             {
                 //Debug.Log("X");

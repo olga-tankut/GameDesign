@@ -32,6 +32,7 @@ public class LevelLoadTrigger : MonoBehaviour
         if (other.gameObject.tag == "Player")
         {
             DisableSprite();
+            Timer.timerIsRunning = false;
             if (loadNextIndex) GameManager.Instance.LoadNextLevel(loadDelay);
             else GameManager.Instance.LoadNextLevel(loadDelay, sceneIndex);
         }
