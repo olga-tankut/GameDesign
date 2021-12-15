@@ -59,7 +59,7 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: Game
     clip: {fileID: 8300000, guid: 565bdf823534d2244a91e618f748c2e0, type: 3}
-    volume: 0.02
+    volume: 0.3
     pitch: 1
     loop: 1
     source: {fileID: 0}
@@ -87,15 +87,9 @@ MonoBehaviour:
     pitch: 1
     loop: 0
     source: {fileID: 0}
-  - name: BrokenLamp
-    clip: {fileID: 8300000, guid: 7e9ee6dc04a5d40d1a5dfc4beb9865e7, type: 3}
-    volume: 0.21
-    pitch: 2.46
-    loop: 0
-    source: {fileID: 0}
-  - name: Boom
-    clip: {fileID: 8300000, guid: cabfae866cab347928b74b7d0ca6bfa9, type: 3}
-    volume: 0.3
-    pitch: 1
+  - name: LvLFail
+    clip: {fileID: 8300000, guid: fb0f5be944c176b47a13d698ff285677, type: 3}
+    volume: 0.26
+    pitch: 0.8
     loop: 0
     source: {fileID: 0}
