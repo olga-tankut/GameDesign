@@ -1444,7 +1444,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3864792717547684188, guid: 630f8de6aea0dc148877d0308eb7e572, type: 3}
       propertyPath: sounds.Array.size
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 3864792717547684188, guid: 630f8de6aea0dc148877d0308eb7e572, type: 3}
       propertyPath: sounds.Array.data[2].clip
@@ -1479,6 +1479,14 @@ PrefabInstance:
       value: BoxContact
       objectReference: {fileID: 0}
     - target: {fileID: 3864792717547684188, guid: 630f8de6aea0dc148877d0308eb7e572, type: 3}
+      propertyPath: sounds.Array.data[7].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 7e9ee6dc04a5d40d1a5dfc4beb9865e7, type: 3}
+    - target: {fileID: 3864792717547684188, guid: 630f8de6aea0dc148877d0308eb7e572, type: 3}
+      propertyPath: sounds.Array.data[7].name
+      value: BrokenLamp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3864792717547684188, guid: 630f8de6aea0dc148877d0308eb7e572, type: 3}
       propertyPath: sounds.Array.data[9].clip
       value: 
       objectReference: {fileID: 8300000, guid: 2c5292ba5cf254919a6b9e2b18e04f49, type: 3}
@@ -1499,6 +1507,10 @@ PrefabInstance:
       value: 2.46
       objectReference: {fileID: 0}
     - target: {fileID: 3864792717547684188, guid: 630f8de6aea0dc148877d0308eb7e572, type: 3}
+      propertyPath: sounds.Array.data[7].pitch
+      value: 1.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3864792717547684188, guid: 630f8de6aea0dc148877d0308eb7e572, type: 3}
       propertyPath: sounds.Array.data[9].pitch
       value: 2.46
       objectReference: {fileID: 0}
@@ -1508,7 +1520,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3864792717547684188, guid: 630f8de6aea0dc148877d0308eb7e572, type: 3}
       propertyPath: sounds.Array.data[3].volume
-      value: 0.053
+      value: 0.08
       objectReference: {fileID: 0}
     - target: {fileID: 3864792717547684188, guid: 630f8de6aea0dc148877d0308eb7e572, type: 3}
       propertyPath: sounds.Array.data[4].volume
@@ -1520,7 +1532,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3864792717547684188, guid: 630f8de6aea0dc148877d0308eb7e572, type: 3}
       propertyPath: sounds.Array.data[6].volume
-      value: 0.062
+      value: 0.04
+      objectReference: {fileID: 0}
+    - target: {fileID: 3864792717547684188, guid: 630f8de6aea0dc148877d0308eb7e572, type: 3}
+      propertyPath: sounds.Array.data[7].volume
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 3864792717547684188, guid: 630f8de6aea0dc148877d0308eb7e572, type: 3}
       propertyPath: sounds.Array.data[9].volume

@@ -84,6 +84,7 @@ GameObject:
   - component: {fileID: 200301795}
   - component: {fileID: 200301796}
   - component: {fileID: 200301797}
+  - component: {fileID: 6142080079732640117}
   m_Layer: 0
   m_Name: Poly Collider
   m_TagString: Untagged
@@ -213,10 +214,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e81581e2bbe947419067baf06b08f93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reduceGroundspeedBy: 8
+  reduceGroundspeedBy: 9
   reductionTime: 5
   destroyParent: 1
   destroyThis: 0
+--- !u!114 &6142080079732640117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6142080079851148690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89fe0462cf982b041b326d93bb5b8adb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundName: BrokenLamp
+  soundOffTime: 99
+  specialTagOnly: 1
+  tag: Player
 --- !u!1 &6980916823765116185
 GameObject:
   m_ObjectHideFlags: 0

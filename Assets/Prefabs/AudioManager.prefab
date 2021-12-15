@@ -87,10 +87,10 @@ MonoBehaviour:
     pitch: 1
     loop: 0
     source: {fileID: 0}
-  - name: Explosion
-    clip: {fileID: 8300000, guid: 7e26c9daf4c32483b9c2790e662d3f1b, type: 3}
-    volume: 0.7
-    pitch: 1
+  - name: BrokenLamp
+    clip: {fileID: 8300000, guid: 7e9ee6dc04a5d40d1a5dfc4beb9865e7, type: 3}
+    volume: 0.21
+    pitch: 2.46
     loop: 0
     source: {fileID: 0}
   - name: Boom

@@ -63,10 +63,10 @@ public class GameManager : MonoBehaviour
     
     public void RestartLevel()
     {
+        Time.timeScale = 0f; //Set time scale to normal, just in case
         AudioManager.instance.Play("LvLFail"); //Play short sound effekt
         giveTryScreen.SetActive(true);
         StartCoroutine(LoadDelay(restartDelay, SceneManager.GetActiveScene().buildIndex));
-        Time.timeScale = 1f; //Set time scale to normal, just in case
         //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
     public void RestartLevelNoUI() //Used for pressing the 'R' Key
@@ -125,6 +125,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator LoadDelay(float time, int index) //Scene loader that loads next lvl after delay
     {
         yield return new WaitForSeconds(time);
+        Time.timeScale = 1f; //Set time scale to normal, just in case
         SceneManager.LoadScene(index);
     }
 }
