@@ -62,6 +62,7 @@ public class GameManager : MonoBehaviour
     
     public void RestartLevel()
     {
+        FindObjectOfType<AudioManager>().Stop("MainMenu");
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 

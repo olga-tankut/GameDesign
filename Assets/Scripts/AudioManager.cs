@@ -5,6 +5,7 @@ using System;
 
 public class AudioManager : MonoBehaviour
 {
+    public String startAudioName;
     public Sound[] sounds;
 
     public static AudioManager instance;
@@ -31,7 +32,7 @@ public class AudioManager : MonoBehaviour
 
     private void Start()
     {
-        Play("Game");
+        Play(startAudioName);
     }
 
     // Update is called once per frame
