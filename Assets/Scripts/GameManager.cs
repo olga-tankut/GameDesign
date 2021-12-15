@@ -68,7 +68,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(LoadDelay(restartDelay, SceneManager.GetActiveScene().buildIndex));
         //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
-    void RestartLevelNoUI() //Used for pressing the 'R' Key
+    public void RestartLevelNoUI() //Used for pressing the 'R' Key
     {
         StartCoroutine(LoadDelay(0.5f, SceneManager.GetActiveScene().buildIndex));
     }
@@ -76,7 +76,7 @@ public class GameManager : MonoBehaviour
     public void BackToMainMenu()
     {
         //AudioManager.instance.Play("Button");
-        LoadNextLevel(1f, 0);
+        StartCoroutine(LoadDelay(0.5f, 0)); //Load Main Menu
         //SceneManager.LoadScene("MainMenu");
     }
 
