@@ -262,6 +262,7 @@ GameObject:
   - component: {fileID: 3637744019075371562}
   - component: {fileID: 3637744019075371560}
   - component: {fileID: 3637744019075371563}
+  - component: {fileID: 6318790492774035039}
   m_Layer: 0
   m_Name: SpriteLayer
   m_TagString: Player
@@ -353,6 +354,32 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &6318790492774035039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3637744019075371557}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db70e0ea77f5ac47a8f4565a9406397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShadowGroup: 0
+  m_HasRenderer: 1
+  m_UseRendererSilhouette: 1
+  m_CastsShadows: 1
+  m_SelfShadows: 0
+  m_ApplyToSortingLayers: 00000000d91e1df6fb3d16e3a9a790c9
+  m_ShapePath:
+  - {x: -0.2202939, y: -1.4361701, z: 0}
+  - {x: 0.24085535, y: -1.4231296, z: 0}
+  - {x: 0.2570776, y: 1.3653703, z: 0}
+  - {x: -0.11574921, y: 1.2637849, z: 0}
+  m_ShapePathHash: -451121272
+  m_Mesh: {fileID: 0}
+  m_InstanceId: -134874
 --- !u!1 &3637744019184192158
 GameObject:
   m_ObjectHideFlags: 0
