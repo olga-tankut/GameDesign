@@ -93,3 +93,9 @@ MonoBehaviour:
     pitch: 0.8
     loop: 0
     source: {fileID: 0}
+  - name: BrokenLamp
+    clip: {fileID: 8300000, guid: fb0f5be944c176b47a13d698ff285677, type: 3}
+    volume: 0.26
+    pitch: 1.2
+    loop: 0
+    source: {fileID: 0}
