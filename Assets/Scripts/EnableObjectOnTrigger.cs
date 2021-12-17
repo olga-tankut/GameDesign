@@ -21,7 +21,7 @@ public class EnableObjectOnTrigger : MonoBehaviour
     {
         if(specialTagOnly)
         {
-            if (collision.tag == tag) ActivateObjects();
+          if (collision.tag == tag) ActivateObjects();
         } else ActivateObjects();
     }
 
